@@ -25,7 +25,7 @@ class CategoryController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {   
+    {
         $category_name= $request->category_name;
         $category = new Category();
 
@@ -63,7 +63,7 @@ class CategoryController extends Controller
         }catch(Exception $error){
             return response()->json(['data' => $error, 'message' => 'You can not update the category'], status:400);
         }
-        
+
     }
 
     /**
