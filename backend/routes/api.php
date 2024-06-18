@@ -28,6 +28,7 @@ Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:san
 // crud on categories
 Route::get('/categories/list', [CategoryController::class, 'index']);
 Route::post('/create/category', [CategoryController::class, 'store']);
+<<<<<<< HEAD
 
 
 
@@ -42,3 +43,6 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Other routes that don't require authentication
+=======
+Route::put('/update/category/{id}', [CategoryController::class, 'update']);
+>>>>>>> e3ca59eab26f5519a70a02ec4965a3e0975a945d
