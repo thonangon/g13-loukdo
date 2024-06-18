@@ -4,7 +4,7 @@ use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Products\ProductController;
 
 /*
