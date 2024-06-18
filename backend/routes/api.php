@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Products\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,3 +28,17 @@ Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:san
 // crud on categories
 Route::get('/categories/list', [CategoryController::class, 'index']);
 Route::post('/create/category', [CategoryController::class, 'store']);
+
+
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    // Routes that require authentication with Sanctum
+    Route::get('/products', [ProductController::class, 'index']);
+    Route::post('/products', [ProductController::class, 'store']);
+    Route::get('/products/{product}', [ProductController::class, 'show']);
+    Route::put('/products/{product}', [ProductController::class, 'update']);
+    Route::delete('/products/{product}', [ProductController::class, 'destroy']);
+});
+
+// Other routes that don't require authentication
