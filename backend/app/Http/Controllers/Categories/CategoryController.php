@@ -71,6 +71,12 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $category = Category::where('id',$id)->first();
+        $category->delete();
+        try{
+            return response()->json(['data' => $category, 'message' => 'You can delete the category'], status:200);
+        }catch(Exception $error){
+            return response()->json(['data' => $error, 'message' => 'You can not delete the category'], status:400);
+        }
     }
 }
