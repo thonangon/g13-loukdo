@@ -50,7 +50,19 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $id =$request->id;
+        $category_name= $request->category_name;
+
+        $category = Category::where('id',$id)->first();
+
+        $category->category_name = $category_name;
+        try {
+            $category->save();
+            return response()->json(['data' => $category, 'message' => 'You can update the category'], status:200);
+        }catch(Exception $error){
+            return response()->json(['data' => $error, 'message' => 'You can not update the category'], status:400);
+        }
+        
     }
 
     /**
