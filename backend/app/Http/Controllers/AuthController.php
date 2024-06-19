@@ -29,7 +29,6 @@ class AuthController extends Controller
                 'message' => 'User not found'
             ], 401);
         }
-
         $user   = User::where('email', $request->email)->firstOrFail();
         $token  = $user->createToken('auth_token')->plainTextToken;
 
