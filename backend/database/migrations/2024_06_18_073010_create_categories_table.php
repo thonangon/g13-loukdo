@@ -16,6 +16,10 @@ return new class extends Migration
             $table->string('category_name');
             $table->timestamps();
         });
+
+        Schema::table('posts', function (Blueprint $table) {
+            $table->string('category')->nullable()->after('stock');
+        });
     }
 
     /**
@@ -23,6 +27,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('posts', function (Blueprint $table) {
+            $table->dropColumn('category');
+        });
+
         Schema::dropIfExists('categories');
     }
 };
