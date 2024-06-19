@@ -6,12 +6,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
     public function toArray($request)
     {
         return [
@@ -20,12 +14,12 @@ class ProductResource extends JsonResource
             'description' => $this->description,
             'price' => $this->price,
             'stock' => $this->stock,
-            'category' => [
-                'id' => $this->category_id,
-                'name' => $this->category->category_name, 
-            ],
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'image' => $this->image,
+            'category_id' => $this->category_id,
+            'category_name' => $this->category->category_name,
+            'created_by' => $this->user->name,
+            'created_at' => $this->created_at->format('l jS, F, Y \a\t h:i:s A'),
+            'updated_at' => $this->updated_at->format('l jS, F, Y \a\t h:i:s A'),
         ];
     }
 }
