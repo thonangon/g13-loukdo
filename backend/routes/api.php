@@ -28,7 +28,9 @@ Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:san
 // crud on categories
 Route::get('/categories/list', [CategoryController::class, 'index']);
 Route::post('/create/category', [CategoryController::class, 'store']);
-
+//forgot password
+Route::post('user/forgot-password', [AuthController::class, 'forgotPassword']);
+Route::post('user/reset-password', [AuthController::class, 'resetPassword']);
 
 
 
