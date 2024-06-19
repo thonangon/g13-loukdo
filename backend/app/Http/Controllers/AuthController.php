@@ -50,4 +50,26 @@ class AuthController extends Controller
             'data' =>$user,
         ]);
     }
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'role_id' => 'required|integer|exists:roles,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role_id' => $request->role_id,
+        ]);
+
+        return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
+    }
 }
