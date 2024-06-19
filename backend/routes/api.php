@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Categories\CategoryController;
-use App\Http\Controllers\Products\ProductController;
+// use App\Http\Controllers\Products\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,19 +29,26 @@ Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:san
 Route::get('/categories/list', [CategoryController::class, 'index']);
 Route::post('/create/category', [CategoryController::class, 'store']);
 
-
-
-
-Route::middleware('auth:sanctum')->group(function () {
-    // Routes that require authentication with Sanctum
-    Route::get('/products', [ProductController::class, 'index']);
-    Route::post('/products', [ProductController::class, 'store']);
-    Route::get('/products/{product}', [ProductController::class, 'show']);
-    Route::put('/products/{product}', [ProductController::class, 'update']);
-    Route::delete('/products/{product}', [ProductController::class, 'destroy']);
-});
-
 // Other routes that don't require authentication
 Route::put('/update/category/{id}', [CategoryController::class, 'update']);
 Route::delete('/delete/category/{id}', [CategoryController::class, 'destroy']);
 
+// // Product Routes
+// Route::prefix('products')->group(function () {
+//     Route::get('/list', [ProductController::class, 'index']);
+//     Route::post('/create', [ProductController::class, 'store']);
+//     Route::get('/view/{id}', [ProductController::class, 'show']);
+//     Route::put('/update/{id}', [ProductController::class, 'update']);
+//     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
+// });
+
+
+
+// Product Routes
+Route::middleware('auth:sanctum')->prefix('products')->group(function () {
+    Route::get('/list', [PostController::class, 'index']);
+    Route::post('/create', [PostController::class, 'store']);
+    Route::get('/view/{id}', [PostController::class, 'show']);
+    Route::put('/update/{id}', [PostController::class, 'update']);
+    Route::delete('/remove/{id}', [PostController::class, 'destroy']);
+});
