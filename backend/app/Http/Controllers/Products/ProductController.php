@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Models\Category;
 use Exception;
@@ -12,33 +13,45 @@ use Carbon\Carbon;
 
 class ProductController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+
+
         try {
             $products = Product::with('category')->get();
-
-            $data = $products->map(function ($product) {
-                return [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'description' => $product->description,
-                    'price' => $product->price,
-                    'stock' => $product->stock,
-                    'image' => $product->image,
-                    'category_id' => $product->category_id,
-                    'category_name' => $product->category->name,
-                    'created_at' => Carbon::parse($product->created_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss'),
-                    'updated_at' => Carbon::parse($product->updated_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss')
-                ];
-            });
-
-            return response()->json(['status' => true, 'data' => $data, 'message' => 'Product list retrieved successfully'], 200);
+            return response()->json(['status' => true, 'data' => ProductResource::collection($products), 'message' => 'Product list retrieved successfully'], 200);
         } catch (Exception $e) {
             return response()->json(['status' => false, 'message' => 'Failed to retrieve product list', 'error' => $e->getMessage()], 500);
         }
+        // try {
+        //     $products = Product::with('category')->get();
+
+        //     $data = $products->map(function ($product) {
+        //         return [
+        //             'id' => $product->id,
+        //             'name' => $product->name,
+        //             'description' => $product->description,
+        //             'price' => $product->price,
+        //             'stock' => $product->stock,
+        //             'image' => $product->image,
+        //             'category_id' => $product->category_id,
+        //             'category_name' => $product->category->category_name,
+        //             // 'created_at' => Carbon::parse($product->created_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss'),
+        //             // 'updated_at' => Carbon::parse($product->updated_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss')
+        //             'created_at' => $product->created_at,
+        //             'updated_at' => $product->updated_at
+        //         ];
+        //     });
+
+        //     return response()->json(['status' => true, 'data' => $data, 'message' => 'Product list retrieved successfully'], 200);
+        // } catch (Exception $e) {
+        //     return response()->json(['status' => false, 'message' => 'Failed to retrieve product list', 'error' => $e->getMessage()], 500);
+        // }
     }
 
     /**
@@ -85,21 +98,28 @@ class ProductController extends Controller
      */
     public function show($id)
     {
+        // try {
+        //     $product = Product::with('category')->findOrFail($id);
+        //     $data = [
+        //         'id' => $product->id,
+        //         'name' => $product->name,
+        //         'description' => $product->description,
+        //         'price' => $product->price,
+        //         'stock' => $product->stock,
+        //         'image' => $product->image,
+        //         'category_id' => $product->category_id,
+        //         'category_name' => $product->category->name,
+        //         'created_at' => Carbon::parse($product->created_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss'),
+        //         'updated_at' => Carbon::parse($product->updated_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss')
+        //     ];
+        //     return response()->json(['status' => true, 'data' => $data, 'message' => 'Product retrieved successfully'], 200);
+        // } catch (Exception $e) {
+        //     return response()->json(['status' => false, 'message' => 'Product not found', 'error' => $e->getMessage()], 404);
+        // }
+
         try {
             $product = Product::with('category')->findOrFail($id);
-            $data = [
-                'id' => $product->id,
-                'name' => $product->name,
-                'description' => $product->description,
-                'price' => $product->price,
-                'stock' => $product->stock,
-                'image' => $product->image,
-                'category_id' => $product->category_id,
-                'category_name' => $product->category->name,
-                'created_at' => Carbon::parse($product->created_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss'),
-                'updated_at' => Carbon::parse($product->updated_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss')
-            ];
-            return response()->json(['status' => true, 'data' => $data, 'message' => 'Product retrieved successfully'], 200);
+            return response()->json(['status' => true, 'data' => new ProductResource($product), 'message' => 'Product retrieved successfully'], 200);
         } catch (Exception $e) {
             return response()->json(['status' => false, 'message' => 'Product not found', 'error' => $e->getMessage()], 404);
         }
