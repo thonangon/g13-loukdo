@@ -29,23 +29,10 @@ Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:san
 // crud on categories
 Route::get('/categories/list', [CategoryController::class, 'index']);
 Route::post('/create/category', [CategoryController::class, 'store']);
-<<<<<<< HEAD
-=======
 //forgot password
 Route::post('user/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('user/reset-password', [AuthController::class, 'resetPassword']);
 
-
-
-Route::middleware('auth:sanctum')->group(function () {
-    // Routes that require authentication with Sanctum
-    Route::get('/products', [ProductController::class, 'index']);
-    Route::post('/products', [ProductController::class, 'store']);
-    Route::get('/products/{product}', [ProductController::class, 'show']);
-    Route::put('/products/{product}', [ProductController::class, 'update']);
-    Route::delete('/products/{product}', [ProductController::class, 'destroy']);
-});
->>>>>>> 77b319908ab55e3df98aa924430912f189e2f79f
 
 // Other routes that don't require authentication
 Route::put('/update/category/{id}', [CategoryController::class, 'update']);
