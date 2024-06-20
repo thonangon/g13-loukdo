@@ -43,12 +43,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    /**
-     * Get the products created by the user.
-     */
-    public function products()
+    public function role()
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsTo(Role::class);
     }
 }
