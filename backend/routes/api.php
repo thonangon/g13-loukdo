@@ -49,7 +49,6 @@ Route::delete('/delete/category/{id}', [CategoryController::class, 'destroy']);
 // });
 
 
-
 // Product Routes
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     Route::get('/list', [ProductController::class, 'index']);
