@@ -4,6 +4,10 @@ namespace App\Http\Controllers\ReplyProduct;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Exception;
+
+use App\Models\replyComment;
+use App\Models\replyComment as ModelsReplyComment;
 
 class ReplyCommentController extends Controller
 {
@@ -12,7 +16,8 @@ class ReplyCommentController extends Controller
      */
     public function index()
     {
-        //
+        $reply = replyComment::all();
+        return response()->json(['data' => $reply, 'message' => 'Reply comment is successfully']);
     }
 
     /**
@@ -20,7 +25,21 @@ class ReplyCommentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user_id = $request->user_id;
+        $category_id = $request->category_id;
+        $text = $request->text;
+
+        $reply = new ModelsReplyComment();
+
+        $reply->user_id = $user_id;
+        $reply->category_id = $category_id;
+        $reply->text = $text;
+        try{
+            $reply->save();
+            return response()->json(['data' => $reply, 'message' => 'Reply comment is successfully']);
+        }catch(Exception $e){
+            return response()->json(['data' => $e, 'message' => 'Reply comment is not successfully']);
+        }
     }
 
     /**
@@ -28,7 +47,7 @@ class ReplyCommentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
     }
 
     /**

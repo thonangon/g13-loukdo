@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\Products\CommentProductController;
+use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,12 @@ Route::prefix('comment')->group(function () {
     Route::get('/view/{id}', [CommentProductController::class, 'show']);
     Route::put('/update/{id}', [CommentProductController::class, 'update']);
     Route::delete('/remove/{id}', [CommentProductController::class, 'destroy']);
+});
+
+// reply comments to products
+Route::prefix('reply')->group(function () {
+    Route::get('/list', [ReplyCommentController::class, 'index']);
+    Route::post('/create', [ReplyCommentController::class, 'store'])->middleware('auth:sanctum');
 });
 
 
