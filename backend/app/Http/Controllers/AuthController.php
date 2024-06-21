@@ -123,27 +123,19 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'role_id' => 'required|integer|exists:roles,id',
-            'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validation for profile image
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
-         // Handle profile image upload
-         $profilePath = null;
-         if ($request->hasFile('profile')) {
-             $profilePath = $request->file('profile')->store('profiles', 'public');
-         }
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => $request->role_id,
-            'profile' => $profilePath, // Store profile image path
         ]);
-        return response()->json([
-            'message' => 'User registered successfully',
-        ], 201);
+
+        return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
     }
 }
