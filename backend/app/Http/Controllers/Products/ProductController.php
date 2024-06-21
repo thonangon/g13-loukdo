@@ -34,7 +34,7 @@ class ProductController extends Controller
             'name' => 'required|string|max:255|unique:products', // Ensure product name is unique in products table
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:10240', // max 10MB for all types of files
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif', // max 10MB for all types of files
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'required|exists:users,id',
         ], [
@@ -60,6 +60,7 @@ class ProductController extends Controller
 
             $product->save();
 
+            
             // Prepare the response with correct image URL
             if ($filePath) {
                 $product->image = Storage::url($filePath);
@@ -88,7 +89,7 @@ class ProductController extends Controller
             'name' => 'required|string|max:255|unique:products,name,' . $id, // Ensure product name is unique except for the current product
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:10240', // max 10MB for all types of files
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif', // max 10MB for all types of files
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'required|exists:users,id',
         ], [
