@@ -146,4 +146,12 @@ class AuthController extends Controller
             'message' => 'User registered successfully',
         ], 201);
     }
+
+    public function logout()
+    {
+        Auth::user()->currentAccessToken()->delete();
+        return response()->json([
+            'message' => 'Successfully logged out'
+        ], 200);
+    }
 }
