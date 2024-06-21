@@ -8,6 +8,7 @@ use App\Models\Product;
 use Exception;
 use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -24,78 +25,36 @@ class ProductController extends Controller
         }
     }
 
-    // /**
-    //  * Store a newly created resource in storage.
-    //  */
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'description' => 'nullable|string',
-    //         'price' => 'required|numeric',
-    //         'image' => 'nullable|image|max:2048', // max 2MB, you can adjust this size
-    //         'category_id' => 'required|exists:categories,id',
-    //         'user_id' => 'required|exists:users,id',
-    //     ]);
-
-    //     try {
-    //         // Handle image upload
-    //         $imagePath = '/uploads/products/';
-    //         $imageName = $request->file('image')->getClientOriginalName(); // Get original image name
-    //         $request->file('image')->storeAs($imagePath, $imageName, 'public'); // Store image in public disk
-
-    //         // Create new product
-    //         $product = new Product([
-    //             'name' => $request->name,
-    //             'description' => $request->description,
-    //             'price' => $request->price,
-    //             'image' => $imagePath . $imageName, // Store image path in database
-    //             'category_id' => $request->category_id,
-    //             'user_id' => $request->user_id,
-    //         ]);
-
-    //         $product->save();
-    //         return response()->json(['status' => true, 'data' => new ProductResource($product), 'message' => 'Product created successfully'], 201);
-    //     } catch (Exception $error) {
-    //         return response()->json(['status' => false, 'message' => 'Product creation failed', 'error' => $error->getMessage()], 400);
-    //     }
-    // }
-
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:products', // Ensure product name is unique in products table
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'image' => 'nullable|image|max:2048', // max 2MB, you can adjust this size
+            'image' => 'nullable|file|', // max 10MB for all types of files
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'required|exists:users,id',
         ]);
 
         try {
-            // Check if the image file with the same name already exists
+            // Handle file upload
             if ($request->hasFile('image')) {
-                $imageName = $request->file('image')->getClientOriginalName();
-                if (Storage::disk('public')->exists('uploads/products/' . $imageName)) {
-                    throw new Exception('Image file with the same name already exists.');
-                }
+                $file = $request->file('image');
+                $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
+                $filePath = $file->storeAs('uploads/products', $fileName, 'public');
+            } else {
+                $filePath = null;
             }
-
-            // Handle image upload
-            $imagePath = '/uploads/products/';
-            $imageName = $request->file('image')->getClientOriginalName();
-            $request->file('image')->storeAs('public' . $imagePath, $imageName);
 
             // Create new product
             $product = new Product([
                 'name' => $request->name,
                 'description' => $request->description,
                 'price' => $request->price,
-                'image' => $imagePath . $imageName,
+                'image' => $filePath,
                 'category_id' => $request->category_id,
                 'user_id' => $request->user_id,
             ]);
@@ -103,7 +62,9 @@ class ProductController extends Controller
             $product->save();
 
             // Prepare the response with correct image URL
-            $product->image = Storage::url('public' . $product->image);
+            if ($filePath) {
+                $product->image = Storage::url($filePath);
+            }
 
             return response()->json([
                 'status' => true,
@@ -118,6 +79,7 @@ class ProductController extends Controller
             ], 400);
         }
     }
+
     /**
      * Display the specified resource.
      */
@@ -137,10 +99,10 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:products,name,' . $id, // Ensure product name is unique except for the current product
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'image' => 'nullable|image|max:2048', // max 2MB, you can adjust this size
+            'image' => 'nullable|file|',
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'required|exists:users,id',
         ]);
@@ -150,10 +112,16 @@ class ProductController extends Controller
 
             // Handle image update
             if ($request->hasFile('image')) {
-                $imagePath = '/uploads/products/';
-                $imageName = $request->file('image')->getClientOriginalName();
-                $request->file('image')->storeAs($imagePath, $imageName, 'public');
-                $product->image = $imagePath . $imageName;
+                $file = $request->file('image');
+                $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
+                $filePath = $file->storeAs('uploads/products', $fileName, 'public');
+
+                // Delete old image if it exists
+                if ($product->image && Storage::disk('public')->exists($product->image)) {
+                    Storage::disk('public')->delete($product->image);
+                }
+
+                $product->image = $filePath;
             }
 
             $product->name = $request->name;
@@ -163,9 +131,23 @@ class ProductController extends Controller
             $product->user_id = $request->user_id;
 
             $product->save();
-            return response()->json(['status' => true, 'data' => new ProductResource($product), 'message' => 'Product updated successfully'], 200);
+
+            // Prepare the response with correct image URL
+            if ($product->image) {
+                $product->image = Storage::url($product->image);
+            }
+
+            return response()->json([
+                'status' => true,
+                'data' => new ProductResource($product),
+                'message' => 'Product updated successfully'
+            ], 200);
         } catch (Exception $error) {
-            return response()->json(['status' => false, 'message' => 'Product update failed', 'error' => $error->getMessage()], 400);
+            return response()->json([
+                'status' => false,
+                'message' => 'Product update failed',
+                'error' => $error->getMessage()
+            ], 400);
         }
     }
 
@@ -176,7 +158,14 @@ class ProductController extends Controller
     {
         try {
             $product = Product::findOrFail($id);
+
+            // Delete associated image file if it exists
+            if ($product->image && Storage::disk('public')->exists($product->image)) {
+                Storage::disk('public')->delete($product->image);
+            }
+
             $product->delete();
+
             return response()->json(['status' => true, 'message' => 'Product deleted successfully'], 200);
         } catch (Exception $error) {
             return response()->json(['status' => false, 'message' => 'Product deletion failed', 'error' => $error->getMessage()], 400);

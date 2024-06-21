@@ -39,22 +39,22 @@ Route::post('user/reset-password', [AuthController::class, 'resetPassword']);
 Route::put('/update/category/{id}', [CategoryController::class, 'update']);
 Route::delete('/delete/category/{id}', [CategoryController::class, 'destroy']);
 
-// Product Routes
-Route::prefix('products')->group(function () {
-    Route::get('/list', [ProductController::class, 'index']);
-    Route::post('/create', [ProductController::class, 'store']);
-    Route::get('/view/{id}', [ProductController::class, 'show']);
-    Route::put('/update/{id}', [ProductController::class, 'update']);
-    Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
-});
-
-
-
 // // Product Routes
-// Route::middleware('auth:sanctum')->prefix('products')->group(function () {
+// Route::prefix('products')->group(function () {
 //     Route::get('/list', [ProductController::class, 'index']);
 //     Route::post('/create', [ProductController::class, 'store']);
 //     Route::get('/view/{id}', [ProductController::class, 'show']);
 //     Route::put('/update/{id}', [ProductController::class, 'update']);
 //     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
 // });
+
+
+
+// Product Routes
+Route::middleware('auth:sanctum')->prefix('products')->group(function () {
+    Route::get('/list', [ProductController::class, 'index']);
+    Route::post('/create', [ProductController::class, 'store']);
+    Route::get('/view/{id}', [ProductController::class, 'show']);
+    Route::put('/update/{id}', [ProductController::class, 'update']);
+    Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
+});
