@@ -29,7 +29,7 @@ class ReplyCommentController extends Controller
         $category_id = $request->category_id;
         $text = $request->text;
 
-        $reply = new ModelsReplyComment();
+        $reply = new replyComment();
 
         $reply->user_id = $user_id;
         $reply->category_id = $category_id;
