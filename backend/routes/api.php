@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Categories\CategoryController;
+use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Products\ProductController;
 
 /*
@@ -48,3 +49,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::put('/update/category/{id}', [CategoryController::class, 'update']);
 Route::delete('/delete/category/{id}', [CategoryController::class, 'destroy']);
 
+// customer orders the product
+Route::get('/orders', [OrderController::class, 'index']);
+Route::post('/orderProducts', [OrderController::class, 'store']);
+Route::get('/orders/{id}/total-price', [OrderController::class, 'getTotalPrice']);
