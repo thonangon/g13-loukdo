@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use Exception;
 use App\Http\Resources\ProductResource;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -23,6 +24,44 @@ class ProductController extends Controller
         }
     }
 
+    // /**
+    //  * Store a newly created resource in storage.
+    //  */
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required|string|max:255',
+    //         'description' => 'nullable|string',
+    //         'price' => 'required|numeric',
+    //         'image' => 'nullable|image|max:2048', // max 2MB, you can adjust this size
+    //         'category_id' => 'required|exists:categories,id',
+    //         'user_id' => 'required|exists:users,id',
+    //     ]);
+
+    //     try {
+    //         // Handle image upload
+    //         $imagePath = '/uploads/products/';
+    //         $imageName = $request->file('image')->getClientOriginalName(); // Get original image name
+    //         $request->file('image')->storeAs($imagePath, $imageName, 'public'); // Store image in public disk
+
+    //         // Create new product
+    //         $product = new Product([
+    //             'name' => $request->name,
+    //             'description' => $request->description,
+    //             'price' => $request->price,
+    //             'image' => $imagePath . $imageName, // Store image path in database
+    //             'category_id' => $request->category_id,
+    //             'user_id' => $request->user_id,
+    //         ]);
+
+    //         $product->save();
+    //         return response()->json(['status' => true, 'data' => new ProductResource($product), 'message' => 'Product created successfully'], 201);
+    //     } catch (Exception $error) {
+    //         return response()->json(['status' => false, 'message' => 'Product creation failed', 'error' => $error->getMessage()], 400);
+    //     }
+    // }
+
+
     /**
      * Store a newly created resource in storage.
      */
@@ -32,28 +71,53 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|max:2048', // max 2MB, you can adjust this size
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'required|exists:users,id',
         ]);
 
         try {
+            // Check if the image file with the same name already exists
+            if ($request->hasFile('image')) {
+                $imageName = $request->file('image')->getClientOriginalName();
+                if (Storage::disk('public')->exists('uploads/products/' . $imageName)) {
+                    throw new Exception('Image file with the same name already exists.');
+                }
+            }
+
+            // Handle image upload
+            $imagePath = '/uploads/products/';
+            $imageName = $request->file('image')->getClientOriginalName();
+            $request->file('image')->storeAs('public' . $imagePath, $imageName);
+
+            // Create new product
             $product = new Product([
                 'name' => $request->name,
                 'description' => $request->description,
                 'price' => $request->price,
-                'image' => $request->image,
+                'image' => $imagePath . $imageName,
                 'category_id' => $request->category_id,
                 'user_id' => $request->user_id,
             ]);
 
             $product->save();
-            return response()->json(['status' => true, 'data' => new ProductResource($product), 'message' => 'Product created successfully'], 201);
+
+            // Prepare the response with correct image URL
+            $product->image = Storage::url('public' . $product->image);
+
+            return response()->json([
+                'status' => true,
+                'data' => new ProductResource($product),
+                'message' => 'Product created successfully'
+            ], 201);
         } catch (Exception $error) {
-            return response()->json(['status' => false, 'message' => 'Product creation failed', 'error' => $error->getMessage()], 400);
+            return response()->json([
+                'status' => false,
+                'message' => 'Product creation failed',
+                'error' => $error->getMessage()
+            ], 400);
         }
     }
-
     /**
      * Display the specified resource.
      */
@@ -76,7 +140,7 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|max:2048', // max 2MB, you can adjust this size
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'required|exists:users,id',
         ]);
@@ -84,10 +148,17 @@ class ProductController extends Controller
         try {
             $product = Product::findOrFail($id);
 
+            // Handle image update
+            if ($request->hasFile('image')) {
+                $imagePath = '/uploads/products/';
+                $imageName = $request->file('image')->getClientOriginalName();
+                $request->file('image')->storeAs($imagePath, $imageName, 'public');
+                $product->image = $imagePath . $imageName;
+            }
+
             $product->name = $request->name;
             $product->description = $request->description;
             $product->price = $request->price;
-            $product->image = $request->image;
             $product->category_id = $request->category_id;
             $product->user_id = $request->user_id;
 
