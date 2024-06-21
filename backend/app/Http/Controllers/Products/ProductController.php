@@ -3,55 +3,24 @@
 namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductResource;
-use App\Models\Product;
-use App\Models\Category;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Carbon\Carbon;
+use App\Models\Product;
+use Exception;
+use App\Http\Resources\ProductResource;
 
 class ProductController extends Controller
 {
-
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-
-
         try {
-            $products = Product::with('category')->get();
+            $products = Product::all();
             return response()->json(['status' => true, 'data' => ProductResource::collection($products), 'message' => 'Product list retrieved successfully'], 200);
-        } catch (Exception $e) {
-            return response()->json(['status' => false, 'message' => 'Failed to retrieve product list', 'error' => $e->getMessage()], 500);
+        } catch (Exception $error) {
+            return response()->json(['status' => false, 'message' => 'Failed to retrieve product list', 'error' => $error->getMessage()], 500);
         }
-        // try {
-        //     $products = Product::with('category')->get();
-
-        //     $data = $products->map(function ($product) {
-        //         return [
-        //             'id' => $product->id,
-        //             'name' => $product->name,
-        //             'description' => $product->description,
-        //             'price' => $product->price,
-        //             'stock' => $product->stock,
-        //             'image' => $product->image,
-        //             'category_id' => $product->category_id,
-        //             'category_name' => $product->category->category_name,
-        //             // 'created_at' => Carbon::parse($product->created_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss'),
-        //             // 'updated_at' => Carbon::parse($product->updated_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss')
-        //             'created_at' => $product->created_at,
-        //             'updated_at' => $product->updated_at
-        //         ];
-        //     });
-
-        //     return response()->json(['status' => true, 'data' => $data, 'message' => 'Product list retrieved successfully'], 200);
-        // } catch (Exception $e) {
-        //     return response()->json(['status' => false, 'message' => 'Failed to retrieve product list', 'error' => $e->getMessage()], 500);
-        // }
     }
 
     /**
@@ -63,132 +32,83 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'stock' => 'required|integer',
+            'image' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'user_id' => 'required|exists:users,id',
         ]);
 
         try {
-            $product = new Product();
-            $product->name = $request->name;
-            $product->description = $request->description;
-            $product->price = $request->price;
-            $product->stock = $request->stock;
-            $product->category_id = $request->category_id;
-
-            if ($request->hasFile('image')) {
-                $imageName = time().'.'.$request->image->extension();
-                $request->image->storeAs('images', $imageName, 'public');
-                $product->image = $imageName;
-            }
+            $product = new Product([
+                'name' => $request->name,
+                'description' => $request->description,
+                'price' => $request->price,
+                'image' => $request->image,
+                'category_id' => $request->category_id,
+                'user_id' => $request->user_id,
+            ]);
 
             $product->save();
-
-            return response()->json(['status' => true, 'data' => $product, 'message' => 'Product stored successfully'], 200);
-        } catch (Exception $e) {
-            return response()->json(['status' => false, 'message' => 'Failed to store product', 'error' => $e->getMessage()], 500);
+            return response()->json(['status' => true, 'data' => new ProductResource($product), 'message' => 'Product created successfully'], 201);
+        } catch (Exception $error) {
+            return response()->json(['status' => false, 'message' => 'Product creation failed', 'error' => $error->getMessage()], 400);
         }
     }
 
     /**
      * Display the specified resource.
-     *
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function show(string $id)
     {
-        // try {
-        //     $product = Product::with('category')->findOrFail($id);
-        //     $data = [
-        //         'id' => $product->id,
-        //         'name' => $product->name,
-        //         'description' => $product->description,
-        //         'price' => $product->price,
-        //         'stock' => $product->stock,
-        //         'image' => $product->image,
-        //         'category_id' => $product->category_id,
-        //         'category_name' => $product->category->name,
-        //         'created_at' => Carbon::parse($product->created_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss'),
-        //         'updated_at' => Carbon::parse($product->updated_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss')
-        //     ];
-        //     return response()->json(['status' => true, 'data' => $data, 'message' => 'Product retrieved successfully'], 200);
-        // } catch (Exception $e) {
-        //     return response()->json(['status' => false, 'message' => 'Product not found', 'error' => $e->getMessage()], 404);
-        // }
-
         try {
-            $product = Product::with('category')->findOrFail($id);
+            $product = Product::findOrFail($id);
             return response()->json(['status' => true, 'data' => new ProductResource($product), 'message' => 'Product retrieved successfully'], 200);
-        } catch (Exception $e) {
-            return response()->json(['status' => false, 'message' => 'Product not found', 'error' => $e->getMessage()], 404);
+        } catch (Exception $error) {
+            return response()->json(['status' => false, 'message' => 'Product not found', 'error' => $error->getMessage()], 404);
         }
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'stock' => 'required|integer',
+            'image' => 'nullable|string',
             'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'user_id' => 'required|exists:users,id',
         ]);
 
         try {
             $product = Product::findOrFail($id);
+
             $product->name = $request->name;
             $product->description = $request->description;
             $product->price = $request->price;
-            $product->stock = $request->stock;
+            $product->image = $request->image;
             $product->category_id = $request->category_id;
-
-            if ($request->hasFile('image')) {
-                // Delete the old image if exists
-                if ($product->image) {
-                    Storage::disk('public')->delete('images/'.$product->image);
-                }
-
-                $imageName = time().'.'.$request->image->extension();
-                $request->image->storeAs('images', $imageName, 'public');
-                $product->image = $imageName;
-            }
+            $product->user_id = $request->user_id;
 
             $product->save();
-
-            return response()->json(['status' => true, 'data' => $product, 'message' => 'Product updated successfully'], 200);
-        } catch (Exception $e) {
-            return response()->json(['status' => false, 'message' => 'Failed to update product', 'error' => $e->getMessage()], 500);
+            return response()->json(['status' => true, 'data' => new ProductResource($product), 'message' => 'Product updated successfully'], 200);
+        } catch (Exception $error) {
+            return response()->json(['status' => false, 'message' => 'Product update failed', 'error' => $error->getMessage()], 400);
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
         try {
             $product = Product::findOrFail($id);
-
-            if ($product->image) {
-                Storage::disk('public')->delete('images/'.$product->image);
-            }
-
             $product->delete();
-            return response()->json(['status' => true, 'data' => $product, 'message' => 'Product deleted successfully'], 200);
-        } catch (Exception $e) {
-            return response()->json(['status' => false, 'message' => 'Failed to delete product', 'error' => $e->getMessage()], 500);
+            return response()->json(['status' => true, 'message' => 'Product deleted successfully'], 200);
+        } catch (Exception $error) {
+            return response()->json(['status' => false, 'message' => 'Product deletion failed', 'error' => $error->getMessage()], 400);
         }
     }
 }
