@@ -34,20 +34,19 @@ class ProductController extends Controller
             'name' => 'required|string|max:255|unique:products', // Ensure product name is unique in products table
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'image' => 'nullable|file|', // max 10MB for all types of files
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:10240', // max 10MB for all types of files
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'required|exists:users,id',
+        ], [
+            'name.required' => 'Product name is required.',
+            'name.unique' => 'Product name already exists.',
+            'image.mimes' => 'Invalid file format. Supported formats: jpeg, png, jpg, gif.',
+            'image.max' => 'File size cannot exceed 10MB.'
         ]);
 
         try {
             // Handle file upload
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
-                $filePath = $file->storeAs('uploads/products', $fileName, 'public');
-            } else {
-                $filePath = null;
-            }
+            $filePath = $this->handleImageUpload($request);
 
             // Create new product
             $product = new Product([
@@ -81,19 +80,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        try {
-            $product = Product::findOrFail($id);
-            return response()->json(['status' => true, 'data' => new ProductResource($product), 'message' => 'Product retrieved successfully'], 200);
-        } catch (Exception $error) {
-            return response()->json(['status' => false, 'message' => 'Product not found', 'error' => $error->getMessage()], 404);
-        }
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
@@ -102,27 +88,21 @@ class ProductController extends Controller
             'name' => 'required|string|max:255|unique:products,name,' . $id, // Ensure product name is unique except for the current product
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'image' => 'nullable|file|',
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif|max:10240', // max 10MB for all types of files
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'required|exists:users,id',
+        ], [
+            'name.required' => 'Product name is required.',
+            'name.unique' => 'Product name already exists.',
+            'image.mimes' => 'Invalid file format. Supported formats: jpeg, png, jpg, gif.',
+            'image.max' => 'File size cannot exceed 10MB.'
         ]);
 
         try {
             $product = Product::findOrFail($id);
 
             // Handle image update
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
-                $filePath = $file->storeAs('uploads/products', $fileName, 'public');
-
-                // Delete old image if it exists
-                if ($product->image && Storage::disk('public')->exists($product->image)) {
-                    Storage::disk('public')->delete($product->image);
-                }
-
-                $product->image = $filePath;
-            }
+            $filePath = $this->handleImageUpload($request, $product);
 
             $product->name = $request->name;
             $product->description = $request->description;
@@ -133,8 +113,8 @@ class ProductController extends Controller
             $product->save();
 
             // Prepare the response with correct image URL
-            if ($product->image) {
-                $product->image = Storage::url($product->image);
+            if ($filePath) {
+                $product->image = Storage::url($filePath);
             }
 
             return response()->json([
@@ -170,5 +150,57 @@ class ProductController extends Controller
         } catch (Exception $error) {
             return response()->json(['status' => false, 'message' => 'Product deletion failed', 'error' => $error->getMessage()], 400);
         }
+    }
+
+    /**
+     * Handle image upload and return file path.
+     */
+    private function handleImageUpload(Request $request, $product = null)
+    {
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+
+            // Use the original file name if possible
+            $fileName = $file->getClientOriginalName();
+
+            // Generate a unique name only if there's a conflict
+            if (Storage::disk('public')->exists('uploads/products/' . $fileName)) {
+                $fileName = $this->getUniqueFileName($file);
+            }
+
+            // Store the file
+            $filePath = $file->storeAs('uploads/products', $fileName, 'public');
+
+            // Delete old image if it exists and is different from the new one
+            if ($product && $product->image && $product->image !== $fileName && Storage::disk('public')->exists('uploads/products/' . $product->image)) {
+                Storage::disk('public')->delete('uploads/products/' . $product->image);
+            }
+
+            return $filePath;
+        }
+
+        // No new image uploaded
+        return $product ? $product->image : null;
+    }
+
+    /**
+     * Generate a unique file name to prevent overwriting existing files.
+     */
+    private function getUniqueFileName($file)
+    {
+        $fileName = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+
+        // Append a timestamp to the file name to ensure uniqueness
+        $timestamp = round(microtime(true) * 1000); // Current timestamp in milliseconds
+        $fileName = pathinfo($fileName, PATHINFO_FILENAME) . '_' . $timestamp . '.' . $extension;
+
+        // Ensure the file name is unique in the storage path
+        while (Storage::disk('public')->exists('uploads/products/' . $fileName)) {
+            $timestamp = round(microtime(true) * 1000); // Generate new timestamp
+            $fileName = pathinfo($fileName, PATHINFO_FILENAME) . '_' . $timestamp . '.' . $extension;
+        }
+
+        return $fileName;
     }
 }
