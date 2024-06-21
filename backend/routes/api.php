@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Products\ProductController;
+use App\Http\Controllers\Products\CommentProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,14 @@ Route::prefix('products')->group(function () {
     Route::get('/view/{id}', [ProductController::class, 'show']);
     Route::put('/update/{id}', [ProductController::class, 'update']);
     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
+});
+// Comment Products Routes
+Route::prefix('comment')->group(function () {
+    Route::get('/list', [CommentProductController::class, 'index']);
+    Route::post('/create', [CommentProductController::class, 'store'])->middleware('auth:sanctum');
+    Route::get('/view/{id}', [CommentProductController::class, 'show']);
+    Route::put('/update/{id}', [CommentProductController::class, 'update']);
+    Route::delete('/remove/{id}', [CommentProductController::class, 'destroy']);
 });
 
 
