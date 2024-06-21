@@ -22,7 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'profile'
+        'profile', // Add 'image' to the fillable array
     ];
 
     /**
