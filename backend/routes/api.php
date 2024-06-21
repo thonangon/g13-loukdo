@@ -59,3 +59,4 @@ Route::prefix('products')->group(function () {
 //     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
 // });
 Route::get('/user/{id}', [UserProfileController::class, 'show']);
+Route::post('/user/update/{id}', [UserProfileController::class, 'update']);
