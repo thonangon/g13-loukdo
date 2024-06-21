@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Products;
 
+use App\Http\Controllers\Controller;
 use App\Models\Products\CommentProduct;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CommentProductController extends Controller
 {
@@ -12,17 +14,52 @@ class CommentProductController extends Controller
      */
     public function index()
     {
-        //
+        // Your code to display a list of comments
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
 
+     public function store(Request $request)
+     {
+         $user_id = auth()->id();
+
+         // return $request;
+         $validatedData = Validator::make($request->all(),[
+             'product_id' => 'required|exists:products,id',
+             'comment' => 'required|string',
+             'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
+         ]);
+        //  return $request;
+         $comment = new CommentProduct();
+         
+         if ($validatedData->fails()){
+             return response()->json([
+                 'success'=> false,
+                 'message'=> $validatedData->errors(),
+                 'status'=>404
+             ]);
+         }
+ 
+         $img = $request->image;
+         $ext = $img->getClientOriginalExtension();
+         $imageName = time().'.'.$ext;
+         $img->move(public_path('/images/product/'), $imageName);
+ 
+         $comment->product_id = $request->product_id;
+         $comment->user_id = $user_id;
+         $comment->comment = $request->comment;
+         $comment->image = $imageName;
+         $comment->save();
+         return response()->json([
+             'comment' => $comment, 
+             'image_path' => asset('/images/product/'. $imageName),
+             'success' => true,
+             'message' => 'comment created successfully',
+             'status' => 200
+         ]);  
+     }
     /**
      * Display the specified resource.
      */
