@@ -35,12 +35,18 @@ class UserProfileController extends Controller
         $user = User::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'profile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validation for profile image
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
+
+        // Update user details
+        $user->name = $request->name;
+        $user->email = $request->email;
 
         if ($request->hasFile('profile')) {
             // Delete the old profile image if it exists
@@ -56,7 +62,7 @@ class UserProfileController extends Controller
         $user->save();
 
         return response()->json([
-            'message' => 'User profile updated successfully',
+            'message' => 'User updated successfully',
         ], 200);
     }
 }
