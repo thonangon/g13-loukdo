@@ -63,9 +63,15 @@ class CommentProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(CommentProduct $commentProduct)
+    public function show(string|int $id)
     {
         //
+        $comment = CommentProduct::findOrFail($id);
+        try{
+            return response()->json(['comment' => $comment,'message' => 'You can see the comment'], status:200);
+        }catch (\Exception $e){
+            return response()->json(['message'=>['message', $e->getMessage()]], status:500);
+        }
     }
 
     /**
@@ -79,8 +85,15 @@ class CommentProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CommentProduct $commentProduct)
+    public function destroy(string|int $id)
     {
         //
+        $commentProduct = CommentProduct::findOrFail($id);
+        try{
+            $commentProduct->delete();
+            return response()->json(['message'=> 'Delet featback succesfully'], status:200);
+        }catch (\Exception $e){
+            return response()->json(['message'=>['message', $e->getMessage()]], status:500);
+        }
     }
 }

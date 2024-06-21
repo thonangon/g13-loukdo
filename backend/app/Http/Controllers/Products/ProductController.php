@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
-use App\Models\Product;
+use App\Models\Products\Product;
 use App\Models\Category;
 use Exception;
 use Illuminate\Http\Request;
@@ -20,7 +20,6 @@ class ProductController extends Controller
      */
     public function index()
     {
-
 
         try {
             $products = Product::with('category')->get();

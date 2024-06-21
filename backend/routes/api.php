@@ -51,7 +51,7 @@ Route::prefix('products')->group(function () {
 Route::prefix('comment')->group(function () {
     Route::get('/list', [CommentProductController::class, 'index']);
     Route::post('/create', [CommentProductController::class, 'store'])->middleware('auth:sanctum');
-    Route::get('/view/{id}', [CommentProductController::class, 'show']);
+    Route::get('/view/{id}', [CommentProductController::class, 'show'])->middleware('auth:sanctum');
     Route::put('/update/{id}', [CommentProductController::class, 'update']);
     Route::delete('/remove/{id}', [CommentProductController::class, 'destroy']);
 });
