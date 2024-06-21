@@ -47,4 +47,14 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+
+    public function sendMessages()
+    {
+        return $this->hasMany(Messages::class, 'sender_id');
+    }
+
+    public function recieveMessage()
+    {
+        return $this->hasMany(Messages::class,'reciever_id');
+    }
 }
