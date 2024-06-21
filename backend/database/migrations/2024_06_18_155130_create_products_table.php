@@ -16,10 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
-            $table->integer('stock');
             $table->string('image')->nullable();
-            $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('user_id')->default(0);
+            $table->unsignedBigInteger('category_id')->index();
+            $table->unsignedBigInteger('user_id')->index();
 
             $table->timestamps();
             // Define foreign key constraint
