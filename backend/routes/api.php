@@ -52,4 +52,5 @@ Route::delete('/delete/category/{id}', [CategoryController::class, 'destroy']);
 // customer orders the product
 Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orderProducts', [OrderController::class, 'store']);
-Route::get('/orders/{id}/total-price', [OrderController::class, 'getTotalPrice']);
+Route::put('/orderProducts/{id}', [OrderController::class, 'update']);
+Route::delete('/orderProducts/delete/{id}', [OrderController::class, 'delete']);

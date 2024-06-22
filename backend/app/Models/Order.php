@@ -27,24 +27,23 @@ class Order extends Model
         return self::all();
     }
     public static function store($request, $id = null)
-{
-    $data = $request->only('user_id', 'order_date');
-    $order = self::updateOrCreate(['id' => $id], $data);
+    {
+        $data = $request->only('user_id', 'order_date');
+        $order = self::updateOrCreate(['id' => $id], $data);
 
-    if ($request->has('products')) {
-        $products = collect($request->products)->mapWithKeys(function ($product) {
-            return [$product['product_id'] => ['qty' => $product['qty']]];
-        });
-        $order->products()->sync($products);
-    }
-
-    return $order;
-}
-    public function calculateTotalPrice(){
-        $total=0;
-        foreach($this->products as $product){
-            $total += $product->price * $product->pivot->qty;
+        if ($request->has('products')) {
+            $products = collect($request->products)->mapWithKeys(function ($product) {
+                $productModel = Product::find($product['product_id']);
+                $totalPrice = $productModel->price * $product['qty'];
+                return [$product['product_id'] => ['qty' => $product['qty'], 'totalPrice' => $totalPrice]];
+            });
+            $order->products()->sync($products);
         }
-        return $total;
+
+        return $order;
+    }
+    public static function destroy($id)
+    {
+        return self::find($id)->delete();
     }
 }
