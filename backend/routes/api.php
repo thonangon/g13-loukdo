@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\Products\CommentProductController;
+use App\Http\Controllers\ChartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,13 +64,19 @@ Route::prefix('messages')->group(function () {
     Route::delete('/remove/{id}', [CommentProductController::class, 'destroy']);
 });
 
-
-
-// // Product Routes
-// Route::middleware('auth:sanctum')->prefix('products')->group(function () {
-//     Route::get('/list', [ProductController::class, 'index']);
-//     Route::post('/create', [ProductController::class, 'store']);
-//     Route::get('/view/{id}', [ProductController::class, 'show']);
-//     Route::put('/update/{id}', [ProductController::class, 'update']);
-//     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
+// Route::middleware('auth:sunctum')->group(function () {
+//     Route::get('/chat/rooms', [ChartController::class, 'rooms']);
+//     Route::get('/chat/messages/{roomId}', [ChartController::class, 'messages']);
+//     Route::post('/chat/messages/{roomId}', [ChartController::class, 'newMessage']);
+//     Route::post('/chat/room', [ChartController::class, 'createRoom']);
 // });
+
+
+
+// messages chat
+Route::middleware('auth:sanctum')->prefix('message')->group(function () {
+    Route::get('/chat/rooms', [ChartController::class, 'rooms']);
+    Route::get('/chat/messages/{roomId}', [ChartController::class, 'messages']);
+    Route::post('/chat/messages/{roomId}', [ChartController::class, 'newMessage']);
+    Route::post('/chat/room', [ChartController::class, 'createRoom']);
+});
