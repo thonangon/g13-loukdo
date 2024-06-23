@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Categories\CategoryController;
+use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\Products\CommentProductController;
 use App\Http\Controllers\ChartController;
@@ -56,13 +57,13 @@ Route::prefix('comment')->group(function () {
     Route::put('/update/{id}', [CommentProductController::class, 'update']);
     Route::delete('/remove/{id}', [CommentProductController::class, 'destroy']);
 });
-// chart messages
-Route::prefix('messages')->group(function () {
-    Route::post('/send', [CommentProductController::class, 'store'])->middleware('auth:sanctum');
-    Route::get('/view/{id}', [CommentProductController::class, 'show']);
-    Route::put('/update/{id}', [CommentProductController::class, 'update']);
-    Route::delete('/remove/{id}', [CommentProductController::class, 'destroy']);
-});
+// // chart messages
+// Route::prefix('messages')->group(function () {
+//     Route::post('/send', [CommentProductController::class, 'store'])->middleware('auth:sanctum');
+//     Route::get('/view/{id}', [CommentProductController::class, 'show']);
+//     Route::put('/update/{id}', [CommentProductController::class, 'update']);
+//     Route::delete('/remove/{id}', [CommentProductController::class, 'destroy']);
+// });
 
 // Route::middleware('auth:sunctum')->group(function () {
 //     Route::get('/chat/rooms', [ChartController::class, 'rooms']);
@@ -80,3 +81,10 @@ Route::middleware('auth:sanctum')->prefix('message')->group(function () {
     Route::post('/chat/messages/{roomId}', [ChartController::class, 'newMessage']);
     Route::post('/chat/room', [ChartController::class, 'createRoom']);
 });
+
+
+// customer orders the product
+Route::get('/orders', [OrderController::class, 'index']);
+Route::post('/orderProducts', [OrderController::class, 'store']);
+Route::put('/orderProducts/{id}', [OrderController::class, 'update']);
+Route::delete('/orderProducts/delete/{id}', [OrderController::class, 'delete']);
