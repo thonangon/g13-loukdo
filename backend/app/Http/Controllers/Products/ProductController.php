@@ -36,7 +36,6 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'image' => 'nullable|file|mimes:jpeg,png,jpg,gif', // max 10MB for all types of files
             'category_id' => 'required|exists:categories,id',
-            'user_id' => 'required|exists:users,id',
         ], [
             'name.required' => 'Product name is required.',
             'name.unique' => 'Product name already exists.',
@@ -55,12 +54,11 @@ class ProductController extends Controller
                 'price' => $request->price,
                 'image' => $filePath,
                 'category_id' => $request->category_id,
-                'user_id' => $request->user_id,
             ]);
 
             $product->save();
 
-            
+
             // Prepare the response with correct image URL
             if ($filePath) {
                 $product->image = Storage::url($filePath);
@@ -91,7 +89,6 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'image' => 'nullable|file|mimes:jpeg,png,jpg,gif', // max 10MB for all types of files
             'category_id' => 'required|exists:categories,id',
-            'user_id' => 'required|exists:users,id',
         ], [
             'name.required' => 'Product name is required.',
             'name.unique' => 'Product name already exists.',
@@ -109,7 +106,6 @@ class ProductController extends Controller
             $product->description = $request->description;
             $product->price = $request->price;
             $product->category_id = $request->category_id;
-            $product->user_id = $request->user_id;
 
             $product->save();
 
