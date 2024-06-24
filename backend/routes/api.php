@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\PostController;
+use App\Http\Controllers\Api\UserProfileController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -108,3 +109,6 @@ Route::post('/orderProducts', [OrderController::class, 'store']);
 Route::put('/orderProducts/{id}', [OrderController::class, 'update']);
 Route::delete('/orderProducts/delete/{id}', [OrderController::class, 'delete']);
 
+
+Route::get('/user/{id}', [UserProfileController::class, 'show']);
+Route::post('/user/update/{id}', [UserProfileController::class, 'update']);
