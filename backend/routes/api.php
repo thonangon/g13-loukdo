@@ -127,4 +127,6 @@ Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     Route::put('/update/{id}', [ProductController::class, 'update']);
     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
 });
+
 Route::get('/user/{id}', [UserProfileController::class, 'show']);
+Route::post('/user/update/{id}', [UserProfileController::class, 'update']);
