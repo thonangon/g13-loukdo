@@ -57,7 +57,7 @@ Route::middleware('auth:sanctum')->prefix('products')->group(function () {
         Route::put('/update/{id}', [ProductController::class, 'update']);
         Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
 
-        
+
 // Comment Products Routes
 Route::prefix('comment')->group(function () {
     Route::get('/list', [CommentProductController::class, 'index']);
@@ -83,14 +83,6 @@ Route::prefix('reply')->group(function () {
 
 
 
-// // Product Routes
-// Route::middleware('auth:sanctum')->prefix('products')->group(function () {
-//     Route::get('/list', [ProductController::class, 'index']);
-//     Route::post('/create', [ProductController::class, 'store']);
-//     Route::get('/view/{id}', [ProductController::class, 'show']);
-//     Route::put('/update/{id}', [ProductController::class, 'update']);
-//     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
-// });
 
 // Route::middleware('auth:sunctum')->group(function () {
 //     Route::get('/chat/rooms', [ChartController::class, 'rooms']);
@@ -115,21 +107,3 @@ Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orderProducts', [OrderController::class, 'store']);
 Route::put('/orderProducts/{id}', [OrderController::class, 'update']);
 Route::delete('/orderProducts/delete/{id}', [OrderController::class, 'delete']);
-// // Product Routes
-// Route::prefix('products')->group(function () {
-//     Route::get('/list', [ProductController::class, 'index']);
-//     Route::post('/create', [ProductController::class, 'store']);
-//     Route::get('/view/{id}', [ProductController::class, 'show']);
-//     Route::put('/update/{id}', [ProductController::class, 'update']);
-//     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
-// });
-
-
-// Product Routes
-Route::middleware('auth:sanctum')->prefix('products')->group(function () {
-    Route::get('/list', [ProductController::class, 'index']);
-    Route::post('/create', [ProductController::class, 'store']);
-    Route::get('/view/{id}', [ProductController::class, 'show']);
-    Route::put('/update/{id}', [ProductController::class, 'update']);
-    Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
-});
