@@ -19,12 +19,12 @@
         </div>
         <!-- Logo -->
         <a class="navbar-brand mx-auto" href="#">
-          <img class="ms-auto" src="../../assets/lOUKDO.png" alt="Logo">
+          <img class="ms-auto" src="../../assets/images/lOUKDO.png" alt="Logo">
         </a>
         <!-- Profile -->
         <div class="d-flex justify-content-end align-items-center" style="width: 40%;">
           <a class="nav-link mr-0" href="#">Login</a>
-          <img src="../../assets/User.png" alt="">
+          <img src="../../assets/images/Male User.png" alt="">
         </div>
       </div>
     </div>
