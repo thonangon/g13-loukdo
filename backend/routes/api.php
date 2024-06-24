@@ -107,3 +107,4 @@ Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orderProducts', [OrderController::class, 'store']);
 Route::put('/orderProducts/{id}', [OrderController::class, 'update']);
 Route::delete('/orderProducts/delete/{id}', [OrderController::class, 'delete']);
+
