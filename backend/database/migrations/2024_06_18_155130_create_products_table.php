@@ -16,15 +16,13 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
-            $table->integer('stock');
             $table->string('image')->nullable();
-            $table->unsignedBigInteger('category_id');
-            $table->unsignedBigInteger('user_id')->default(0);
+            $table->unsignedBigInteger('category_id')->index();
 
             $table->timestamps();
             // Define foreign key constraint
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
 
         });
     }
@@ -36,7 +34,6 @@ return new class extends Migration
     {
         Schema::table('products', function (Blueprint $table) {
             $table->dropForeign(['category_id']);
-            $table->dropForeign(['user_id']);
         });
 
         Schema::dropIfExists('products');
