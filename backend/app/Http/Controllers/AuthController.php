@@ -40,7 +40,7 @@ class AuthController extends Controller
             'token_type'    => 'Bearer'
         ]);
     }
-    
+
     public function index(Request $request)
     {
         $user = $request->user();
@@ -58,25 +58,25 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-    
+
         $user = User::where('email', $request->email)->first();
-    
+
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);
         }
-    
+
         $token = Str::random(60);
-    
+
         Password::create([
             'email' => $user->email,
             'token' => $token,
-            'expires_at' => now()->addHours(1), 
+            'expires_at' => now()->addHours(1),
         ]);
-    
+
         return response()->json([
             'message' => 'Password reset link sent to your email','token' => $token
         ]);
@@ -123,20 +123,29 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'role_id' => 'nullable|integer|exists:roles,id',
+            'role_id' => 'required|integer|exists:roles,id',
+            'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validation for profile image
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
+         // Handle profile image upload
+         $profilePath = null;
+         if ($request->hasFile('profile')) {
+             $profilePath = $request->file('profile')->store('profiles', 'public');
+         }
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => $request->role_id,
+            'profile' => $profilePath, // Store profile image path
         ]);
-
-        return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
+        return response()->json([
+            'message' => 'User registered successfully',
+        ], 201);
     }
 
     public function logout()
