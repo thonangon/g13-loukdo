@@ -62,6 +62,8 @@ Route::prefix('comment')->group(function () {
 Route::prefix('reply')->group(function () {
     Route::get('/list', [ReplyCommentController::class, 'index']);
     Route::post('/create', [ReplyCommentController::class, 'store'])->middleware('auth:sanctum');
+    Route::put('/update/{id}', [ReplyCommentController::class, 'update']);
+    Route::delete('/remove/{id}', [ReplyCommentController::class, 'destroy']);
 });
 
 
