@@ -26,7 +26,7 @@
         </a>
         <!-- Profile -->
         <div class="d-flex justify-content-end align-items-center" style="width: 40%;">
-          <a class="nav-link mr-0" href="#">Login</a>
+          <a class="nav-link mr-0" href="/login">Login</a>
           <img src="../../assets/images/Male User.png" alt="">
         </div>
       </div>
