@@ -9,6 +9,7 @@ use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\ChartController;
+use App\Http\Controllers\Products\CommentProductController;
 use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 
 /*
@@ -57,7 +58,7 @@ Route::middleware('auth:sanctum')->prefix('products')->group(function () {
         Route::get('/view/{id}', [ProductController::class, 'show']);
         Route::put('/update/{id}', [ProductController::class, 'update']);
         Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
-
+});
 
 // Comment Products Routes
 Route::prefix('comment')->group(function () {
