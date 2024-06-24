@@ -1,0 +1,23 @@
+<template>
+    <div class="container">
+      <nav-bar/>
+      <Footer/> 
+    </div>
+</template>
+
+<script>
+// import navbar from "@/components/navbars/NavBar.vue"
+import NavBar from './components/navbars/NavBar.vue';
+import Footer from './components/footer/FooTer.vue'
+export default {
+  components:{
+    NavBar,
+    Footer,
+  }
+
+}
+</script>
+
+<style>
+
+</style>

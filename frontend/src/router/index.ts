@@ -60,11 +60,11 @@ router.beforeEach(async (to, from, next) => {
     /* empty */
   }
 
-  if (authRequired && !store.isAuthenticated) {
-    next('/login')
-  } else {
-    next()
-  }
+  // if (authRequired && !store.isAuthenticated) {
+  //   next('/login')
+  // } else {
+  //   next()
+  // }
 })
 
 export default { router, simpleAcl }
