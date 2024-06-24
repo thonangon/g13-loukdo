@@ -1,7 +1,11 @@
 <?php
 
+<<<<<<< HEAD:backend/app/Models/category.php
 
 namespace App\Models;
+=======
+namespace App\Models\Products;
+>>>>>>> crud_reply_comment:backend/app/Models/Products/category.php
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
