@@ -1,6 +1,9 @@
 <?php
 
+<<<<<<< HEAD
 namespace App\Models\Products;
+=======
+>>>>>>> f2f50b75c98dae4c0ba3ea3f1ac062a67856bc88
 
 namespace App\Models;
 

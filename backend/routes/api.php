@@ -51,7 +51,83 @@ Route::prefix('products')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
-    // Route::get('/list', [ProductController::class, 'index']);
+        // Route::get('/list', [ProductController::class, 'index']);
+        Route::post('/create', [ProductController::class, 'store']);
+        Route::get('/view/{id}', [ProductController::class, 'show']);
+        Route::put('/update/{id}', [ProductController::class, 'update']);
+        Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
+
+        
+// Comment Products Routes
+Route::prefix('comment')->group(function () {
+    Route::get('/list', [CommentProductController::class, 'index']);
+    Route::post('/create', [CommentProductController::class, 'store'])->middleware('auth:sanctum');
+    Route::get('/view/{id}', [CommentProductController::class, 'show'])->middleware('auth:sanctum');
+    Route::put('/update/{id}', [CommentProductController::class, 'update'])->middleware('auth:sanctum');
+    Route::delete('/remove/{id}', [CommentProductController::class, 'destroy'])->middleware('auth:sanctum');
+});
+// // chart messages
+// Route::prefix('messages')->group(function () {
+//     Route::post('/send', [CommentProductController::class, 'store'])->middleware('auth:sanctum');
+//     Route::get('/view/{id}', [CommentProductController::class, 'show']);
+//     Route::put('/update/{id}', [CommentProductController::class, 'update']);
+//     Route::delete('/remove/{id}', [CommentProductController::class, 'destroy']);
+
+// reply comments to products
+Route::prefix('reply')->group(function () {
+    Route::get('/list', [ReplyCommentController::class, 'index']);
+    Route::post('/create', [ReplyCommentController::class, 'store'])->middleware('auth:sanctum');
+    Route::put('/update/{id}', [ReplyCommentController::class, 'update']);
+    Route::delete('/remove/{id}', [ReplyCommentController::class, 'destroy']);
+});
+
+
+
+// // Product Routes
+// Route::middleware('auth:sanctum')->prefix('products')->group(function () {
+//     Route::get('/list', [ProductController::class, 'index']);
+//     Route::post('/create', [ProductController::class, 'store']);
+//     Route::get('/view/{id}', [ProductController::class, 'show']);
+//     Route::put('/update/{id}', [ProductController::class, 'update']);
+//     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
+// });
+
+// Route::middleware('auth:sunctum')->group(function () {
+//     Route::get('/chat/rooms', [ChartController::class, 'rooms']);
+//     Route::get('/chat/messages/{roomId}', [ChartController::class, 'messages']);
+//     Route::post('/chat/messages/{roomId}', [ChartController::class, 'newMessage']);
+//     Route::post('/chat/room', [ChartController::class, 'createRoom']);
+// });
+
+
+
+// messages chat
+Route::middleware('auth:sanctum')->prefix('message')->group(function () {
+    Route::get('/chat/rooms', [ChartController::class, 'rooms']);
+    Route::get('/chat/messages/{roomId}', [ChartController::class, 'messages']);
+    Route::post('/chat/messages/{roomId}', [ChartController::class, 'newMessage']);
+    Route::post('/chat/room', [ChartController::class, 'createRoom']);
+});
+
+
+// customer orders the product
+Route::get('/orders', [OrderController::class, 'index']);
+Route::post('/orderProducts', [OrderController::class, 'store']);
+Route::put('/orderProducts/{id}', [OrderController::class, 'update']);
+Route::delete('/orderProducts/delete/{id}', [OrderController::class, 'delete']);
+// // Product Routes
+// Route::prefix('products')->group(function () {
+//     Route::get('/list', [ProductController::class, 'index']);
+//     Route::post('/create', [ProductController::class, 'store']);
+//     Route::get('/view/{id}', [ProductController::class, 'show']);
+//     Route::put('/update/{id}', [ProductController::class, 'update']);
+//     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
+// });
+
+
+// Product Routes
+Route::middleware('auth:sanctum')->prefix('products')->group(function () {
+    Route::get('/list', [ProductController::class, 'index']);
     Route::post('/create', [ProductController::class, 'store']);
     Route::get('/view/{id}', [ProductController::class, 'show']);
     Route::put('/update/{id}', [ProductController::class, 'update']);
