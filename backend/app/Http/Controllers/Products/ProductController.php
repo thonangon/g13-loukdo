@@ -3,55 +3,26 @@
 namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductResource;
-use App\Models\Product;
-use App\Models\Category;
-use Exception;
 use Illuminate\Http\Request;
+use App\Models\Product;
+use Exception;
+use App\Http\Resources\ProductResource;
 use Illuminate\Support\Facades\Storage;
-use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
-
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-
-
         try {
-            $products = Product::with('category')->get();
+            $products = Product::all();
             return response()->json(['status' => true, 'data' => ProductResource::collection($products), 'message' => 'Product list retrieved successfully'], 200);
-        } catch (Exception $e) {
-            return response()->json(['status' => false, 'message' => 'Failed to retrieve product list', 'error' => $e->getMessage()], 500);
+        } catch (Exception $error) {
+            return response()->json(['status' => false, 'message' => 'Failed to retrieve product list', 'error' => $error->getMessage()], 500);
         }
-        // try {
-        //     $products = Product::with('category')->get();
-
-        //     $data = $products->map(function ($product) {
-        //         return [
-        //             'id' => $product->id,
-        //             'name' => $product->name,
-        //             'description' => $product->description,
-        //             'price' => $product->price,
-        //             'stock' => $product->stock,
-        //             'image' => $product->image,
-        //             'category_id' => $product->category_id,
-        //             'category_name' => $product->category->category_name,
-        //             // 'created_at' => Carbon::parse($product->created_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss'),
-        //             // 'updated_at' => Carbon::parse($product->updated_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss')
-        //             'created_at' => $product->created_at,
-        //             'updated_at' => $product->updated_at
-        //         ];
-        //     });
-
-        //     return response()->json(['status' => true, 'data' => $data, 'message' => 'Product list retrieved successfully'], 200);
-        // } catch (Exception $e) {
-        //     return response()->json(['status' => false, 'message' => 'Failed to retrieve product list', 'error' => $e->getMessage()], 500);
-        // }
     }
 
     /**
@@ -60,135 +31,177 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:products', // Ensure product name is unique in products table
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'stock' => 'required|integer',
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif', // max 10MB for all types of files
             'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'user_id' => 'required|exists:users,id',
+        ], [
+            'name.required' => 'Product name is required.',
+            'name.unique' => 'Product name already exists.',
+            'image.mimes' => 'Invalid file format. Supported formats: jpeg, png, jpg, gif.',
+            'image.max' => 'File size cannot exceed 10MB.'
         ]);
 
         try {
-            $product = new Product();
-            $product->name = $request->name;
-            $product->description = $request->description;
-            $product->price = $request->price;
-            $product->stock = $request->stock;
-            $product->category_id = $request->category_id;
+            // Handle file upload
+            $filePath = $this->handleImageUpload($request);
 
-            if ($request->hasFile('image')) {
-                $imageName = time().'.'.$request->image->extension();
-                $request->image->storeAs('images', $imageName, 'public');
-                $product->image = $imageName;
-            }
+            // Create new product
+            $product = new Product([
+                'name' => $request->name,
+                'description' => $request->description,
+                'price' => $request->price,
+                'image' => $filePath,
+                'category_id' => $request->category_id,
+                'user_id' => $request->user_id,
+            ]);
 
             $product->save();
 
-            return response()->json(['status' => true, 'data' => $product, 'message' => 'Product stored successfully'], 200);
-        } catch (Exception $e) {
-            return response()->json(['status' => false, 'message' => 'Failed to store product', 'error' => $e->getMessage()], 500);
-        }
-    }
+            
+            // Prepare the response with correct image URL
+            if ($filePath) {
+                $product->image = Storage::url($filePath);
+            }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function show($id)
-    {
-        // try {
-        //     $product = Product::with('category')->findOrFail($id);
-        //     $data = [
-        //         'id' => $product->id,
-        //         'name' => $product->name,
-        //         'description' => $product->description,
-        //         'price' => $product->price,
-        //         'stock' => $product->stock,
-        //         'image' => $product->image,
-        //         'category_id' => $product->category_id,
-        //         'category_name' => $product->category->name,
-        //         'created_at' => Carbon::parse($product->created_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss'),
-        //         'updated_at' => Carbon::parse($product->updated_at)->isoFormat('dddd Do, MMMM, YYYY [at] h:mm:ss')
-        //     ];
-        //     return response()->json(['status' => true, 'data' => $data, 'message' => 'Product retrieved successfully'], 200);
-        // } catch (Exception $e) {
-        //     return response()->json(['status' => false, 'message' => 'Product not found', 'error' => $e->getMessage()], 404);
-        // }
-
-        try {
-            $product = Product::with('category')->findOrFail($id);
-            return response()->json(['status' => true, 'data' => new ProductResource($product), 'message' => 'Product retrieved successfully'], 200);
-        } catch (Exception $e) {
-            return response()->json(['status' => false, 'message' => 'Product not found', 'error' => $e->getMessage()], 404);
+            return response()->json([
+                'status' => true,
+                'data' => new ProductResource($product),
+                'message' => 'Product created successfully'
+            ], 201);
+        } catch (Exception $error) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Product creation failed',
+                'error' => $error->getMessage()
+            ], 400);
         }
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:products,name,' . $id, // Ensure product name is unique except for the current product
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'stock' => 'required|integer',
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif', // max 10MB for all types of files
             'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'user_id' => 'required|exists:users,id',
+        ], [
+            'name.required' => 'Product name is required.',
+            'name.unique' => 'Product name already exists.',
+            'image.mimes' => 'Invalid file format. Supported formats: jpeg, png, jpg, gif.',
+            'image.max' => 'File size cannot exceed 10MB.'
         ]);
 
         try {
             $product = Product::findOrFail($id);
+
+            // Handle image update
+            $filePath = $this->handleImageUpload($request, $product);
+
             $product->name = $request->name;
             $product->description = $request->description;
             $product->price = $request->price;
-            $product->stock = $request->stock;
             $product->category_id = $request->category_id;
-
-            if ($request->hasFile('image')) {
-                // Delete the old image if exists
-                if ($product->image) {
-                    Storage::disk('public')->delete('images/'.$product->image);
-                }
-
-                $imageName = time().'.'.$request->image->extension();
-                $request->image->storeAs('images', $imageName, 'public');
-                $product->image = $imageName;
-            }
+            $product->user_id = $request->user_id;
 
             $product->save();
 
-            return response()->json(['status' => true, 'data' => $product, 'message' => 'Product updated successfully'], 200);
-        } catch (Exception $e) {
-            return response()->json(['status' => false, 'message' => 'Failed to update product', 'error' => $e->getMessage()], 500);
+            // Prepare the response with correct image URL
+            if ($filePath) {
+                $product->image = Storage::url($filePath);
+            }
+
+            return response()->json([
+                'status' => true,
+                'data' => new ProductResource($product),
+                'message' => 'Product updated successfully'
+            ], 200);
+        } catch (Exception $error) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Product update failed',
+                'error' => $error->getMessage()
+            ], 400);
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  string  $id
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
         try {
             $product = Product::findOrFail($id);
 
-            if ($product->image) {
-                Storage::disk('public')->delete('images/'.$product->image);
+            // Delete associated image file if it exists
+            if ($product->image && Storage::disk('public')->exists($product->image)) {
+                Storage::disk('public')->delete($product->image);
             }
 
             $product->delete();
-            return response()->json(['status' => true, 'data' => $product, 'message' => 'Product deleted successfully'], 200);
-        } catch (Exception $e) {
-            return response()->json(['status' => false, 'message' => 'Failed to delete product', 'error' => $e->getMessage()], 500);
+
+            return response()->json(['status' => true, 'message' => 'Product deleted successfully'], 200);
+        } catch (Exception $error) {
+            return response()->json(['status' => false, 'message' => 'Product deletion failed', 'error' => $error->getMessage()], 400);
         }
+    }
+
+    /**
+     * Handle image upload and return file path.
+     */
+    private function handleImageUpload(Request $request, $product = null)
+    {
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+
+            // Use the original file name if possible
+            $fileName = $file->getClientOriginalName();
+
+            // Generate a unique name only if there's a conflict
+            if (Storage::disk('public')->exists('uploads/products/' . $fileName)) {
+                $fileName = $this->getUniqueFileName($file);
+            }
+
+            // Store the file
+            $filePath = $file->storeAs('uploads/products', $fileName, 'public');
+
+            // Delete old image if it exists and is different from the new one
+            if ($product && $product->image && $product->image !== $fileName && Storage::disk('public')->exists('uploads/products/' . $product->image)) {
+                Storage::disk('public')->delete('uploads/products/' . $product->image);
+            }
+
+            return $filePath;
+        }
+
+        // No new image uploaded
+        return $product ? $product->image : null;
+    }
+
+    /**
+     * Generate a unique file name to prevent overwriting existing files.
+     */
+    private function getUniqueFileName($file)
+    {
+        $fileName = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+
+        // Append a timestamp to the file name to ensure uniqueness
+        $timestamp = round(microtime(true) * 1000); // Current timestamp in milliseconds
+        $fileName = pathinfo($fileName, PATHINFO_FILENAME) . '_' . $timestamp . '.' . $extension;
+
+        // Ensure the file name is unique in the storage path
+        while (Storage::disk('public')->exists('uploads/products/' . $fileName)) {
+            $timestamp = round(microtime(true) * 1000); // Generate new timestamp
+            $fileName = pathinfo($fileName, PATHINFO_FILENAME) . '_' . $timestamp . '.' . $extension;
+        }
+
+        return $fileName;
     }
 }
