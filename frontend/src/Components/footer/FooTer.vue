@@ -1,7 +1,7 @@
 <template>
     <footer class=" d-flex justify-content-between">
         <div class="logo">
-            <img src="../../assets/lOUKDO.png" alt="logo">
+            <img src="../../assets/images/lOUKDO.png" alt="logo">
         </div>
         <div class="product">
             <p>Products</p>
