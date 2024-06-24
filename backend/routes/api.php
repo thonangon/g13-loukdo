@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\PostController;
+use App\Http\Controllers\Api\UserProfileController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -126,3 +127,4 @@ Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     Route::put('/update/{id}', [ProductController::class, 'update']);
     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
 });
+Route::get('/user/{id}', [UserProfileController::class, 'show']);
