@@ -1,8 +1,7 @@
 <template>
   <nav>
     <div class="menus">
-        <P>Products</P>
-        
+        <P>Products</P> 
     </div>
     <div class="logo">
 
