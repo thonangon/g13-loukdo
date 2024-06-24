@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Product;
+use App\Models;
 use Exception;
 use App\Http\Resources\ProductResource;
+use App\Models\Product;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -60,7 +61,7 @@ class ProductController extends Controller
 
             $product->save();
 
-            
+
             // Prepare the response with correct image URL
             if ($filePath) {
                 $product->image = Storage::url($filePath);
