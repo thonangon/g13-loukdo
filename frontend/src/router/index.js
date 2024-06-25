@@ -11,7 +11,7 @@ const routes = [
     //     component: homePage
     // },
     { 
-        path: '/produc_detail',
+        path: '/',
         name:'produc_detail', 
         component: produc_detail
     },
