@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\Products\RateProductController;
+use App\Http\Controllers\Products\CommentProductController;
+use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +26,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 
@@ -65,3 +68,30 @@ Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     Route::delete('/remove/{productId}', [RateProductController::class, 'removeRating']);
     Route::get('/ratings/{productId}', [RateProductController::class, 'getRatings']);
 });
+// Comment Products Routes
+Route::prefix('comment')->group(function () {
+    Route::get('/list', [CommentProductController::class, 'index']);
+    Route::post('/create', [CommentProductController::class, 'store'])->middleware('auth:sanctum');
+    Route::get('/view/{id}', [CommentProductController::class, 'show']);
+    Route::put('/update/{id}', [CommentProductController::class, 'update']);
+    Route::delete('/remove/{id}', [CommentProductController::class, 'destroy']);
+});
+
+// reply comments to products
+Route::prefix('reply')->group(function () {
+    Route::get('/list', [ReplyCommentController::class, 'index']);
+    Route::post('/create', [ReplyCommentController::class, 'store'])->middleware('auth:sanctum');
+    Route::put('/update/{id}', [ReplyCommentController::class, 'update']);
+    Route::delete('/remove/{id}', [ReplyCommentController::class, 'destroy']);
+});
+
+
+
+// // Product Routes
+// Route::middleware('auth:sanctum')->prefix('products')->group(function () {
+//     Route::get('/list', [ProductController::class, 'index']);
+//     Route::post('/create', [ProductController::class, 'store']);
+//     Route::get('/view/{id}', [ProductController::class, 'show']);
+//     Route::put('/update/{id}', [ProductController::class, 'update']);
+//     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
+// });
