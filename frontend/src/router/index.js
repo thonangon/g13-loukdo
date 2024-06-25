@@ -27,6 +27,9 @@ const routes = [
         path: '/order',
         name:'order', 
         component: CustomerOrder
+      
+    },
+    { 
         path: '/foget',
         name:'foget', 
         component: ChangePassword
