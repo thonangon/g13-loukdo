@@ -5,7 +5,10 @@
         <!-- Empty div to push the logo to the center -->
         <div class="d-flex" style="width: 40%;">
           <div class="d-flex me-auto">
-            <p class="me-5 mb-0">Products</p>
+            <!-- <p class="me-5 mb-0">Products</p> -->
+            <router-link to="/" class="me-5 mb-0">
+              Products
+            </router-link>
             <div class="dropdown me-5">
               <a class="text-dark" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -23,7 +26,7 @@
         </a>
         <!-- Profile -->
         <div class="d-flex justify-content-end align-items-center" style="width: 40%;">
-          <a class="nav-link mr-0" href="#">Login</a>
+          <a class="nav-link mr-0" href="/login">Login</a>
           <img src="../../assets/images/Male User.png" alt="">
         </div>
       </div>
