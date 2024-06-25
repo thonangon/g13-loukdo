@@ -9,6 +9,7 @@ use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\ChartController;
+use App\Http\Controllers\Products\RateProductController;
 use App\Http\Controllers\Products\CommentProductController;
 use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 
@@ -50,6 +51,25 @@ Route::delete('/delete/category/{id}', [CategoryController::class, 'destroy']);
 // Product Routes
 Route::prefix('products')->group(function () {
     Route::get('/list', [ProductController::class, 'index']);
+});
+
+Route::middleware('auth:sanctum')->prefix('products')->group(function () {
+    // Route::get('/list', [ProductController::class, 'index']);
+    Route::post('/create', [ProductController::class, 'store']);
+    Route::get('/view/{id}', [ProductController::class, 'show']);
+    Route::put('/update/{id}', [ProductController::class, 'update']);
+    Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
+
+    Route::get('/ratings/{productId}', [ProductController::class, 'getProductRatings']);
+});
+
+
+
+
+Route::middleware('auth:sanctum')->prefix('products')->group(function () {
+    Route::post('/rate/{productId}', [RateProductController::class, 'rate']);
+    Route::delete('/remove/{productId}', [RateProductController::class, 'removeRating']);
+    Route::get('/ratings/{productId}', [RateProductController::class, 'getRatings']);
 });
 
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {

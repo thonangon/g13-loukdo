@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Category;
-use App\Models\Products\CommentProduct;
+use App\Models\CommentProduct;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
