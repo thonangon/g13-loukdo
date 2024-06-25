@@ -14,7 +14,6 @@
                 <div class="star-rating">
                   <span class="fa fa-star checked"></span>
                   <span class="fa fa-star checked"></span>
-                  <span class="fa fa-star checked"></span>
                   <span class="fa fa-star-half-alt checked"></span>
                   <span class="fa fa-star"></span>
                 </div>
