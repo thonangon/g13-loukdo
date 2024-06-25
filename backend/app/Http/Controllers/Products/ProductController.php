@@ -31,10 +31,10 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:products', // Ensure product name is unique in products table
+            'name' => 'required|string|max:255|unique:products',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif', // max 10MB for all types of files
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif', 
             'category_id' => 'required|exists:categories,id',
         ], [
             'name.required' => 'Product name is required.',
@@ -84,7 +84,7 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:products,name,' . $id, // Ensure product name is unique except for the current product
+            'name' => 'required|string|max:255|unique:products,name,' . $id,
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'image' => 'nullable|file|mimes:jpeg,png,jpg,gif',
