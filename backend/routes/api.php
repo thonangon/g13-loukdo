@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Products\ProductController;
+use App\Http\Controllers\Products\RateProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,4 +53,15 @@ Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     Route::get('/view/{id}', [ProductController::class, 'show']);
     Route::put('/update/{id}', [ProductController::class, 'update']);
     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
+    
+    Route::get('/ratings/{productId}', [ProductController::class, 'getProductRatings']);
+});
+
+
+
+
+Route::middleware('auth:sanctum')->prefix('products')->group(function () {
+    Route::post('/rate/{productId}', [RateProductController::class, 'rate']);
+    Route::delete('/remove/{productId}', [RateProductController::class, 'removeRating']);
+    Route::get('/ratings/{productId}', [RateProductController::class, 'getRatings']);
 });

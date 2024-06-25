@@ -1,5 +1,7 @@
 <?php
 
+// Product.php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,8 +20,8 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function user()
+    public function ratings()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(ProductUserRating::class);
     }
 }
