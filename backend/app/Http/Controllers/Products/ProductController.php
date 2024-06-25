@@ -203,7 +203,7 @@ class ProductController extends Controller
     }
 
 
-        /**
+    /**
      * Retrieve ratings for a specific product.
      */
 

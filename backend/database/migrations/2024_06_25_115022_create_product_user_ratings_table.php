@@ -4,15 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductUserRatingsTable extends Migration
+return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up()
     {
         Schema::create('product_user_ratings', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('product_id');
-            $table->unsignedTinyInteger('rating'); 
+            $table->unsignedTinyInteger('rating');
 
             $table->timestamps();
 
@@ -26,4 +29,4 @@ class CreateProductUserRatingsTable extends Migration
     {
         Schema::dropIfExists('product_user_ratings');
     }
-}
+};

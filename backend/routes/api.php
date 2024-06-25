@@ -53,7 +53,7 @@ Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     Route::get('/view/{id}', [ProductController::class, 'show']);
     Route::put('/update/{id}', [ProductController::class, 'update']);
     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
-    
+
     Route::get('/ratings/{productId}', [ProductController::class, 'getProductRatings']);
 });
 
