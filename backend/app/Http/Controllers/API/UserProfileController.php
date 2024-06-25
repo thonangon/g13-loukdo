@@ -65,4 +65,10 @@ class UserProfileController extends Controller
             'message' => 'User updated successfully',
         ], 200);
     }
+    public function getProfilePhotoUrlAttribute($value)
+{
+    // Logic to return the profile photo URL based on some attribute or relation
+    return asset('storage/' . $value); // Example: Assuming profile photo URL is stored in 'profile_photo_url' column
 }
+}
+

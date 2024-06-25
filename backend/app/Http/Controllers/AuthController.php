@@ -13,6 +13,9 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
+    public function listUser(){
+        return User::all();
+    }
     public function login(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
