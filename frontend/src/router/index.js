@@ -4,6 +4,7 @@ import { createWebHistory, createRouter } from 'vue-router'
 import produc_detail from '../views/Products/DetailPro.vue'
 import LoginUser from '../views/Users/LoginUser.vue'
 import CustomerOrder from '../views/Order/CustomerOrder.vue'
+import register from '../views/Users/ReginsterAcc.vue'
 
 
 const routes = [
@@ -21,6 +22,11 @@ const routes = [
         path: '/login',
         name:'login', 
         component: LoginUser
+    },
+    {
+        path: '/register',
+        name:'register', 
+        component: register
     },
     { 
         path: '/order',
