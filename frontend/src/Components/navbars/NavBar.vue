@@ -6,7 +6,7 @@
         <div class="d-flex" style="width: 40%;">
           <div class="d-flex me-auto">
             <!-- <p class="me-5 mb-0">Products</p> -->
-            <router-link to="/order" class="me-5 mb-0">
+            <router-link to="/register" class="me-5 mb-0">
               Products
             </router-link>
             <div class="dropdown me-5">
