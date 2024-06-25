@@ -1,6 +1,7 @@
 <?php
 
 use Laravel\Fortify\Features;
+use Laravel\Fortify\Contracts\TwoFactorAuthenticationProvider;
 
 return [
 
