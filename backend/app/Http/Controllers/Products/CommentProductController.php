@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
-use App\Models\Products\CommentProduct;
+use App\Models\CommentProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -33,7 +33,7 @@ class CommentProductController extends Controller
          ]);
         //  return $request;
          $comment = new CommentProduct();
-         
+
          if ($validatedData->fails()){
              return response()->json([
                  'success'=> false,
@@ -41,24 +41,24 @@ class CommentProductController extends Controller
                  'status'=>404
              ]);
          }
- 
+
          $img = $request->image;
          $ext = $img->getClientOriginalExtension();
          $imageName = time().'.'.$ext;
          $img->move(public_path('/images/product/'), $imageName);
- 
+
          $comment->product_id = $request->product_id;
          $comment->user_id = $user_id;
          $comment->comment = $request->comment;
          $comment->image = $imageName;
          $comment->save();
          return response()->json([
-             'comment' => $comment, 
+             'comment' => $comment,
              'image_path' => asset('/images/product/'. $imageName),
              'success' => true,
              'message' => 'comment created successfully',
              'status' => 200
-         ]);  
+         ]);
      }
     /**
      * Display the specified resource.
