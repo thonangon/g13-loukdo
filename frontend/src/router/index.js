@@ -3,6 +3,7 @@ import { createWebHistory, createRouter } from 'vue-router'
 // import homePage from '@/views/HomePage.vue'
 import produc_detail from '../views/Products/DetailPro.vue'
 import LoginUser from '../views/Users/LoginUser.vue'
+import ChangePassword from '../views/FogetPassword/ChangePassword.vue'
 
 
 const routes = [
@@ -20,6 +21,11 @@ const routes = [
         path: '/login',
         name:'login', 
         component: LoginUser
+    },
+    { 
+        path: '/foget',
+        name:'foget', 
+        component: ChangePassword
     },
  
 ]
