@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models;
 use Exception;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Models\ProductUserRating;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -32,10 +32,10 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:products', // Ensure product name is unique in products table
+            'name' => 'required|string|max:255|unique:products',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif', // max 10MB for all types of files
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif',
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'required|exists:users,id',
         ], [
@@ -87,10 +87,10 @@ class ProductController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:products,name,' . $id, // Ensure product name is unique except for the current product
+            'name' => 'required|string|max:255|unique:products,name,' . $id,
             'description' => 'nullable|string',
             'price' => 'required|numeric',
-            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif', // max 10MB for all types of files
+            'image' => 'nullable|file|mimes:jpeg,png,jpg,gif',
             'category_id' => 'required|exists:categories,id',
             'user_id' => 'required|exists:users,id',
         ], [
@@ -204,5 +204,65 @@ class ProductController extends Controller
         }
 
         return $fileName;
+    }
+
+
+    /**
+     * Retrieve ratings for a specific product.
+     */
+
+
+
+    public function getProductRatings($productId)
+    {
+        try {
+            // Find the product
+            $product = Product::findOrFail($productId);
+
+            // Check if the authenticated user (seller) owns this product
+            if ($product->user_id !== auth()->id()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Unauthorized',
+                ], 403);
+            }
+
+            // Fetch ratings associated with this product
+            $ratings = ProductUserRating::where('product_id', $productId)
+                ->with('user')
+                ->get();
+
+            // Format response data
+            $formattedRatings = $ratings->map(function ($rating) use ($product) {
+                $role = ($rating->user_id === $product->user_id) ? 'owner' : 'customer';
+
+                return [
+                    'rating_id' => $rating->id,
+                    'user_id' => $rating->user->id,
+                    'user_name' => $rating->user->name,
+                    'user_email' => $rating->user->email,
+                    'rating' => $rating->rating,
+                    'role' => $role,
+                    'created_at' => $rating->created_at,
+                ];
+            });
+
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Product ratings retrieved successfully',
+                'data' => [
+                    'product_id' => $productId,
+                    'product_name' => $product->name,
+                    'ratings' => $formattedRatings,
+                ],
+            ], 200);
+        } catch (Exception $error) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to retrieve product ratings',
+                'error' => $error->getMessage(),
+            ], 500);
+        }
     }
 }
