@@ -17,11 +17,10 @@ export default {
   components:{
     NavBar,
     Footer,
+   
   }
 
 }
 </script>
-
 <style>
-
 </style>
