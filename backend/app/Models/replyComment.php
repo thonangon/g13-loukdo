@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Products\CommentProduct;
+use App\Models\CommentProduct;
 class replyComment extends Model
 {
     use HasFactory;
