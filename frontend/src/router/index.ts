@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import axiosInstance from '@/plugins/axios'
 import { useAuthStore } from '@/stores/auth-store'
 import { createAcl, defineAclRules } from 'vue-simple-acl'
+// ___________________loukdo__________________
 
 const simpleAcl = createAcl({})
 const router = createRouter({
@@ -26,11 +27,25 @@ const router = createRouter({
       name: 'home',
       component: () => import('../views/Web/HomeView.vue')
     },
+<<<<<<< HEAD
     {
       path: '/post',
       name: 'post',
       component: () => import('../views/Web/Post/ListView.vue')
+    },
+    {
+      path: '/userLogin',
+      name: 'userLogin',
+      component: () => import('../views/Users/LoginUser.vue')
     }
+=======
+    // {
+    //   path: 'productdetail',
+    //   name: 'productdetail',
+    //   component: () => import('../views/Products/DetailPro.vue')
+    // },
+    
+>>>>>>> 6a094d2896b5f17309d036c098744cffda4168f5
   ]
 })
 
@@ -60,11 +75,11 @@ router.beforeEach(async (to, from, next) => {
     /* empty */
   }
 
-  if (authRequired && !store.isAuthenticated) {
-    next('/login')
-  } else {
-    next()
-  }
+  // if (authRequired && !store.isAuthenticated) {
+  //   next('/login')
+  // } else {
+  //   next()
+  // }
 })
 
 export default { router, simpleAcl }

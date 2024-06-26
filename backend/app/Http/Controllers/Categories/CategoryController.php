@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Categories;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Category;
+// use App\Models\Products\Category;
 use Exception;
 use App\Http\Resources\CategoryResource;
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
@@ -24,19 +25,37 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(Request $request)
+    // {
+    //     $category_name= $request->category_name;
+    //     $category = new Category();
+
+    //     $category->category_name = $category_name;
+    //     try {
+    //         $category->save();
+    //         return response()->json(['data' => $category, 'message' => 'You can store the category'], status:200);
+    //     }catch(Exception $error){
+    //         return response()->json(['data' => $error, 'message' => 'You can not store the category'], status:400);
+    //     }
+    // }
+
     public function store(Request $request)
     {
-        $category_name= $request->category_name;
-        $category = new Category();
+        $category_name = $request->category_name;
+        $user_id = $request->user_id; // Accept user_id from request
 
+        $category = new Category();
         $category->category_name = $category_name;
+        $category->user_id = $user_id;
+
         try {
             $category->save();
-            return response()->json(['data' => $category, 'message' => 'You can store the category'], status:200);
-        }catch(Exception $error){
-            return response()->json(['data' => $error, 'message' => 'You can not store the category'], status:400);
+            return response()->json(['data' => $category, 'message' => 'You can store the category'], 200);
+        } catch (Exception $error) {
+            return response()->json(['data' => $error, 'message' => 'You cannot store the category'], 400);
         }
     }
+
 
     /**
      * Display the specified resource.

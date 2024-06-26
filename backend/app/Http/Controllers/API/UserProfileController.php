@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -20,7 +19,16 @@ class UserProfileController extends Controller
     public function show($id): JsonResponse
     {
         $user = User::findOrFail($id);
-        return response()->json($user);
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'profile' => asset('storage/' . $user->profile),
+            'email_verified_at' => $user->email_verified_at,
+            'two_factor_confirmed_at' => $user->two_factor_confirmed_at,
+            'created_at' => $user->created_at,
+            'updated_at' => $user->updated_at,
+        ]);
     }
 
     /**
@@ -63,12 +71,6 @@ class UserProfileController extends Controller
 
         return response()->json([
             'message' => 'User updated successfully',
+       
         ], 200);
-    }
-    public function getProfilePhotoUrlAttribute($value)
-{
-    // Logic to return the profile photo URL based on some attribute or relation
-    return asset('storage/' . $value); // Example: Assuming profile photo URL is stored in 'profile_photo_url' column
-}
-}
-
+    }}
