@@ -4,6 +4,7 @@ import { createWebHistory, createRouter } from 'vue-router'
 import produc_detail from '../views/Products/DetailPro.vue'
 import LoginUser from '../views/Users/LoginUser.vue'
 import CustomerOrder from '../views/Order/CustomerOrder.vue'
+import ChangePassword from '../views/FogetPassword/ChangePassword.vue'
 import register from '../views/Users/ReginsterAcc.vue'
 
 
@@ -32,6 +33,12 @@ const routes = [
         path: '/order',
         name:'order', 
         component: CustomerOrder
+      
+    },
+    { 
+        path: '/foget',
+        name:'foget', 
+        component: ChangePassword
     },
  
 ]

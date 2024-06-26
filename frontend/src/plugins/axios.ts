@@ -7,9 +7,7 @@ const axiosInstance = axios.create({
     'Content-Type': 'application/json'
   }
 })
-
 axiosInstance.get('http://127.0.0.1:8000/sanctum/csrf-cookie')
-
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
@@ -26,7 +24,6 @@ axiosInstance.interceptors.request.use(
     return Promise.reject(error)
   }
 )
-
 // Add a response interceptor
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -38,5 +35,4 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-
 export default axiosInstance
