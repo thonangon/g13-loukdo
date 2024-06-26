@@ -19,7 +19,7 @@ export const useUserStore = defineStore('user', {
       const userAccount = localStorage.getItem('userAccount');
       if (token && accountUser) {
         this.tokenUser = token;
-        this.userAccount = JSON.parse(userAccount);
+        this.accountUser = JSON.parse(userAccount);
       }
     },
     logout() {
