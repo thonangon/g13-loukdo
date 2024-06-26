@@ -27,6 +27,7 @@
         <!-- Profile -->
         <div class="d-flex justify-content-end align-items-center" style="width: 40%;">
           <a class="nav-link mr-0" href="/login">Login</a>
+          <button class="btn btn-danger m-3" @click="logout">Logout</button>
           <img src="../../assets/images/Male User.png" alt="">
         </div>
       </div>
@@ -36,9 +37,35 @@
 </template>
 
 <script>
-export default {
 
-}
+import { useUserStore } from '@/stores/user.js';
+import axios from 'axios';
+
+export default {
+  setup() {
+    const store_user = useUserStore();
+    store_user.loadUser(); // Ensure user data is loaded from localStorage
+
+    const logout = async () => {
+      try {
+        await axios.post('http://127.0.0.1:8000/api/logout', {}, {
+          headers: {
+            Authorization: `Bearer ${store_user.tokenUser}`
+          }
+        });
+        store_user.logout();
+        window.location.href = '/'; // Redirect to login page after logout
+      } catch (error) {
+        console.error('Logout failed:', error);
+      }
+    };
+
+    return {
+      store_user,
+      logout,
+    };
+  },
+};
 </script>
 
 <style>
