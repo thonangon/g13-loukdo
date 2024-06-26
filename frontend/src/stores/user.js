@@ -8,18 +8,18 @@ export const useUserStore = defineStore('user', {
   }),
   actions: {
     setUser(data) {
-      this.accountUser = data.userAccount;
-      this.tokenUser = data.userToken;
+      this.accountUser = data.accountUser;
+      this.tokenUser = data.tokenUser;
       
       localStorage.setItem('user_token', data.userToken);
-      localStorage.setItem('userAccount', JSON.stringify(data.userAccount));
+      localStorage.setItem('userAccount', JSON.stringify(data.accountUser));
     },
     loadUser() {
       const token = localStorage.getItem('user_token');
-      const userAccount = localStorage.getItem('userAccount');
+      const accountUser = localStorage.getItem('userAccount');
       if (token && accountUser) {
         this.tokenUser = token;
-        this.userAccount = JSON.parse(userAccount);
+        this.accountUser = JSON.parse(accountUser);
       }
     },
     logout() {
