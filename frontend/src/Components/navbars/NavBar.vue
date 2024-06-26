@@ -6,13 +6,13 @@
         <div class="d-flex" style="width: 40%;">
           <div class="d-flex me-auto">
             <!-- <p class="me-5 mb-0">Products</p> -->
-            <router-link to="/register" class="me-5 mb-0">
+            <router-link to="/produc_detail" class="me-5 mb-0">
               Products
             </router-link>
             <div class="dropdown me-5">
               <a class="text-dark" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <li><a class="dropdown-item" href="#">Action</a></li>
+                <router-link to="/register" class="me-5 mb-0 dropdown-item">Register</router-link>
                 <li><a class="dropdown-item" href="#">Another action</a></li>
                 <li><a class="dropdown-item" href="#">Something else here</a></li>
               </ul>
@@ -54,7 +54,7 @@ export default {
           }
         });
         store_user.logout();
-        window.location.href = '/'; // Redirect to login page after logout
+        window.location.href = '/produc_detail'; // Redirect to login page after logout
       } catch (error) {
         console.error('Logout failed:', error);
       }

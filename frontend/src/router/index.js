@@ -15,7 +15,7 @@ const routes = [
     //     component: homePage
     // },
     { 
-        path: '/',
+        path: '/produc_detail',
         name:'produc_detail', 
         component: produc_detail
     },
