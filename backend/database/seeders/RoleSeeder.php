@@ -25,5 +25,5 @@ class RoleSeeder extends Seeder
             Role::create($role);
         }
     }
-    
+
 }

@@ -106,13 +106,6 @@ Route::prefix('reply')->group(function () {
 
 
 
-// Route::middleware('auth:sunctum')->group(function () {
-//     Route::get('/chat/rooms', [ChartController::class, 'rooms']);
-//     Route::get('/chat/messages/{roomId}', [ChartController::class, 'messages']);
-//     Route::post('/chat/messages/{roomId}', [ChartController::class, 'newMessage']);
-//     Route::post('/chat/room', [ChartController::class, 'createRoom']);
-// });
-
 
 
 // messages chat
