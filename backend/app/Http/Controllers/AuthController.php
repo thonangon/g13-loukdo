@@ -33,12 +33,7 @@ class AuthController extends Controller
         }
         $user   = User::where('email', $request->email)->firstOrFail();
         $token  = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'message'       => 'Login success',
-            'access_token'  => $token,
-            'token_type'    => 'Bearer'
-        ]);
+        return response()->json(['data'=>$user,'success'=>true, 'token' => $token], 200);
     }
 
     public function index(Request $request)
