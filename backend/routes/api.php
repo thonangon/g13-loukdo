@@ -33,6 +33,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 
+Route::get('/user/list', [AuthController::class, 'listUser']);
+
 // crud on categories
 Route::get('/categories/list', [CategoryController::class, 'index']);
 Route::post('/create/category', [CategoryController::class, 'store']);
