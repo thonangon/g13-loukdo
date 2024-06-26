@@ -8,11 +8,17 @@
               <h2><b>Create an account</b></h2>
               <p>Enter your email to sign up for this app</p>
             </div>
-            <div class="form-row" style="gap: 10px">
+            <div class="form-row d-flex" style="gap: 10px">
               <div class="col">
                 <div class="form-group">
-                  <label for="lastName">User name</label>
-                  <input type="text" class="form-control" id="lastName" v-model="user.name"/>
+                  <label for="firsName">Firs name</label>
+                  <input type="text" class="form-control" id="firstName" v-model="user.firstname"/>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="lastName">Last name</label>
+                  <input type="text" class="form-control" id="lastName" v-model="user.lastname"/>
                 </div>
               </div>
             </div>
@@ -75,7 +81,7 @@ export default {
         register: "http://127.0.0.1:8000/api/register",
       },
       user: {
-        name: "",
+        name: this.firstname + " " + this.lastname,
         email: "",
         password: "",
       },

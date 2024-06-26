@@ -20,8 +20,6 @@ export default {
     NavBar,
     card,
     Footer,
-
-   
   }
 
 }
