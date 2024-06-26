@@ -1,5 +1,6 @@
 <template>
     <section class="container">
+      <h1>welcome to card</h1>
       <div class="row">
         <div class="col-md-3" v-for="(product, index) in products" :key="index">
           <div class="card mb-3">
@@ -9,7 +10,7 @@
                 <span class="material-symbols-outlined">account_circle</span>
                 <div class="px-2 rounded font-semibold">{{ product.name }}</div>
               </div>
-              <p class="card-text">{{ product.title }}</p>
+              <p class="card-text">{{ product.description }}</p>
               <div class="d-flex align-items-center justify-content-between">
                 <div class="star-rating">
                   <span class="fa fa-star checked"></span>
@@ -27,41 +28,21 @@
   </template>
   
   <script>
+  import api from '../../views/api';
   export default {
     name: 'CardComponent',
     data() {
       return {
-        products: [
-          {
-            id: 1,
-            name: 'thonal',
-            title: 'Example Clothing',
-            image:
-              'https://images.nightcafe.studio/jobs/8gONOFn1ruXBxrx9Jsc3/8gONOFn1ruXBxrx9Jsc3--1--9m9d2_2x.jpg?tr=w-1600,c-at_max'
-          },
-          {
-            id: 2,
-            name: 'thonal',
-            title: 'Example Clothing',
-            image:
-              'https://images.nightcafe.studio/jobs/8gONOFn1ruXBxrx9Jsc3/8gONOFn1ruXBxrx9Jsc3--1--9m9d2_2x.jpg?tr=w-1600,c-at_max'
-          },
-          {
-            id: 3,
-            name: 'thonal',
-            title: 'Example Clothing',
-            image:
-              'https://images.nightcafe.studio/jobs/8gONOFn1ruXBxrx9Jsc3/8gONOFn1ruXBxrx9Jsc3--1--9m9d2_2x.jpg?tr=w-1600,c-at_max'
-          },
-          {
-            id: 4,
-            name: 'thonal',
-            title: 'Example Clothing',
-            image:
-              'https://images.nightcafe.studio/jobs/8gONOFn1ruXBxrx9Jsc3/8gONOFn1ruXBxrx9Jsc3--1--9m9d2_2x.jpg?tr=w-1600,c-at_max'
-          }
-        ]
+        products: []
       };
+    },
+    async created() {
+      try {
+        const response = await api.listProdcut();
+        this.products = response.data;
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
   </script>
