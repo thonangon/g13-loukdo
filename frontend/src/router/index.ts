@@ -27,25 +27,22 @@ const router = createRouter({
       name: 'home',
       component: () => import('../views/Web/HomeView.vue')
     },
-<<<<<<< HEAD
-    {
-      path: '/post',
-      name: 'post',
-      component: () => import('../views/Web/Post/ListView.vue')
-    },
-    {
-      path: '/userLogin',
-      name: 'userLogin',
-      component: () => import('../views/Users/LoginUser.vue')
-    }
-=======
+    // {
+    //   path: '/post',
+    //   name: 'post',
+    //   component: () => import('../views/Web/Post/ListView.vue')
+    // },
+    // {
+    //   path: '/userLogin',
+    //   name: 'userLogin',
+    //   component: () => import('../views/Users/LoginUser.vue')
+    // }
     // {
     //   path: 'productdetail',
     //   name: 'productdetail',
     //   component: () => import('../views/Products/DetailPro.vue')
     // },
     
->>>>>>> 6a094d2896b5f17309d036c098744cffda4168f5
   ]
 })
 
