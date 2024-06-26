@@ -1,6 +1,5 @@
 <template>
   <section class="container">
-    <h1>welcome to card</h1>
     <div class="row">
       <div class="col-md-3" v-for="(product, index) in products" :key="index">
         <div class="card mb-3">
