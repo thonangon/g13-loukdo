@@ -8,7 +8,6 @@
               <img src="" class="img-fluid img-thumbnail mt-4 mb-2" />
             </div>
             <div class="ms-3" style="margin-top: 130px">
-              <h5>{{ user.name }}</h5>
             </div>
           </div>
           <div class="p-4 text-black">
@@ -44,19 +43,26 @@
 </template>
 
 <script>
-import api from '../Api'
+import axios from 'axios';
+
 export default {
   name: "Profile",
   data() {
     return {
-      user: "" 
+      user: "" ,
+      api:{
+        profile:'http://127.0.0.1:8000/api/register'
+      }
     };
   },
+  
   methods: {
     async viewProfile() {
       try {
-        this.user= response.data.name; 
-        console.log(response.data.name);
+        let response = await axios.post(this.api.profile);
+        console.log(response);
+        // this.user= response.data.name; 
+        // console.log(response.data.name);
       } catch (error) {
         console.error('Error fetching user name:', error);
       }

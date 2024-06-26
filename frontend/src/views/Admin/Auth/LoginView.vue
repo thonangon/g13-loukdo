@@ -1,5 +1,5 @@
 <!-- src/components/Login.vue -->
-<template>
+<!-- <template>
   <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <el-card class="w-full max-w-md shadow-lg">
       <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
@@ -66,4 +66,4 @@ const { value: email, errorMessage: emailError } = useField('email')
 .min-h-screen {
   min-height: 100vh;
 }
-</style>
+</style> -->
