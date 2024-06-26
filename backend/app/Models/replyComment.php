@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\CommentProduct;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Products\CommentProduct;
 class replyComment extends Model
 {
     use HasFactory;

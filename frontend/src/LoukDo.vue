@@ -12,6 +12,7 @@
 // import navbar from "@/components/navbars/NavBar.vue"
 import NavBar from '@/Components/navbars/NavBar.vue';
 import Footer from '@/Components/footer/FooTer.vue';
+
 export default {
   components:{
     NavBar,
@@ -20,7 +21,5 @@ export default {
 
 }
 </script>
-
 <style>
-
 </style>

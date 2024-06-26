@@ -28,6 +28,16 @@ const router = createRouter({
       component: () => import('../views/Web/HomeView.vue')
     },
     // {
+    //   path: '/post',
+    //   name: 'post',
+    //   component: () => import('../views/Web/Post/ListView.vue')
+    // },
+    // {
+    //   path: '/userLogin',
+    //   name: 'userLogin',
+    //   component: () => import('../views/Users/LoginUser.vue')
+    // }
+    // {
     //   path: 'productdetail',
     //   name: 'productdetail',
     //   component: () => import('../views/Products/DetailPro.vue')
