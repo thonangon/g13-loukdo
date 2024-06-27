@@ -38,13 +38,14 @@ class UserProfileController extends Controller
      * @param  int  $id
      * @return JsonResponse
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request)
     {
-        $user = User::findOrFail($id);
+        $user_id = Auth()->id();
+        $user = User::find($user_id);
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'name' => 'nullable|string|max:255',
+            'email' => 'nullable|string|email|max:255|unique:users,email,' . $user_id,
             'profile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validation for profile image
         ]);
 
@@ -53,8 +54,14 @@ class UserProfileController extends Controller
         }
 
         // Update user details
-        $user->name = $request->name;
-        $user->email = $request->email;
+        if ($request->name == null || $request->email == null)
+        {
+            $user->name = $user->name;
+            $user->email = $user->email;
+        }else{
+            $user->name = $request->name;
+            $user->email = $request->email;
+        }
 
         if ($request->hasFile('profile')) {
             // Delete the old profile image if it exists
@@ -64,13 +71,18 @@ class UserProfileController extends Controller
 
             // Store the new profile image
             $profilePath = $request->file('profile')->store('profiles', 'public');
+            $image_path = asset('/storage'.'/'. $profilePath);
             $user->profile = $profilePath;
+            $user->profile_path = $image_path;
+            // return $profilePath;
         }
 
         $user->save();
 
         return response()->json([
+            'data'=>$user,
             'message' => 'User updated successfully',
+            'image_path' => asset('/storage'.'/'. $profilePath),
        
         ], 200);
     }}
