@@ -4,6 +4,7 @@
       <div class="col-md-3" v-for="(product, index) in products" :key="index">
         <div class="card mb-3">
           <img :src="product.image" class="card-img-top" alt=" clothe" />
+          <p>{{ product.image }}</p>
           <div class="card-body">
             <div class="d-flex align-items-center">
               <div class="d-flex align-items-center" style="height: 60px;">
@@ -38,7 +39,6 @@ export default {
   data() {
     return {
       products: [],
-      baseURL: 'http://127.0.0.1:8000/api'
     }
   },
   async created() {

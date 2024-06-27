@@ -106,7 +106,7 @@ export default {
           localStorage.setItem('user_token', response.data.token);
           localStorage.setItem('userAccount', JSON.stringify(response.data.data));
 
-          this.$router.push("/login");
+          this.$router.push("/");
         }
       } catch (e) {
         console.log("Error register:", e);
@@ -127,7 +127,7 @@ export default {
     if (token && accountUser) {
       this.store_user.tokenUser = token;
       this.store_user.accountUser = JSON.parse(accountUser);
-      this.$router.push("/login");
+      this.$router.push("/");
     }
   }
 };

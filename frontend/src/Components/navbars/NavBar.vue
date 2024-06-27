@@ -6,7 +6,7 @@
         <div class="d-flex" style="width: 40%;">
           <div class="d-flex me-auto">
             <!-- <p class="me-5 mb-0">Products</p> -->
-            <router-link to="/produc_detail" class="me-5 mb-0">
+            <router-link to="/" class="me-5 mb-0">
               Products
             </router-link>
             <div class="dropdown me-5">
@@ -26,9 +26,19 @@
         </a>
         <!-- Profile -->
         <div class="d-flex justify-content-end align-items-center" style="width: 40%;">
-          <a class="nav-link mr-0" href="/login">Login</a>
-          <button class="btn btn-danger m-3" @click="logout">Logout</button>
-          <img src="../../assets/images/Male User.png" alt="">
+          <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0">Login</router-link>
+          <router-link v-else class="nav-link mr-0">{{ store_user.accountUser.name }}</router-link>
+          
+          <div class="">
+            <img class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" src="../../assets/images/Male User.png" alt="">
+            <div class="dropdown">
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <router-link class="dropdown-item">Profile</router-link>
+                    <button class="dropdown-item" @click="logout">Logout</button>
+                </ul>
+            </div>
+        </div>
+          
         </div>
       </div>
     </div>
