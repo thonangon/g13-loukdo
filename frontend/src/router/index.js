@@ -17,9 +17,10 @@ const routes = [
         component: home_pro
     },
     { 
-        path: '/produc_detail',
+        path: '/product/:id',
         name:'produc_detail', 
-        component: produc_detail
+        component: produc_detail,
+        props: true
     },
     { 
         path: '/login',

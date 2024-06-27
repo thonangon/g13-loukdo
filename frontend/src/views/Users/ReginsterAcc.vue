@@ -33,7 +33,9 @@
             </div>
             <div class="d-flex">
               <input type="password" class="form-control fw-bold flex-grow-1" v-model="user.password"/>
-              <button type="submit" class="btn btn-dark ms-3">Submit</button>
+              <button type="submit" class="btn btn-dark ms-3" :disabled="loading">
+                <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Submit
+              </button>
             </div>
 
             <div class="row justify-content-center mt-4">
@@ -57,7 +59,6 @@
                 <p class="mb-0">Google</p>
               </div>
             </div>
-
             <p class="mt-3 text-center">
               By clicking continue, you agree to our <b>Terms of Service</b> and
               <b>Privacy</b><br /><b>Policy.</b>
@@ -87,6 +88,7 @@ export default {
         password: "",
       },
       store_user: useUserStore(),
+      loading: false,
     };
   },
   computed: {
@@ -96,6 +98,7 @@ export default {
   },
   methods: {
     async register(data_register) {
+      this.loading = true;
       try {
         let response = await axios.post(this.API.register, data_register);
         if (response.data.success) {
@@ -109,6 +112,7 @@ export default {
           this.$router.push("/");
         }
       } catch (e) {
+        this.loading = false;
         console.log("Error register:", e);
       }
     },
@@ -131,6 +135,7 @@ export default {
     }
   }
 };
+
 </script>
 
 <style>
