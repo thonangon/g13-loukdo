@@ -14,7 +14,7 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'description', 'price', 'image', 'category_id'
+        'name', 'description', 'price', 'image', 'category_id', 'user_id'
     ];
 
     public function category()
@@ -32,3 +32,6 @@ class Product extends Model
         return $this->HasMany(CommentProduct::class);
     }
 }
+
+
+
