@@ -34,6 +34,9 @@
             <div class="d-flex">
               <input type="password" class="form-control fw-bold flex-grow-1" v-model="user.password"/>
               <button type="submit" class="btn btn-dark ms-3">Submit</button>
+              <button type="submit" class="btn btn-dark ms-3" :disabled="loading">
+                <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Submit
+              </button>
             </div>
 
             <div class="row justify-content-center mt-4">
@@ -86,6 +89,7 @@ export default {
         password: "",
       },
       store_user: useUserStore(),
+      loading: false,
     };
   },
   computed: {
@@ -95,6 +99,7 @@ export default {
   },
   methods: {
     async register(data_register) {
+      this.loading = true;
       try {
         let response = await axios.post(this.API.register, data_register);
         if (response.data.success) {
@@ -108,6 +113,7 @@ export default {
           this.$router.push("/");
         }
       } catch (e) {
+        this.loading = false;
         console.log("Error register:", e);
       }
     },
