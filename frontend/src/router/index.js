@@ -6,6 +6,8 @@ import LoginUser from '../views/Users/LoginUser.vue'
 import CustomerOrder from '../views/Order/CustomerOrder.vue'
 import ChangePassword from '../views/FogetPassword/ChangePassword.vue'
 import register from '../views/Users/ReginsterAcc.vue'
+import Viewprofile from '../views/profile/ProfileVue.vue'
+
 
 
 const routes = [
@@ -40,6 +42,12 @@ const routes = [
         name:'foget', 
         component: ChangePassword
     },
+    {
+        path: '/profile',
+        name:'profile', 
+        component: Viewprofile
+    },
+    
  
 ]
 

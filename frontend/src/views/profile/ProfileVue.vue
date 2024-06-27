@@ -5,7 +5,8 @@
         <div class="card h-100">
           <div class="cover rounded-top text-white d-flex flex-row">
             <div class="profile ms-4 mt-5 d-flex flex-column align-items-center">
-              <img src="" class="img-fluid img-thumbnail mt-5"/>
+              <img src="" class="img-fluid img-thumbnail mt-5" />
+              <h4 class="mt-2">{{ user?.name }}</h4>
             </div>
             <div class="ms-3" style="margin-top: 130px"></div>
           </div>
@@ -33,6 +34,7 @@
                   <button class="btn btn-dark btn-sm">Post</button>
                 </div>
               </div>
+              <p>{{userStore}}</p>
             </div>
           </div>
         </div>
@@ -42,29 +44,23 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { useUserStore} from '@/stores/user.js'
+import { ref, onMounted } from 'vue'
 
 export default {
   name: 'Profile',
-  data() {
-    return {
-      user: '',
-      api: {
-        profile: 'http://127.0.0.1:8000/api/register'
-      }
-    }
-  },
+  setup() {
+    const userStore = useUserStore()
+    userStore.loadUser()
+    const user = ref(userStore.accountUser)
 
-  methods: {
-    async viewProfile() {
-      try {
-        let response = await axios.post(this.api.profile)
-        console.log(response)
-        // this.user= response.data.name;
-        // console.log(response.data.name);
-      } catch (error) {
-        console.error('Error fetching user name:', error)
-      }
+    onMounted(() => {
+      user.value = userStore.accountUser
+    })
+
+
+    return {
+      userStore,
     }
   }
 }
