@@ -5,10 +5,9 @@
         <div class="card h-100">
           <div class="cover rounded-top text-white d-flex flex-row">
             <div class="profile ms-4 mt-5 d-flex flex-column align-items-center">
-              <img src="" class="img-fluid img-thumbnail mt-4 mb-2" />
+              <img src="" class="img-fluid img-thumbnail mt-5"/>
             </div>
-            <div class="ms-3" style="margin-top: 130px">
-            </div>
+            <div class="ms-3" style="margin-top: 130px"></div>
           </div>
           <div class="p-4 text-black">
             <div class="d-flex justify-content-around align-items-center">
@@ -43,32 +42,32 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
-  name: "Profile",
+  name: 'Profile',
   data() {
     return {
-      user: "" ,
-      api:{
-        profile:'http://127.0.0.1:8000/api/register'
+      user: '',
+      api: {
+        profile: 'http://127.0.0.1:8000/api/register'
       }
-    };
+    }
   },
-  
+
   methods: {
     async viewProfile() {
       try {
-        let response = await axios.post(this.api.profile);
-        console.log(response);
-        // this.user= response.data.name; 
+        let response = await axios.post(this.api.profile)
+        console.log(response)
+        // this.user= response.data.name;
         // console.log(response.data.name);
       } catch (error) {
-        console.error('Error fetching user name:', error);
+        console.error('Error fetching user name:', error)
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -93,7 +92,7 @@ body,
 
 .cover {
   height: 200px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   background: rgb(79, 220, 242);
 }
 
