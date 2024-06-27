@@ -8,6 +8,7 @@
       <div class="mb-3">
         <label for="exampleInputEmail1" class="form-label fw-bold" style="padding-top: 10px">Email address</label>
         <input type="email" class="form-control fw-bold" v-model="email" required />
+        <span v-if="emailError" class="text-danger">{{ emailError }}</span>
       </div>
       <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label fw-bold" style="padding-top: 10px">Password</label>
@@ -18,8 +19,8 @@
             Submit
           </button>
         </div>
+        <span v-if="passwordError" class="text-danger">{{ passwordError }}</span>
       </div>
-      <div v-if="error" class="alert alert-dark">{{ error }}</div>
       <div>
         <a href="" style="text-decoration: none">Did you forget password?</a>
       </div>
@@ -41,11 +42,43 @@ export default {
         login: 'http://127.0.0.1:8000/api/login'
       },
       loading: false,
-      error: null
+      emailError: null,
+      passwordError: null
+    }
+  },
+  watch: {
+    email(newEmail) {
+      if (!newEmail) {
+        this.emailError = 'Email is required.';
+      } else if (!this.isValidEmail(newEmail)) {
+        this.emailError = 'Please enter a valid email address.';
+      } else {
+        this.emailError = null;
+      }
+    },
+    password(newPassword) {
+      if (!newPassword) {
+        this.passwordError = 'Password is required.';
+      }else if(newPassword.length<8){
+        this.passwordError = 'Password must be at least 8 characters long.';
+      }
+      else {
+        this.passwordError = null;
+      }
     }
   },
   methods: {
+    isValidEmail(email) {
+      // Regular expression to validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    },
     async login() {
+      // Check if there are any validation errors before proceeding
+      if (this.emailError || this.passwordError) {
+        return;
+      }
+
       this.loading = true;
       try {
         let response = await axios.post(this.api.login, { email: this.email, password: this.password });
@@ -58,12 +91,11 @@ export default {
           localStorage.setItem('user_token', response.data.token);
           localStorage.setItem('userAccount', JSON.stringify(response.data.data));
 
-          this.$router.push('/order');
+          this.$router.push('/login');
         } else {
-          this.error = response.data.message;
+          this.emailError = response.data.message;
         }
       } catch (e) {
-        this.error = 'Error logging in. Please try again.';
       } finally {
         this.loading = false;
       }
@@ -76,7 +108,7 @@ export default {
     if (token && accountUser) {
       this.store_user.tokenUser = token;
       this.store_user.accountUser = JSON.parse(accountUser);
-      this.$router.push('/order');
+      this.$router.push('/login');
     }
   }
 }
