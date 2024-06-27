@@ -57,7 +57,6 @@
                 <p class="mb-0">Google</p>
               </div>
             </div>
-
             <p class="mt-3 text-center">
               By clicking continue, you agree to our <b>Terms of Service</b> and
               <b>Privacy</b><br /><b>Policy.</b>
@@ -131,6 +130,7 @@ export default {
     }
   }
 };
+
 </script>
 
 <style>

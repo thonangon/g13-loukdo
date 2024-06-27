@@ -23,7 +23,8 @@
                 <span>&#9733;</span>
                 <span>&#9734;</span>
               </div>
-              <a href="#" class="btn btn-dark mt-3">Details</a>
+              <router-link v-if="!store_user.accountUser" to="/register" class="btn btn-dark mt-3">Details</router-link>
+              <router-link v-else :to="{ name: 'produc_detail', params: { id: product.id} }" class="btn btn-dark mt-3">Details</router-link>
             </div>
           </div>
         </div>
@@ -34,13 +35,23 @@
 
 <script>
 import api from '../../views/api'
+import { useUserStore } from '@/stores/user.js';
 export default {
   name: 'CardComponent',
+  setup() {
+    const store_user = useUserStore();
+    store_user.loadUser();
+    return{
+      store_user,
+    }
+  },
+
   data() {
     return {
       products: [],
     }
   },
+ 
   async created() {
     try {
       const response = await api.listProduct()

@@ -27,9 +27,10 @@
         <!-- Profile -->
         <div class="d-flex justify-content-end align-items-center" style="width: 40%;">
           <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0">Login</router-link>
-          <router-link v-else class="nav-link mr-0">{{ store_user.accountUser.name }}</router-link>
+          <router-link v-else-if="store_user.accountUser" class="nav-link mr-0">{{ store_user.accountUser.name }}</router-link>
           
           <div class="">
+            <!-- <img v-if="store_user.accountUser.profile" class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"  :src="store_user.accountUser.profile" alt=""> -->
             <img class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" src="../../assets/images/Male User.png" alt="">
             <div class="dropdown">
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
