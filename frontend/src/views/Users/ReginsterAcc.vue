@@ -8,11 +8,17 @@
               <h2><b>Create an account</b></h2>
               <p>Enter your email to sign up for this app</p>
             </div>
-            <div class="form-row" style="gap: 10px">
+            <div class="form-row d-flex" style="gap: 10px">
               <div class="col">
                 <div class="form-group">
-                  <label for="lastName">User name</label>
-                  <input type="text" class="form-control" id="lastName" v-model="user.name"/>
+                  <label for="firstName">First name</label>
+                  <input type="text" class="form-control" id="firstName" v-model="user.firstname"/>
+                </div>
+              </div>
+              <div class="col">
+                <div class="form-group">
+                  <label for="lastName">Last name</label>
+                  <input type="text" class="form-control" id="lastName" v-model="user.lastname"/>
                 </div>
               </div>
             </div>
@@ -75,12 +81,18 @@ export default {
         register: "http://127.0.0.1:8000/api/register",
       },
       user: {
-        name: "",
+        firstname: "",
+        lastname: "",
         email: "",
         password: "",
       },
       store_user: useUserStore(),
     };
+  },
+  computed: {
+    fullName() {
+      return this.user.firstname + " " + this.user.lastname;
+    }
   },
   methods: {
     async register(data_register) {
@@ -94,14 +106,18 @@ export default {
           localStorage.setItem('user_token', response.data.token);
           localStorage.setItem('userAccount', JSON.stringify(response.data.data));
 
-          this.$router.push("/login");
+          this.$router.push("/");
         }
       } catch (e) {
         console.log("Error register:", e);
       }
     },
     submitForm() {
-      this.register(this.user);
+      const userWithFullName = {
+        ...this.user,
+        name: this.fullName
+      };
+      this.register(userWithFullName);
     },
   },
   mounted() {
@@ -111,7 +127,7 @@ export default {
     if (token && accountUser) {
       this.store_user.tokenUser = token;
       this.store_user.accountUser = JSON.parse(accountUser);
-      this.$router.push("/login");
+      this.$router.push("/");
     }
   }
 };
