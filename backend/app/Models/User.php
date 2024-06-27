@@ -47,4 +47,17 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class);
     }
+
+
+        // Define relationship with Category
+        public function category()
+        {
+            return $this->belongsTo(Category::class);
+        }
+
+        // Define relationship with User
+        public function user()
+        {
+            return $this->belongsTo(User::class);
+        }
 }

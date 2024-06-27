@@ -50,18 +50,20 @@ Route::prefix('products')->group(function () {
     Route::get('/list', [ProductController::class, 'index']);
 });
 
+// Route::get('/products/image/{id}', [ProductController::class, 'getImage']);
+
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     // Route::get('/list', [ProductController::class, 'index']);
     Route::post('/create', [ProductController::class, 'store']);
-    Route::get('/view/{id}', [ProductController::class, 'show']);
-    Route::put('/update/{id}', [ProductController::class, 'update']);
-    Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
+    Route::get('/view/{id}', [ProductController::class, 'show'])->name('products.view');
+    Route::put('/update/{id}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('/remove/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
     Route::get('/ratings/{productId}', [ProductController::class, 'getProductRatings']);
+
+    Route::get('/image/{id}', [ProductController::class, 'getImage']);
+
 });
-
-
-
 
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     Route::post('/rate/{productId}', [RateProductController::class, 'rate']);
