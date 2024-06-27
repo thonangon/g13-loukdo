@@ -1,5 +1,4 @@
 import { createWebHistory, createRouter } from 'vue-router'
-
 import home_pro from '../views/Products/ProductShow.vue'
 import produc_detail from '../views/Products/DetailPro.vue'
 import LoginUser from '../views/Users/LoginUser.vue'
@@ -7,6 +6,7 @@ import CustomerOrder from '../views/Order/CustomerOrder.vue'
 import ChangePassword from '../views/FogetPassword/ChangePassword.vue'
 import register from '../views/Users/ReginsterAcc.vue'
 import Viewprofile from '../views/profile/ProfileVue.vue'
+
 
 
 
