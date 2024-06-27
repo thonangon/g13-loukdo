@@ -33,7 +33,6 @@
             </div>
             <div class="d-flex">
               <input type="password" class="form-control fw-bold flex-grow-1" v-model="user.password"/>
-              <button type="submit" class="btn btn-dark ms-3">Submit</button>
               <button type="submit" class="btn btn-dark ms-3" :disabled="loading">
                 <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Submit
               </button>

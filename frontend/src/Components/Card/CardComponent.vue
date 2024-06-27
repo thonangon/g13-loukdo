@@ -1,36 +1,29 @@
 <template>
-  <section class="container">
-    <div class="row">
-      <div class="col-md-3" v-for="(product, index) in products" :key="index">
-        <div class="card mb-3">
-          <img :src="product.image" class="card-img-top" alt=" clothe" />
-          <p>{{ product.image }}</p>
-          <div class="card-body">
-            <div class="d-flex align-items-center">
-              <div class="d-flex align-items-center" style="height: 60px;">
-                  <img src="../../assets/images/Male User.png" alt="User Image" style="height: 50px; width: 43px; margin-right: 10px;">
-                   <p class="mb-0">Username</p>
-              </div>
+<section class="container">
+  <div class="row">
+    <div class="col-md-3" v-for="(product, index) in products" :key="index">
+      <div class="card mb-3 shadow-sm">
+        <img src="../../assets/images/Group 52.png" class="card-img" alt="clothe" />
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text text-muted">{{ product.description }}</p>
+          <h5 class="card-price text-success">{{ product.price }}</h5>
+          <div class="d-flex align-items-center justify-content-between mt-3">
+            <div class="star-rating" style="font-size: 1.5em; color: #f39c12;">
+              <span>&#9733;</span>
+              <span>&#9733;</span>
+              <span>&#9733;</span>
+              <span>&#9733;</span>
+              <span>&#9734;</span>
             </div>
-            <h5>{{ product.name }}</h5>
-            <p class="card-text">{{ product.description }}</p>
-            <h5>{{ product.price }}</h5>
-            <div class="d-flex align-items-center justify-content-between">
-              <div class="star-rating" style="font-size: 1.7em;">
-                <span>&#9733;</span>
-                <span>&#9733;</span>
-                <span>&#9733;</span>
-                <span>&#9733;</span>
-                <span>&#9734;</span>
-              </div>
-              <router-link v-if="!store_user.accountUser" to="/register" class="btn btn-dark mt-3">Details</router-link>
-              <router-link v-else :to="{ name: 'produc_detail', params: { id: product.id} }" class="btn btn-dark mt-3">Details</router-link>
-            </div>
+            <router-link v-if="!store_user.accountUser" to="/register" class="btn btn-primary">Details</router-link>
+            <router-link v-else :to="{ name: 'produc_detail', params: { id: product.id} }" class="btn btn-primary">Details</router-link>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 </template>
 
 <script>
@@ -67,5 +60,57 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.card {
+  border-radius: 15px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.card-text {
+  font-size: 0.9em;
+}
+
+.card-price {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.star-rating span {
+  margin-right: 5px;
+}
+
+.btn {
+  border-radius: 30px;
+  font-size: 0.9em;
+  padding: 10px 20px;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #004085;
+}
 </style>
