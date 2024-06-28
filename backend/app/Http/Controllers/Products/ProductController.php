@@ -40,70 +40,70 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function store(Request $request)
-    {
-        try {
-            // Validate incoming request
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'price' => 'required|numeric',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:204800', // Adjust max file size as needed
-                'category_id' => 'required|exists:categories,id',
-            ]);
-
-            // Handle validation errors
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validation error',
-                    'errors' => $validator->errors()
-                ], 422);
-            }
-
-            // Handle image upload if provided
-            $imageName = null;
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('/api/products/image/'), $imageName);
-                 // Prepare the response with correct image URL if an image was uploaded
-                $image_url = $imageName ? asset('/api/products/image/' . $imageName) : null;
-            }
-
-            // Get the authenticated user
-            $user_id = Auth::id();
-            // return $user_id;
-         
-            // Create new product instance and associate with the user
-            $product = new Product();
-            $product->name = $request->name;
-            $product->description = $request->description;
-            $product->price = $request->price;
-            $product->image = $imageName;
-            $product->image_path = $image_url;
-            $product->category_id = $request->category_id;
-            $product->user_id = $user_id;
-            $product->save();
-         
-           
-
-            // Return success response
-            return response()->json([
-                'status' => true,
-                'data' => $product, // Assuming you're returning the product directly
-                'message' => 'Product created successfully'
-            ], 201);
-
-        } catch (Exception $error) {
-            // Return error response if an exception occurs
-            return response()->json([
-                'status' => false,
-                'message' => 'Product creation failed',
-                'error' => $error->getMessage()
-            ], 400);
-        }
-    }
+     public function store(Request $request)
+     {
+         try {
+             // Validate incoming request
+             $validator = Validator::make($request->all(), [
+                 'name' => 'required|string|max:255',
+                 'description' => 'nullable|string',
+                 'price' => 'required|numeric',
+                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:204800', // Adjust max file size as needed
+                 'category_id' => 'required|exists:categories,id',
+             ]);
+ 
+             // Handle validation errors
+             if ($validator->fails()) {
+                 return response()->json([
+                     'status' => false,
+                     'message' => 'Validation error',
+                     'errors' => $validator->errors()
+                 ], 422);
+             }
+ 
+             // Handle image upload if provided
+             $imageName = null;
+             if ($request->hasFile('image')) {
+                 $image = $request->file('image');
+                 $imageName = time() . '_' . $image->getClientOriginalName();
+                 $image->move(public_path('/api/products/image/'), $imageName);
+                  // Prepare the response with correct image URL if an image was uploaded
+                 $image_url = $imageName ? asset('/api/products/image/' . $imageName) : null;
+             }
+            
+             // Get the authenticated user
+             $user_id = Auth::id();
+             // return $user_id;
+          
+             // Create new product instance and associate with the user
+             $product = new Product();
+             $product->name = $request->name;
+             $product->description = $request->description;
+             $product->price = $request->price;
+             $product->image = $imageName;
+             $product->category_id = $request->category_id;
+             $product->user_id = $user_id;
+             $product->save();
+          
+            
+ 
+             // Return success response
+             return response()->json([
+                 'status' => true,
+                 'data' => $product, // Assuming you're returning the product directly
+                 'message' => 'Product created successfully'
+             ], 201);
+ 
+         } catch (Exception $error) {
+             // Return error response if an exception occurs
+             return response()->json([
+                 'status' => false,
+                 'message' => 'Product creation failed',
+                 'error' => $error->getMessage()
+             ], 400);
+         }
+     }
+     
 
 
     /**
