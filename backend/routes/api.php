@@ -53,15 +53,14 @@ Route::delete('/delete/category/{id}', [CategoryController::class, 'destroy']);
 // Product Routes
 Route::prefix('products')->group(function () {
     Route::get('/list', [ProductController::class, 'index']);
+    Route::get('/view/{id}', [ProductController::class, 'show']);
 });
 
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     // Route::get('/list', [ProductController::class, 'index']);
     Route::post('/create', [ProductController::class, 'store']);
-    Route::get('/view/{id}', [ProductController::class, 'show']);
     Route::put('/update/{id}', [ProductController::class, 'update']);
     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
-
     Route::get('/ratings/{productId}', [ProductController::class, 'getProductRatings']);
 });
 
@@ -74,13 +73,6 @@ Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     Route::get('/ratings/{productId}', [RateProductController::class, 'getRatings']);
 });
 
-Route::middleware('auth:sanctum')->prefix('products')->group(function () {
-        // Route::get('/list', [ProductController::class, 'index']);
-        Route::post('/create', [ProductController::class, 'store']);
-        Route::get('/view/{id}', [ProductController::class, 'show']);
-        Route::put('/update/{id}', [ProductController::class, 'update']);
-        Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
-});
 
 // Comment Products Routes
 Route::prefix('comment')->group(function () {
