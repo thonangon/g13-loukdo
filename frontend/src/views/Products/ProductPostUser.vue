@@ -26,42 +26,92 @@
         <span style="color:red"> {{errorQuantity}}</span>
       </div>
       <div class="mb-3">
+        <label for="product-quantity" class="form-label fw-bold">Category</label>
+        <input type="number" class="form-control" id="product-quantity" placeholder="Category" v-model="category" required />
+        <span style="color:red"> {{errorCategory}}</span>
+      </div>
+      <div class="mb-3">
         <label for="product-description" class="form-label fw-bold">Description</label>
         <textarea class="form-control" id="product-description" placeholder="Enter details about your product!" v-model="description" required></textarea>
         <span style="color:red"> {{errorDescription}}</span>
       </div>
       <div class="mb-3">
-      <label for="product-image" class="form-label fw-bold">Photo</label>
-      <div class="d-flex align-items-center">
-        <input type="file" class="form-control flex-grow-1" id="product-image" required />
-        <button type="submit" class="btn btn-dark ms-3"  :disabled="loading">
-          <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          Post
-        </button>
+        <label for="product-image" class="form-label fw-bold">Photo</label>
+        <div class="d-flex align-items-center">
+          <input type="file" class="form-control flex-grow-1" id="product-image" @change="handleFileUpload" ref="imageInput" required />
+          <button type="submit" class="btn btn-dark ms-3" :disabled="loading">
+            <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Post
+          </button>
+        </div>
       </div>
-    </div>
     </div>
   </form>
 </template>
-
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import { useUserStore } from '@/stores/user.js';
+
 export default {
-  data(){
-    return{
-      name:'',
-      price:'',
-      quantity:'',
-      description:'',
-      image:'',
-      loading:false,
-      errorName:'',
-      errorPrice:'',
-      errorQuantity:'',
-      errorDescription:'',
-      api:{
-        createProduct:'http://127.0.0.1:8000/api/products/create'
+  data() {
+    return {
+      category:'',
+      name: '',
+      price: null,
+      quantity: null,
+      description: '',
+      image: null,
+      loading: false,
+      errorName: '',
+      errorPrice: '',
+      errorQuantity: '',
+      errorDescription: '',
+      errorCategory: '',
+      store_user: useUserStore(),
+    };
+  },
+  methods: {
+    async createProduct() {
+      try {
+        this.loading = true;
+        const formData = new FormData();
+        formData.append('name', this.name);
+        formData.append('price', this.price);
+        formData.append('quantity', this.quantity);
+        formData.append('description', this.description);
+        formData.append('image', this.image);
+        formData.append('category_id',this.category);
+        console.log(this.store_user.tokenUser)
+
+        const token = localStorage.getItem('authToken'); // Assuming you store JWT token in localStorage
+
+        const response = await axios.post('http://127.0.0.1:8000/api/products/create', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${this.store_user.tokenUser}`
+          }
+        });
+
+        console.log('Product created:', response.data);
+        this.resetForm();
+      } catch (error) {
+        console.error('Error creating product:', error);
+        if (error.response && error.response.status === 401) {
+          console.log('Unauthorized access. Redirecting to login.');
+        }
+      } finally {
+        this.loading = false;
       }
+    },
+    handleFileUpload(event) {
+      this.image = event.target.files[0];
+    },
+    resetForm() {
+      this.name = '';
+      this.price = null;
+      this.quantity = null;
+      this.description = '';
+      this.image = null;
     }
   },
   watch:{
@@ -96,32 +146,20 @@ export default {
       else{
         this.errorDescription = null
       }
-    }
-  },
-  methods: {
-    async createProduct() {
-      try {
-        this.loading = true; 
-        let response = await axios.post(this.api.createProduct, {
-          name: this.name,
-          price: this.price,
-          quantity: this.quantity,
-          description: this.description,
-          image: this.image,
-        });
-        console.log(response);
-
-        
-        // Handle the successful response here
-        this.loading = false; // Set loading to false after the request is complete
-      } catch (error) {
-        console.log('Error creating product', error);
-        this.loading = false; // Set loading to false in case of an error
-      }
     },
-  }
-}
+    category(newCategory){
+      if(!newCategory || newCategory <= 0){
+        this.errorCategory = 'Select valid category'
+      }
+      else{
+        this.errorCategory = null
+      }
+    }
+
+  },
+};
 </script>
+
 
 <style>
 </style>
