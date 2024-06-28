@@ -1,50 +1,58 @@
 <template>
-<section class="container">
-  <div class="row">
-    <div class="col-md-3" v-for="(product, index) in products" :key="index">
-      <div class="card mb-3 shadow-sm">
-        <img src="../../assets/images/Group 52.png" class="card-img" alt="clothe" />
-        <div class="card-body">
-          <h5 class="card-title">{{ product.name }}</h5>
-          <p class="card-text text-muted">{{ product.description }}</p>
-          <h5 class="card-price text-success">{{ product.price }}</h5>
-          <div class="d-flex align-items-center justify-content-between mt-3">
-            <div class="star-rating" style="font-size: 1.5em; color: #f39c12;">
-              <span>&#9733;</span>
-              <span>&#9733;</span>
-              <span>&#9733;</span>
-              <span>&#9733;</span>
-              <span>&#9734;</span>
+  <section class="container">
+    <div class="row">
+      <div class="col-md-3" v-for="(product, index) in products" :key="index">
+        <div class="card mb-3 shadow-sm">
+          <img :src="getImageUrl(product.image)" class="card-img" alt="clothe" style="height: 400px;"/>
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text text-muted">{{ product.description }}</p>
+            <h5 class="card-price text-success">{{ product.price }}</h5>
+            <div class="d-flex align-items-center justify-content-between mt-3">
+              <div class="star-rating" style="font-size: 1.5em; color: #f39c12;">
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9733;</span>
+                <span>&#9734;</span>
+              </div>
+              <router-link v-if="!store_user.accountUser" to="/register" class="btn btn-primary">Details</router-link>
+              <router-link v-else :to="{ name: 'produc_detail', params: { id: product.id} }" class="btn btn-primary">Details</router-link>
             </div>
-            <router-link v-if="!store_user.accountUser" to="/register" class="btn btn-primary">Details</router-link>
-            <router-link v-else :to="{ name: 'produc_detail', params: { id: product.id} }" class="btn btn-primary">Details</router-link>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 </template>
 
 <script>
 import api from '../../views/api'
 import { useUserStore } from '@/stores/user.js';
+
 export default {
   name: 'CardComponent',
   setup() {
     const store_user = useUserStore();
     store_user.loadUser();
-    return{
+    return {
       store_user,
     }
   },
 
   data() {
     return {
-      products: [],
+      products: []
     }
   },
- 
+  computed: {
+    getImageUrl() {
+      return (filename) => {
+        return api.imageUrlProduct(filename);
+      };
+    }
+  },
+
   async created() {
     try {
       const response = await api.listProduct()
@@ -59,6 +67,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 .card {
