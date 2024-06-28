@@ -46,7 +46,7 @@ class UserProfileController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|max:255|unique:users,email,' . $user_id,
-            'profile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validation for profile image
+            'profile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', 
         ]);
 
         if ($validator->fails()) {
@@ -74,7 +74,7 @@ class UserProfileController extends Controller
             $image_path = asset('/storage'.'/'. $profilePath);
             $user->profile = $profilePath;
             $user->profile_path = $image_path;
-            // return $profilePath;
+          
         }
 
         $user->save();
