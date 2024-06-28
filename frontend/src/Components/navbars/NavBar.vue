@@ -17,7 +17,7 @@
                     <li><a class="dropdown-item custom-font-size" href="#">Something else here</a></li>
                   </ul>
                 </div>
-                <router-link to="/" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">More...</router-link>
+                <router-link to="/product-post" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">More...</router-link>
               </div> 
             </div>
             <!-- Logo -->
