@@ -1,15 +1,9 @@
 <template>
   <section class="container">
     <div class="row">
-<<<<<<< HEAD
-      <div class="col-md-3" v-for="(product, index) in products" :key="index">
-        <div class="card mb-3 shadow-sm">
-          <img :src="getImageUrl(product.image)" class="card-img" alt="clothe" style="height: 400px;"/>
-=======
       <div class="col-md-3" v-for="(product, index) in filteredProducts" :key="index">
         <div class="card mb-3 shadow-sm">
           <img src="../../assets/images/Group 52.png" class="card-img" alt="clothe" />
->>>>>>> origin/Search_Product
           <div class="card-body">
             <h5 class="card-title">{{ product.name }}</h5>
             <p class="card-text text-muted">{{ product.description }}</p>
@@ -30,44 +24,6 @@
       </div>
     </div>
   </section>
-<<<<<<< HEAD
-</template>
-
-<script>
-import api from '../../views/api'
-import { useUserStore } from '@/stores/user.js';
-
-export default {
-  name: 'CardComponent',
-  setup() {
-    const store_user = useUserStore();
-    store_user.loadUser();
-    return {
-      store_user,
-    }
-  },
-
-  data() {
-    return {
-      products: []
-    }
-  },
-  computed: {
-    getImageUrl() {
-      return (filename) => {
-        return api.imageUrlProduct(filename);
-      };
-    }
-  },
-
-  async created() {
-    try {
-      const response = await api.listProduct()
-      if (response.data.status) {
-        this.products = response.data.data
-      } else {
-        console.error('Error fetching products: ', response.data.message)
-=======
   </template>
   
   <script>
@@ -108,7 +64,6 @@ export default {
         }
       } catch (error) {
         console.error('API error: ', error)
->>>>>>> origin/Search_Product
       }
     }
   }
