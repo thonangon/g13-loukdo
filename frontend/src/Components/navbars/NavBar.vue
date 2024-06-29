@@ -8,7 +8,8 @@
             <div class="d-flex" style="width: 40%;">
               <div class="d-flex me-auto">
                 <!-- <p class="me-5 mb-0">Products</p> -->
-                <router-link to="/" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">Products</router-link>
+                <router-link to="/" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">Home</router-link>
+                <router-link to="/product" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">Products</router-link>
                 <div class="dropdown me-5 custom-font-size">
                   <a class="text-dark custom-font-size nav-link" active-class="active text-primary border-bottom" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">

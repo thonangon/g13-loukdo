@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
-import home_pro from '../views/Products/ProductShow.vue'
+import Home from '../views/HomePage/Homeview.vue'
+import product from '../views/Products/ProductShow.vue'
 import produc_detail from '../views/Products/DetailPro.vue'
 import LoginUser from '../views/Users/LoginUser.vue'
 import CustomerOrder from '../views/Order/CustomerOrder.vue'
@@ -11,8 +12,13 @@ import ProductShow from '../views/Products/ProductShow.vue';
 const routes = [
     { 
         path: '/',
+        name:'Home', 
+        component: Home
+    },
+    { 
+        path: '/product',
         name:'home_pro', 
-        component: home_pro
+        component: product
     },
     { 
         path: '/product/:id',
