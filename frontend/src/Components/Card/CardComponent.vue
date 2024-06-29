@@ -1,9 +1,15 @@
 <template>
   <section class="container">
     <div class="row">
+<<<<<<< HEAD
       <div class="col-md-3" v-for="(product, index) in products" :key="index">
         <div class="card mb-3 shadow-sm">
           <img :src="getImageUrl(product.image)" class="card-img" alt="clothe" style="height: 400px;"/>
+=======
+      <div class="col-md-3" v-for="(product, index) in filteredProducts" :key="index">
+        <div class="card mb-3 shadow-sm">
+          <img src="../../assets/images/Group 52.png" class="card-img" alt="clothe" />
+>>>>>>> origin/Search_Product
           <div class="card-body">
             <h5 class="card-title">{{ product.name }}</h5>
             <p class="card-text text-muted">{{ product.description }}</p>
@@ -24,6 +30,7 @@
       </div>
     </div>
   </section>
+<<<<<<< HEAD
 </template>
 
 <script>
@@ -60,13 +67,55 @@ export default {
         this.products = response.data.data
       } else {
         console.error('Error fetching products: ', response.data.message)
+=======
+  </template>
+  
+  <script>
+  import api from '../../views/api'
+  import { useUserStore } from '@/stores/user.js';
+  export default {
+    name: 'CardComponent',
+    props: ['searchQuery'],
+    setup() {
+      const store_user = useUserStore();
+      store_user.loadUser();
+      return {
+        store_user,
       }
-    } catch (error) {
-      console.error('API error: ', error)
+    },
+    data() {
+      return {
+        products: [],
+      }
+    },
+    computed: {
+      filteredProducts() {
+        if (!this.searchQuery) {
+          return this.products;
+        }
+        return this.products.filter(product => 
+          product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+      }
+    },
+    async created() {
+      try {
+        const response = await api.listProduct()
+        if (response.data.status) {
+          this.products = response.data.data
+        } else {
+          console.error('Error fetching products: ', response.data.message)
+        }
+      } catch (error) {
+        console.error('API error: ', error)
+>>>>>>> origin/Search_Product
+      }
     }
   }
-}
-</script>
+  </script>
+  
+  
+  
 
 
 <style scoped>

@@ -6,8 +6,12 @@ import LoginUser from '../views/Users/LoginUser.vue'
 import CustomerOrder from '../views/Order/CustomerOrder.vue'
 import ChangePassword from '../views/FogetPassword/ChangePassword.vue'
 import register from '../views/Users/ReginsterAcc.vue'
+<<<<<<< HEAD
 import creatProduct from '../views/Products/CreateProduct.vue'
 
+=======
+import ProductShow from '../views/Products/ProductShow.vue';
+>>>>>>> origin/Search_Product
 
 const routes = [
     { 
@@ -42,11 +46,21 @@ const routes = [
         name:'foget', 
         component: ChangePassword
     },
+<<<<<<< HEAD
     { 
         path: '/product/create',
         name:'create_product',  
         component: creatProduct
     },
+=======
+    {
+      path: '/product/:id',
+      name: 'ProductShow',
+      component: ProductShow,
+    },
+  
+
+>>>>>>> origin/Search_Product
  
 ]
 
