@@ -112,28 +112,13 @@
       <cards_product class="mt-5" :searchQuery="searchQuery" />
     </div>
   </div>
-  <div class="container mt-5">
-    <h3>Popular Categories</h3>
-    <div class="row">
-      <div class="col-md-3">
-        <div class="card">
-          <img src="../../assets/images/cloth.jpg" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Clothing</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="card">
-          <img src="../../assets/images/shoes.jpg" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">Clothing</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div>
+  <div>
+    <div class="container mt-5">
+      <h3> The Populer Categories</h3>
+      <categories class="mt-5"/>
+  </div>
+  </div>
   </div>
   <div class="container mt-5">
     <div class="row align-items-center">
@@ -162,10 +147,12 @@
 </template>
 <script>
 import cards_product from '@/Components/Card/CardComponent.vue'
+import Categories from '@/Components/Card/CategoriesSlide.vue'
 export default {
   name: 'HomeView',
   components: {
-    cards_product
+    cards_product,
+    Categories
   },
   data() {
     return {}
