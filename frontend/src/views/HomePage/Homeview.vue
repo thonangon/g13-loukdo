@@ -42,7 +42,7 @@
             <div class="row align-items-center">
               <div class="col-md-6">
                 <div class="carousel-caption text-center">
-                  <h1>second hand clothing!</h1>
+                  <h1>Second hand Goods!</h1>
                   <p class="content">
                     reducing the cost compared to buying new products, Save money , Encourages users
                     to know about products , where products are reused and recycled rather than
@@ -112,7 +112,7 @@
       <cards_product class="mt-5" :searchQuery="searchQuery" />
     </div>
   </div>
-  <!-- <div class="container mt-5">
+  <div class="container mt-5">
     <h3>Popular Categories</h3>
     <div class="row">
       <div class="col-md-3">
@@ -134,12 +134,12 @@
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
   <div class="container mt-5">
     <div class="row align-items-center">
       <div class="col-md-6">
         <div class="text-center">
-          <h1>second hand clothing!</h1>
+          <h1>second hand Goods!</h1>
           <p class="content">
             	encourages recycling and reduces waste, promoting a more sustainable lifestyle.
             	Small businesses and individuals can reach a wider audience, increasing their chances of selling items.
