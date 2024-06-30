@@ -1,45 +1,33 @@
 <template>
     <div class="container mt-5">
-        <div class="d-flex justify-content-between">
+        <!-- v-for="comment in productDetails.comments" :key="comment.id" -->
+        <div v-if="productDetails" class="">
             <div class="leftSide" style="width: 48%;">
                 <div class="d-flex align-items-center" style="height: 60px;">
                     <img src="../../assets/images/Male User.png" alt="User Image" style="height: 50px; width: 43px; margin-right: 10px;">
-                    <p class="mb-0">Username>Owner>clothe</p>
-                </div>
-                <div class="proImageSlide">
-                    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner mt-5" style="height: 500px;">
-                            <div class="carousel-item active">
-                                <img src="../../assets/images/Group 52.png" class="d-block w-100" style="height: 100%;" alt="...">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="../../assets/images/Group 52.png" class="d-block w-100" style="height: 100%;" alt="...">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="../../assets/images/Group 52.png" class="d-block w-100" style="height: 100%;" alt="...">
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
-                    </div>
+                    <p class="mb-0">{{ productDetails.pro_owner.name }}>Owner>{{ productDetails.name }}</p>
                 </div>
             </div>
+            <!-- <p>{{ productDetails }}</p> -->
             <!-- _______________________________________________PPPPPPP_______________________________________________ -->
-            <div class="rightSide p-3" style="width: 48%;">
-                <form>
+            <div class="rightSide p-3 d-flex align-items-center gap-5 bg-light rounded shadow">
+                <div class="proImageSlide">
+                    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner" style="height: 600px;">
+                            <div class="carousel-item active">
+                                <img :src="product_img_url(productDetails.image)" class="d-block w-100" style="height: 100%;" alt="...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form class="p-5" style="width: 60%;">
                     <div class="title">
-                        <h1>Terra Cotta Studio Top</h1>
-                        <h3>$2222-$444</h3>
+                        <h1>{{productDetails.name}}</h1>
+                        <h3>${{ productDetails.price }}</h3>
                     </div>
                     <div class="description">
                         <h2>DESCRIPTION</h2>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laborum est porro, alias facilis earum nulla nihil ab, vero, impedit optio illum cumque magni unde nisi. Alias praesentium, cupiditate eius tenetur dolor deserunt nam dicta mollitia iusto, aspernatur nemo? Facere molestiae neque asperiores! Quos porro in corrupti explicabo at sapiente quo?</p>
+                        <p>{{productDetails.description}}</p>
                     </div>
                     <div class="detail">
                         <h2>DETAIL</h2>
@@ -70,7 +58,7 @@
             </div>   
         </div>
         <!-- ______________________________________________PPPPPPPPPPPPP_________________________________ -->
-        <p class="p-2 border-bottom" style="width: 100%;">Ratings and Fatback this product!</p>
+        <p class="p- mt-5 border-bottom" style="width: 100%;">Ratings and Fatback this product!</p>
         <!-- _____________________________________PPPPPPPPPPPPPPP___________________________________ -->
          <div class="RateAndFeadback d-flex">
             <div class="feadback" style="width: 70%;">
@@ -108,7 +96,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="message-text" class="col-form-label">Message:</label>
-                                        <textarea class="form-control" id="message-text"></textarea>
+                                        <textarea class="form-control" id="message-text" v-model="messagees"></textarea>
                                     </div>
                                     </form>
                                 </div>
@@ -132,16 +120,17 @@
                     </div>
                 </div>
                 <!-- _________________________________________________________Show feadback______________________________________ -->
-                 <div class="feadback">
-                    <div class="">
+                 <div v-if="productDetails" class="feadback">
+                    <div v-for="comment in productDetails.comments" :key="comment.id" class="">
                         <div class="d-flex align-items-center" style="height: 60px;">
                             <img src="../../assets/images/Male User.png" alt="User Image" style="height: 50px; width: 43px; margin-right: 10px;">
-                            <p class="mb-0">Username</p>
+                            <p class="mb-0">{{ comment.user.name }}:</p>
                         </div>
                         <div class="d-flex flex-column">
-                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam, quidem.</p>
+                            <p>{{ comment.comment }}.</p>
                             <p class="d-flex">
-                                <img src="../../assets/images/Group 52.png" alt="" style="width: 243px; height: 240px;">
+                                <img :src="imageCommented_url(comment.image)" alt="Comment Image" style="width: 243px; height: 240px;">
+                                <small>Posted on: {{ new Date(comment.created_at).toLocaleString() }}</small>
                             </p>
                         </div>
                         <div class="user-actions">
@@ -182,18 +171,50 @@
                         </div>
                     </div>
                 </div>
-                
             </div>
          </div>
     </div>
 </template>
 
 <script>
-export default {
+import api from "@/views/api.js";
+import { useUserStore } from "@/stores/user.js";
 
-}
+export default {
+  props: ['id'],
+  data() {
+    return {
+      productDetails: null,
+      user_store: useUserStore()
+    };
+  },
+  async mounted() {
+    try {
+      const productId = this.id; // Assuming 'id' prop is passed to this component
+      const userToken = this.user_store.tokenUser;
+
+      // Make the API request with authorization headers
+      const response = await api.detailProduct(productId, {
+        Authorization: `Bearer ${userToken}`
+      });
+
+      this.productDetails = response.data.data;
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+    }
+  },
+  methods:{
+    product_img_url(filename){
+        return api.imageUrlProduct(filename);
+    },
+
+    imageCommented_url(filename){
+        return api.imageComment(filename);
+    }
+  }
+};
 </script>
 
 <style>
-
+/* Your component styles */
 </style>
