@@ -22,6 +22,9 @@
                 </div>
                 <router-link to="/product/create" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">More...</router-link>
               </div>
+
+
+              
               <!-- Logo -->
               <a class="navbar-brand mx-auto logo" href="#">
                 <img class="ms-auto logo-img" src="../../assets/images/lOUKDO.png" alt="Logo">
