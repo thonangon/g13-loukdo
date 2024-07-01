@@ -2,42 +2,21 @@
 
 namespace App\Http\Middleware;
 
+use Closure;
 use Illuminate\Http\Request;
-use Inertia\Middleware;
 
-class HandleInertiaRequests extends Middleware
+class HandleInertiaRequests
 {
     /**
-     * The root template that's loaded on the first page visit.
+     * Handle an incoming request.
      *
-     * @see https://inertiajs.com/server-side-setup#root-template
-     * @var string
-     */
-    protected $rootView = 'app';
-
-    /**
-     * Determines the current asset version.
-     *
-     * @see https://inertiajs.com/asset-versioning
      * @param  \Illuminate\Http\Request  $request
-     * @return string|null
+     * @param  \Closure  $next
+     * @return mixed
      */
-    public function version(Request $request): ?string
+    public function handle(Request $request, Closure $next)
     {
-        return parent::version($request);
-    }
-
-    /**
-     * Defines the props that are shared by default.
-     *
-     * @see https://inertiajs.com/shared-data
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    public function share(Request $request): array
-    {
-        return array_merge(parent::share($request), [
-            //
-        ]);
+        // Logic to handle Inertia.js requests
+        return $next($request);
     }
 }

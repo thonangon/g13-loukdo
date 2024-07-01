@@ -2,12 +2,6 @@
 
 
 namespace App\Models;
-// namespace App\Models\Products;
-// namespace App\Models\Products;
-
-namespace App\Models;
-
-use App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

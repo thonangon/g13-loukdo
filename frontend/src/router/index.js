@@ -1,0 +1,65 @@
+import { createWebHistory, createRouter } from 'vue-router'
+
+import Home from '../views/HomePage/Homeview.vue'
+import product from '../views/Products/ProductShow.vue'
+import produc_detail from '../views/Products/DetailPro.vue'
+import LoginUser from '../views/Users/LoginUser.vue'
+import CustomerOrder from '../views/Order/CustomerOrder.vue'
+import ChangePassword from '../views/FogetPassword/ChangePassword.vue'
+import register from '../views/Users/ReginsterAcc.vue'
+import ProductShow from '../views/Products/ProductShow.vue';
+
+const routes = [
+    { 
+        path: '/',
+        name:'Home', 
+        component: Home
+    },
+    { 
+        path: '/product',
+        name:'home_pro', 
+        component: product
+    },
+    { 
+        path: '/product/:id',
+        name:'produc_detail', 
+        component: produc_detail,
+        props: true
+    },
+    { 
+        path: '/login',
+        name:'login', 
+        component: LoginUser
+    },
+    {
+        path: '/register',
+        name:'register', 
+        component: register
+    },
+    { 
+        path: '/order',
+        name:'order', 
+        component: CustomerOrder
+      
+    },
+    { 
+        path: '/foget',
+        name:'foget', 
+        component: ChangePassword
+    },
+    {
+      path: '/product/:id',
+      name: 'ProductShow',
+      component: ProductShow,
+    },
+  
+
+ 
+]
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes,
+})
+
+export default router;

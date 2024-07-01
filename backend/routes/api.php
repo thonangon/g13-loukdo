@@ -9,6 +9,7 @@ use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Order\OrderController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\ChartController;
+use App\Http\Controllers\Products\RateProductController;
 use App\Http\Controllers\Products\CommentProductController;
 use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 
@@ -32,6 +33,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::get('/me', [AuthController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/post/list', [PostController::class, 'index'])->middleware('auth:sanctum');
 
+Route::get('/user/list', [AuthController::class, 'listUser']);
+
 // crud on categories
 Route::get('/categories/list', [CategoryController::class, 'index']);
 Route::post('/create/category', [CategoryController::class, 'store']);
@@ -50,17 +53,38 @@ Route::delete('/delete/category/{id}', [CategoryController::class, 'destroy']);
 // Product Routes
 Route::prefix('products')->group(function () {
     Route::get('/list', [ProductController::class, 'index']);
+    Route::get('/view/{id}', [ProductController::class, 'show']);
 });
+
+// Route::get('/products/image/{id}', [ProductController::class, 'getImage']);
 
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     // Route::get('/list', [ProductController::class, 'index']);
     Route::post('/create', [ProductController::class, 'store']);
+
     Route::get('/view/{id}', [ProductController::class, 'show']);
     Route::put('/update/{id}', [ProductController::class, 'update']);
     Route::delete('/remove/{id}', [ProductController::class, 'destroy']);
 });
 
-// 
+    Route::get('/pro_details/{product_id}', [ProductController::class, 'show'])->name('products.view');
+    Route::put('/update/{id}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('/remove/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+
+    Route::get('/ratings/{productId}', [ProductController::class, 'getProductRatings']);
+
+    Route::get('/image/{id}', [ProductController::class, 'getImage']);
+
+
+
+Route::middleware('auth:sanctum')->prefix('products')->group(function () {
+    Route::post('/rate/{productId}', [RateProductController::class, 'rate']);
+    Route::delete('/remove/{productId}', [RateProductController::class, 'removeRating']);
+    Route::get('/ratings/{productId}', [RateProductController::class, 'getRatings']);
+});
+
+
+
 // Comment Products Routes
 Route::prefix('comment')->group(function () {
     Route::get('/list', [CommentProductController::class, 'index']);
@@ -86,12 +110,14 @@ Route::prefix('reply')->group(function () {
 
 
 
+
 // Route::middleware('auth:sunctum')->group(function () {
 //     Route::get('/chat/rooms', [ChartController::class, 'rooms']);
 //     Route::get('/chat/messages/{roomId}', [ChartController::class, 'messages']);
 //     Route::post('/chat/messages/{roomId}', [ChartController::class, 'newMessage']);
 //     Route::post('/chat/room', [ChartController::class, 'createRoom']);
 // });
+
 
 
 
