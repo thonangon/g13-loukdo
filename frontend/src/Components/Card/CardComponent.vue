@@ -26,6 +26,7 @@
   </section>
   </template>
   
+  
   <script>
   import api from '../../views/api'
   import { useUserStore } from '@/stores/user.js';
@@ -55,22 +56,18 @@
       }
     },
     async created() {
-      try {
-        const response = await api.listProduct()
-        if (response.data.status) {
-          this.products = response.data.data
-        } else {
-          console.error('Error fetching products: ', response.data.message)
-        }
-      } catch (error) {
-        console.error('API error: ', error)
+    try {
+      const response = await api.listProduct();
+      if (response.data.status) {
+        this.products = response.data.data;
+        this.$emit('products-loaded', this.products);
+      } else {
+        console.error('Error fetching products: ', response.data.message);
       }
-    },
-    methods:{
-      imageProduct(filename){
-        return api.imageUrlProduct(filename)
-      }
+    } catch (error) {
+      console.error('API error: ', error);
     }
+  },
   }
   </script>
   
