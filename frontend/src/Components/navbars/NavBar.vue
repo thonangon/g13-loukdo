@@ -11,7 +11,8 @@
             <div class="d-flex w-100 justify-content-between align-items-center">
               <!-- Left side of the navbar -->
               <div class="d-flex flex-grow-1">
-                <router-link to="/" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">Products</router-link>
+                <router-link to="/" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">Home</router-link>
+                <router-link to="/product" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">Products</router-link>
                 <div class="dropdown me-5 custom-font-size">
                   <a class="text-dark custom-font-size nav-link" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
