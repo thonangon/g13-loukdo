@@ -61,7 +61,7 @@ Route::prefix('products')->group(function () {
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     // Route::get('/list', [ProductController::class, 'index']);
     Route::post('/create', [ProductController::class, 'store']);
-    Route::get('/view/{id}', [ProductController::class, 'show'])->name('products.view');
+    Route::get('/pro_details/{product_id}', [ProductController::class, 'show'])->name('products.view');
     Route::put('/update/{id}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/remove/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
