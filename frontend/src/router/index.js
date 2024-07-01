@@ -57,7 +57,7 @@ const routes = [
         path: '/profile',
         name: 'profile', 
         component: Viewprofile
-    }
+    },
 ]
 
 const router = createRouter({

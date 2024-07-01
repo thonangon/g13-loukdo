@@ -87,10 +87,11 @@
               </div>
               <div class="d-flex align-items-center gap-1">
                 <div>
-                  <button class="btn bg-light-gray btn-sm">...</button>
+                  <button class="btn bg-light-gray btn">...</button>
                 </div>
                 <div>
-                  <button class="btn btn-dark btn-sm">Post</button>
+                  <a href="/product-post"><button class="btn btn-dark btn">Post</button></a>
+                  
                 </div>
               </div>
             </div>

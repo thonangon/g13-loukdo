@@ -91,6 +91,13 @@ export default {
             Authorization: `Bearer ${this.store_user.tokenUser}`
           }
         });
+        if (response.data.status) {
+          // Handle success
+          this.$router.push('/'); // Navigate to home page
+        } else {
+          // Handle error response
+          console.error('Error posting product: ', response.data.message);
+        }
 
         console.log('Product created:', response.data);
         this.resetForm();
