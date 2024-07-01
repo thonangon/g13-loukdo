@@ -32,7 +32,12 @@ export default {
     return axios.get(`${API_URL}/products/pro_details/${productId}`, {
       headers: headers
     });
+  },
+
+  comment_product(data, headers) {
+    return axios.post(`${API_URL}/comment/create`, data, {
+      headers: headers
+    });
   }
-  
 };
 

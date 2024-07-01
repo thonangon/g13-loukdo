@@ -64,7 +64,7 @@
          <div class="RateAndFeadback d-flex">
             <div class="feadback" style="width: 70%;">
                 <!-- __________________________________________rate_show________________________________ -->
-                <rate_show/>
+                <rate_show :product_id="id"/>
                 <!-- _________________________________________________________Show feadback______________________________________ -->
                  <div v-if="productDetails" class="feadback">
                     <div v-for="comment in productDetails.data.comments" :key="comment.id" class="">
