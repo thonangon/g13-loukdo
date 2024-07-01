@@ -94,8 +94,8 @@ class ProductController extends Controller
 
    public function show(Request $request, $id)
    {
+       $product = Product::findOrFail($id); // Ensure product with ID exists
        try {
-           $product = Product::findOrFail($id); // Ensure product with ID exists
            return response()->json([
                'status' => true,
                'data' => new ProductDetailResource($product),
