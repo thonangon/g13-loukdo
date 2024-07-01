@@ -49,15 +49,13 @@
   </form>
 </template>
 <script>
-// import api from '../../views/api'
-
-import axios from 'axios';
+import api from '../../views/api'
 import { useUserStore } from '@/stores/user.js';
 
 export default {
   data() {
     return {
-      category:'',
+      category: '',
       name: '',
       price: null,
       quantity: null,
@@ -82,12 +80,12 @@ export default {
         formData.append('quantity', this.quantity);
         formData.append('description', this.description);
         formData.append('image', this.image);
-        formData.append('category_id',this.category);
+        formData.append('category_id', this.category);
         console.log(this.store_user.tokenUser)
 
         const token = localStorage.getItem('authToken'); // Assuming you store JWT token in localStorage
 
-        const response = await axios.post('http://127.0.0.1:8000/api/products/create', formData, {
+        const response = await api.createProduct(formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${this.store_user.tokenUser}`
@@ -116,50 +114,45 @@ export default {
       this.image = null;
     }
   },
-  watch:{
-    name(newName){
-      if(!newName){
-          this.errorName = 'Add valid product name'
-      }
-      else{
-        this.errorName =null
-      }
-    },
-    price(newPrice){
-      if(!newPrice || newPrice <= 0){
-        this.errorPrice = 'Enter valid price'
-      }
-      else{
-        this.errorPrice = null
+  watch: {
+    name(newName) {
+      if (!newName) {
+        this.errorName = 'Add valid product name';
+      } else {
+        this.errorName = null;
       }
     },
-    quantity(newQuantity){
-      if(!newQuantity || newQuantity <= 0){
-        this.errorQuantity = 'Enter valid quantity'
-      }
-      else{
-        this.errorQuantity = null
-      }
-    },
-    description(newDescription){
-      if(!newDescription){
-        this.errorDescription = 'Add valid product description'
-      }
-      else{
-        this.errorDescription = null
+    price(newPrice) {
+      if (!newPrice || newPrice <= 0) {
+        this.errorPrice = 'Enter valid price';
+      } else {
+        this.errorPrice = null;
       }
     },
-    category(newCategory){
-      if(!newCategory || newCategory <= 0){
-        this.errorCategory = 'Select valid category'
+    quantity(newQuantity) {
+      if (!newQuantity || newQuantity <= 0) {
+        this.errorQuantity = 'Enter valid quantity';
+      } else {
+        this.errorQuantity = null;
       }
-      else{
-        this.errorCategory = null
+    },
+    description(newDescription) {
+      if (!newDescription) {
+        this.errorDescription = 'Add valid product description';
+      } else {
+        this.errorDescription = null;
+      }
+    },
+    category(newCategory) {
+      if (!newCategory || newCategory <= 0) {
+        this.errorCategory = 'Select valid category';
+      } else {
+        this.errorCategory = null;
       }
     }
-
   },
 };
+
 </script>
 
 
