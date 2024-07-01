@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-3" v-for="(product, index) in filteredProducts" :key="index">
         <div class="card mb-3 shadow-sm">
-          <img src="../../assets/images/Group 52.png" class="card-img" alt="clothe" />
+          <img :src="imageProduct(product.image)" class="card-img" alt="clothe" style="height: 400px;"/>
           <div class="card-body">
             <h5 class="card-title">{{ product.name }}</h5>
             <p class="card-text text-muted">{{ product.description }}</p>
@@ -64,6 +64,11 @@
         }
       } catch (error) {
         console.error('API error: ', error)
+      }
+    },
+    methods:{
+      imageProduct(filename){
+        return api.imageUrlProduct(filename)
       }
     }
   }
