@@ -1,19 +1,25 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
-import home_pro from '../views/Products/ProductShow.vue'
+import Home from '../views/HomePage/Homeview.vue'
+import product from '../views/Products/ProductShow.vue'
 import produc_detail from '../views/Products/DetailPro.vue'
 import LoginUser from '../views/Users/LoginUser.vue'
 import CustomerOrder from '../views/Order/CustomerOrder.vue'
 import ChangePassword from '../views/FogetPassword/ChangePassword.vue'
 import register from '../views/Users/ReginsterAcc.vue'
 import UserPostProduct from '../views/Products/ProductPostUser.vue'  
-
+import ProductShow from '../views/Products/ProductShow.vue';
 
 const routes = [
     { 
         path: '/',
+        name:'Home', 
+        component: Home
+    },
+    { 
+        path: '/product',
         name:'home_pro', 
-        component: home_pro
+        component: product
     },
     { 
         path: '/product/:id',
@@ -47,6 +53,13 @@ const routes = [
         name:'product-post', 
         component: UserPostProduct
     },
+    {
+      path: '/product/:id',
+      name: 'ProductShow',
+      component: ProductShow,
+    },
+  
+
  
 ]
 

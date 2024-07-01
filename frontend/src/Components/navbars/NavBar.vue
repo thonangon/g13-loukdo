@@ -8,7 +8,8 @@
             <div class="d-flex" style="width: 40%;">
               <div class="d-flex me-auto">
                 <!-- <p class="me-5 mb-0">Products</p> -->
-                <router-link to="/" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">Products</router-link>
+                <router-link to="/" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">Home</router-link>
+                <router-link to="/product" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">Products</router-link>
                 <div class="dropdown me-5 custom-font-size">
                   <a class="text-dark custom-font-size nav-link" active-class="active text-primary border-bottom" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -18,6 +19,7 @@
                   </ul>
                 </div>
                 <router-link to="/product-post" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">More...</router-link>
+                <router-link to="/product/create" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">More...</router-link>
               </div> 
             </div>
             <!-- Logo -->
@@ -27,7 +29,7 @@
             <!-- Profile -->
             <div class="d-flex justify-content-end align-items-center" style="width: 40%;">
               <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size">Login</router-link>
-              <p v-else-if="store_user.accountUser" class="mb-0 custom-font-size" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">{{ store_user.accountUser.name.toUpperCase() }}</p>
+              <h5 v-else-if="store_user.accountUser" class="mb-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">{{ store_user.accountUser.name.toUpperCase() }}</h5>
               
               <div class="">
                 <img class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" src="../../assets/images/Male User.png" alt="">

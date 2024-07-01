@@ -1,3 +1,4 @@
+
 <template>
   <div class="container">
     <form @submit.prevent="submitForm">
@@ -71,16 +72,13 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "../../views/api";
 import { useUserStore } from "@/stores/user.js";
 
 export default {
   name: "RegisterAccVue",
   data() {
     return {
-      API: {
-        register: "http://127.0.0.1:8000/api/register",
-      },
       user: {
         firstname: "",
         lastname: "",
@@ -97,10 +95,10 @@ export default {
     }
   },
   methods: {
-    async register(data_register) {
+    async register(userData) {
       this.loading = true;
       try {
-        let response = await axios.post(this.API.register, data_register);
+        let response = await api.register(userData);
         if (response.data.success) {
           this.store_user.accountUser = response.data.data;
           this.store_user.tokenUser = response.data.token;
@@ -135,7 +133,6 @@ export default {
     }
   }
 };
-
 </script>
 
 <style>

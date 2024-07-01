@@ -17,11 +17,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the products.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         $products = Product::all();
@@ -32,12 +28,6 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created product in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         try {
@@ -102,109 +92,89 @@ class ProductController extends Controller
         }
     }
 
+   public function show(Request $request, $id)
+   {
+       try {
+           $product = Product::findOrFail($id); // Ensure product with ID exists
+           return response()->json([
+               'status' => true,
+               'data' => new ProductDetailResource($product),
+           ]);
+       } catch (\Exception $e) {
+           return response()->json([
+               'status' => false,
+               'message' => 'Product not found or an error occurred.',
+           ], 404); // Return appropriate HTTP status code
+       }
+   }
 
-    /**
-     * Display the specified product.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request, $id)
-    {
-        try {
-            $product = Product::findOrFail($id); // Ensure product with ID exists
-            return response()->json([
-                'status' => true,
-                'data' => new ProductDetailResource($product),
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Product not found or an error occurred.',
-            ], 404); // Return appropriate HTTP status code
-        }
-    }
+   public function update(Request $request, Product $product)
+   {
+       try {
+           // Validate incoming request
+           $validator = Validator::make($request->all(), [
+               'name' => 'required|string|max:255',
+               'description' => 'nullable|string',
+               'price' => 'required|numeric',
+               'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:204800', // Adjust max file size as needed
+               'category_id' => 'required|exists:categories,id',
+           ]);
 
-    /**
-     * Update the specified product in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Product $product)
-    {
-        try {
-            // Validate incoming request
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'price' => 'required|numeric',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:204800', // Adjust max file size as needed
-                'category_id' => 'required|exists:categories,id',
-            ]);
+           // Handle validation errors
+           if ($validator->fails()) {
+               return response()->json([
+                   'status' => false,
+                   'message' => 'Validation error',
+                   'errors' => $validator->errors()
+               ], 422);
+           }
 
-            // Handle validation errors
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validation error',
-                    'errors' => $validator->errors()
-                ], 422);
-            }
+           // Handle image update if provided
+           if ($request->hasFile('image')) {
+               // Delete previous image if exists
+               if ($product->image) {
+                   Storage::delete('public/products/' . $product->image);
+               }
 
-            // Handle image update if provided
-            if ($request->hasFile('image')) {
-                // Delete previous image if exists
-                if ($product->image) {
-                    Storage::delete('public/products/' . $product->image);
-                }
+               // Upload new image
+               $file = $request->file('image');
+               $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+               $extension = $file->getClientOriginalExtension();
+               $fileNameToStore = $fileName . '_' . time() . '.' . $extension;
+               $file->storeAs('public/products', $fileNameToStore); // Store in storage/app/public/products
 
-                // Upload new image
-                $file = $request->file('image');
-                $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $extension = $file->getClientOriginalExtension();
-                $fileNameToStore = $fileName . '_' . time() . '.' . $extension;
-                $file->storeAs('public/products', $fileNameToStore); // Store in storage/app/public/products
+               // Update image field in product
+               $product->image = $fileNameToStore;
+           }
 
-                // Update image field in product
-                $product->image = $fileNameToStore;
-            }
+           // Update other fields
+           $product->name = $request->name;
+           $product->description = $request->description;
+           $product->price = $request->price;
+           $product->category_id = $request->category_id;
 
-            // Update other fields
-            $product->name = $request->name;
-            $product->description = $request->description;
-            $product->price = $request->price;
-            $product->category_id = $request->category_id;
+           // Save the updated product
+           $product->save();
 
-            // Save the updated product
-            $product->save();
+           // Prepare the response with correct image URL if an image was uploaded
+           $product->image_url = $product->image ? asset('storage/products/' . $product->image) : null;
 
-            // Prepare the response with correct image URL if an image was uploaded
-            $product->image_url = $product->image ? asset('storage/products/' . $product->image) : null;
+           // Return success response
+           return response()->json([
+               'status' => true,
+               'data' => new ProductResource($product),
+               'message' => 'Product updated successfully'
+           ]);
+       } catch (\Exception $error) {
+           // Return error response if an exception occurs
+           return response()->json([
+               'status' => false,
+               'message' => 'Product update failed',
+               'error' => $error->getMessage()
+           ], 400);
+       }
+   }
 
-            // Return success response
-            return response()->json([
-                'status' => true,
-                'data' => new ProductResource($product),
-                'message' => 'Product updated successfully'
-            ]);
-        } catch (\Exception $error) {
-            // Return error response if an exception occurs
-            return response()->json([
-                'status' => false,
-                'message' => 'Product update failed',
-                'error' => $error->getMessage()
-            ], 400);
-        }
-    }
-
-    /**
-     * Remove the specified product from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         try {
@@ -242,20 +212,6 @@ class ProductController extends Controller
             ], 400);
         }
     }
-
-
-
-
-
-
-
-
-    /**
-     * Get the image for a specific product.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function getImage($id)
     {
         try {
@@ -311,7 +267,6 @@ class ProductController extends Controller
                     'created_at' => $rating->created_at,
                 ];
             });
-
             // Return JSON response with success message and ratings data
             return response()->json([
                 'status' => true,
@@ -332,5 +287,3 @@ class ProductController extends Controller
         }
     }
 }
-
-

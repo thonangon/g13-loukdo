@@ -53,6 +53,7 @@ Route::delete('/delete/category/{id}', [CategoryController::class, 'destroy']);
 // Product Routes
 Route::prefix('products')->group(function () {
     Route::get('/list', [ProductController::class, 'index']);
+    Route::get('/view/{id}', [ProductController::class, 'show']);
 });
 
 // Route::get('/products/image/{id}', [ProductController::class, 'getImage']);

@@ -6,14 +6,14 @@
         <span>Have a nice day!</span>
       </div>
       <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label fw-bold" style="padding-top: 10px">Email address</label>
-        <input type="email" class="form-control fw-bold" v-model="email" required />
+        <label for="exampleInputEmail1" class="form-label fw-bold">Email address</label>
+        <input type="email" class="form-control" v-model="email" required />
         <span v-if="emailError" class="text-danger">{{ emailError }}</span>
       </div>
       <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label fw-bold" style="padding-top: 10px">Password</label>
+        <label for="exampleInputPassword1" class="form-label fw-bold">Password</label>
         <div class="d-flex align-items-center">
-          <input type="password" class="form-control fw-bold flex-grow-1" v-model="password" required />
+          <input type="password" class="form-control flex-grow-1" v-model="password" required />
           <button type="submit" class="btn btn-dark ms-3" :disabled="loading">
             <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             Submit
@@ -22,25 +22,23 @@
         <span v-if="passwordError" class="text-danger">{{ passwordError }}</span>
       </div>
       <div>
-        <a href="" style="text-decoration: none">Did you forget password?</a>
+        <a href="#" style="text-decoration: none">Forgot your password?</a>
       </div>
     </div>
   </form>
 </template>
 
 <script>
-import axios from 'axios';
+import api from "../../views/api";
 import { useUserStore } from '@/stores/user.js';
 
 export default {
+  name: "Login",
   data() {
     return {
       email: '',
       password: '',
       store_user: useUserStore(),
-      api: {
-        login: 'http://127.0.0.1:8000/api/login'
-      },
       loading: false,
       emailError: null,
       passwordError: null
@@ -48,32 +46,40 @@ export default {
   },
   watch: {
     email(newEmail) {
-      if (!newEmail) {
+      this.validateEmail(newEmail);
+    },
+    password(newPassword) {
+      this.validatePassword(newPassword);
+    }
+  },
+  methods: {
+    validateEmail(email) {
+      if (!email) {
         this.emailError = 'Email is required.';
-      } else if (!this.isValidEmail(newEmail)) {
+      } else if (!this.isValidEmail(email)) {
         this.emailError = 'Please enter a valid email address.';
       } else {
         this.emailError = null;
       }
     },
-    password(newPassword) {
-      if (!newPassword) {
+    validatePassword(password) {
+      if (!password) {
         this.passwordError = 'Password is required.';
-      }else if(newPassword.length<8){
+      } else if (password.length < 8) {
         this.passwordError = 'Password must be at least 8 characters long.';
-      }
-      else {
+      } else {
         this.passwordError = null;
       }
-    }
-  },
-  methods: {
+    },
     isValidEmail(email) {
-      // Regular expression to validate email format
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailRegex.test(email);
     },
     async login() {
+      // Validate email and password
+      this.validateEmail(this.email);
+      this.validatePassword(this.password);
+
       // Check if there are any validation errors before proceeding
       if (this.emailError || this.passwordError) {
         return;
@@ -81,8 +87,7 @@ export default {
 
       this.loading = true;
       try {
-        let response = await axios.post(this.api.login, { email: this.email, password: this.password });
-        console.log(response);
+        const response = await api.login({ email: this.email, password: this.password });
         if (response.data.success) {
           this.store_user.accountUser = response.data.data;
           this.store_user.tokenUser = response.data.token;
@@ -95,7 +100,8 @@ export default {
         } else {
           this.emailError = response.data.message;
         }
-      } catch (e) {
+      } catch (error) {
+        console.error('Login error:', error);
       } finally {
         this.loading = false;
       }
@@ -111,8 +117,9 @@ export default {
       this.$router.push('/');
     }
   }
-}
+};
 </script>
 
 <style>
+/* Add any necessary styles here */
 </style>
