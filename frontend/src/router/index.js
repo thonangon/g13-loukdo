@@ -7,54 +7,50 @@ import LoginUser from '../views/Users/LoginUser.vue'
 import CustomerOrder from '../views/Order/CustomerOrder.vue'
 import ChangePassword from '../views/FogetPassword/ChangePassword.vue'
 import register from '../views/Users/ReginsterAcc.vue'
-import ProductShow from '../views/Products/ProductShow.vue';
+import Viewprofile from '../views/profile/ProfileVue.vue'
 
 const routes = [
     { 
         path: '/',
-        name:'Home', 
+        name: 'Home', 
         component: Home
     },
     { 
         path: '/product',
-        name:'home_pro', 
+        name: 'home_pro', 
         component: product
     },
     { 
         path: '/product/:id',
-        name:'produc_detail', 
+        name: 'produc_detail', 
         component: produc_detail,
         props: true
     },
     { 
         path: '/login',
-        name:'login', 
+        name: 'login', 
         component: LoginUser
     },
     {
         path: '/register',
-        name:'register', 
+        name: 'register', 
         component: register
     },
     { 
         path: '/order',
-        name:'order', 
+        name: 'order', 
         component: CustomerOrder
-      
     },
     { 
         path: '/foget',
-        name:'foget', 
+        name: 'foget', 
         component: ChangePassword
     },
     {
-      path: '/product/:id',
-      name: 'ProductShow',
-      component: ProductShow,
-    },
-  
-
- 
+        path: '/profile',
+        name: 'profile', 
+        component: Viewprofile
+    }
 ]
 
 const router = createRouter({
@@ -62,4 +58,4 @@ const router = createRouter({
     routes,
 })
 
-export default router;
+export default router

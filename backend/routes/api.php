@@ -123,4 +123,4 @@ Route::delete('/orderProducts/delete/{id}', [OrderController::class, 'delete']);
 
 
 Route::get('/user/{id}', [UserProfileController::class, 'show']);
-Route::post('/user/update/{id}', [UserProfileController::class, 'update']);
+Route::post('/user/update', [UserProfileController::class, 'update'])->middleware('auth:sanctum');

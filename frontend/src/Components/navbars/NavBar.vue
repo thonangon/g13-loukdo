@@ -34,13 +34,12 @@
                 <img class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" src="../../assets/images/Male User.png" alt="">
                 <div class="dropdown">
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <router-link class="dropdown-item" active-class="active" exact to="/profile">Profile</router-link>
+                    <router-link v-if="!store_user.accountUser" class="dropdown-item" active-class="active" exact to="/register">Profile</router-link>
+                    <router-link v-else class="dropdown-item" active-class="active" exact to="/profile">Profile</router-link>
                     <button class="dropdown-item" @click="logout">Logout</button>
                   </ul>
-
                 </div>
             </div>
-              
             </div>
           </div>
         </div>
@@ -50,15 +49,21 @@
 
 </template>
 
-<script>
 
+<script>
 import { useUserStore } from '@/stores/user.js';
 import axios from 'axios';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
   setup() {
     const store_user = useUserStore();
-    store_user.loadUser(); // Ensure user data is loaded from localStorage
+    const router = useRouter();
+
+    onMounted(() => {
+      store_user.loadUser(); // Ensure user data is loaded from localStorage
+    });
 
     const logout = async () => {
       try {
@@ -74,11 +79,19 @@ export default {
       }
     };
 
+    const profile = () => {
+      if (store_user.accountUser === null) {
+        router.push('/register');
+      } else {
+        router.push('/profile');
+      }
+    };
     return {
       store_user,
       logout,
+      profile,
     };
-  },
+  }
 };
 </script>
 
