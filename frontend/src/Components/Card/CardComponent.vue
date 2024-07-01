@@ -26,6 +26,7 @@
   </section>
   </template>
   
+  
   <script>
   import api from '../../views/api'
   import { useUserStore } from '@/stores/user.js';
