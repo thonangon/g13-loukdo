@@ -7,4 +7,7 @@ export default {
   listProduct() {
     return axios.get(`${API_URL}/products/list`);
   },
+  createProduct(formData, config) {
+    return axios.post(`${API_URL}/products/create`, formData, config);
+  }
 };
