@@ -5,16 +5,68 @@
         <div class="card h-100">
           <div class="cover rounded-top text-white d-flex flex-row">
             <div
-            class="profile ms-4 mt-5 d-flex flex-row align-items-center"
-            style="padding-top: 60px">
+              class="profile ms-4 mt-5 d-flex flex-row align-items-center"
+              style="padding-top: 60px"
+            >
               <div class="position-relative">
-                <img :src="userStore.accountUser.profile_path" class="img-fluid img-thumbnail mt-5 me-3" />
-                <label for="fileUpload" class="camera-icon position-absolute">
-                  <i class="fas fa-camera fa-lg text-dark"></i>
+                <img
+                  :src="userStore.accountUser.profile_path"
+                  class="img-fluid img-thumbnail mt-5 me-3"
+                />
+                <label for="inputGroupFile04" class="camera-icon position-absolute">
+                  <i
+                    class="fas fa-camera fa-lg"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"
+                  ></i>
                 </label>
-                <input type="file" id="fileUpload" ref="fileUpload" style="display: none"/>
+
+                <!-- Modal -->
+                <div
+                  class="modal fade"
+                  id="exampleModal"
+                  ref="exampleModalRef"
+                  tabindex="-1"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true">
+
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title text-dark" id="exampleModalLabel">
+                          Upload your profile
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+
+          
+                      <form @submit.prevent="uploadProfilePicture" enctype="multipart/form-data">
+                        <div class="modal-body">
+                          <input
+                            type="file"
+                            class="form-control"
+                            aria-label="Upload"
+                            accept="image/*"
+                            @change="onFileChange"
+                          />
+                        </div> 
+                        <div class="modal-footer justify-content-between">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-danger">Upload</button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <h4 class="mt-5" style="color: black">{{ userStore.accountUser.name }}</h4>
+              <h4 class="mt-5" style="color: black">
+                {{ userStore.accountUser.name.toUpperCase() }}
+              </h4>
             </div>
           </div>
           <div class="p-4 text-black">
@@ -50,51 +102,64 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 import { useUserStore } from '@/stores/user.js'
-import { ref, onMounted } from 'vue'
-
 
 export default {
   name: 'Profile',
-  data(){
-    return{
-      api:{
-        profile:'http://127.0.0.1:8000/api/user/update'
-      }
+  data() {
+    return {
+      userStore: useUserStore(),
+      profile: null
+    }
+  },
+  mounted() {
+    // Retrieve profile path from localStorage on component mount
+    const storedProfilePath = localStorage.getItem('profile_path')
+    if (storedProfilePath) {
+      this.userStore.accountUser.profile_path = storedProfilePath
     }
   },
   methods: {
-    async updateUserImageProfile() {
+    onFileChange(e) {
+      this.profile = e.target.files[0]
+      console.log(this.profile) // Log the file
+    },
+    async uploadProfilePicture() {
+      if (!this.profile) {
+        console.error('No file selected.')
+        return
+      }
+
+      const formData = new FormData()
+      formData.append('profile', this.profile) // Ensure key matches backend
 
       try {
-        console.log(response);
-        let response = await axios.post(this.api.profile,{
-          // image: this.$refs.fileUpload.files[0]
-        });
+        const response = await axios.post('http://127.0.0.1:8000/api/user/update', formData, {
+          headers: {
+            Authorization: `Bearer ${this.userStore.tokenUser}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+
+        console.log(response.data) // Log the response
+        // Update the profile path in the user store
+        this.userStore.accountUser.profile_path = response.data.image_path
+
+        // Save profile path to localStorage
+        localStorage.setItem('profile_path', response.data.image_path)
+
       } catch (error) {
-        console.error('Error updating user profile:', error);
+        if (error.response && error.response.data) {
+          console.error('Error:', error.response.data) // Log detailed error from server
+        } else {
+          console.error('Error:', error.message) // Log generic error
+        }
       }
-    }
-  },
-
-  setup() {
-    const userStore = useUserStore()
-    const user = ref(userStore.accountUser)
-
-    onMounted(() => {
-      user.value = userStore.accountUser
-    })
-
-
-    
-
-    return {
-      userStore,
     }
   }
 }
-</script>
+</script> 
 
 <style scoped>
 html,
@@ -113,7 +178,7 @@ body,
 }
 
 .profile h4 {
-  margin-left: 10px; /* Adjust as needed */
+  margin-left: 10px;
 }
 
 .card {
@@ -131,7 +196,7 @@ body,
 }
 
 .text-dark {
-  color: #333; /* Adjust to match your dark color preference */
+  color: #333;
 }
 
 .position-relative {
@@ -139,8 +204,11 @@ body,
 }
 
 .camera-icon {
-  top: 150px; /* Adjust as needed */
-  right:25px; /* Adjust as needed */
+  top: 150px;
+  right: 25px;
   cursor: pointer;
+}
+.camera-icon :hover {
+  color: black;
 }
 </style>

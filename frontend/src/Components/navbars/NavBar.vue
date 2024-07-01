@@ -33,13 +33,12 @@
                 <img class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" src="../../assets/images/Male User.png" alt="">
                 <div class="dropdown">
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <router-link class="dropdown-item" active-class="active" exact to="/profile">Profile</router-link>
+                    <router-link v-if="!store_user.accountUser" class="dropdown-item" active-class="active" exact to="/register">Profile</router-link>
+                    <router-link v-else class="dropdown-item" active-class="active" exact to="/profile">Profile</router-link>
                     <button class="dropdown-item" @click="logout">Logout</button>
                   </ul>
-
                 </div>
             </div>
-              
             </div>
           </div>
         </div>
@@ -86,7 +85,6 @@ export default {
         router.push('/profile');
       }
     };
-
     return {
       store_user,
       logout,
