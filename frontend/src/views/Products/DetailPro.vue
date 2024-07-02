@@ -85,7 +85,7 @@
 
 <script>
 import api from "@/views/api.js";
-import { useUserStore } from "@/stores/user.js";
+// import { useUserStore } from "@/stores/user.js";
 import rate_show from "@/Components/Card/RateProShow.vue"
 import comment from "@/Components/Card/CommentPro.vue"
 import cards_product from '@/Components/Card/CardComponent.vue'
@@ -100,19 +100,19 @@ export default {
   data() {
     return {
       productDetails: null,
-      user_store: useUserStore(),
+    //   user_store: useUserStore(),
       products: [],
     };
   },
   async mounted() {
     try {
       const productId = this.id; // Assuming 'id' prop is passed to this component
-      const userToken = this.user_store.tokenUser;
-      console.log(userToken)
+    //   const userToken = this.user_store.tokenUser;
+    //   console.log(userToken)
 
       // Make the API request with authorization headers
       const response = await api.detailProduct(productId, {
-        Authorization: `Bearer ${userToken}`
+        // Authorization: `Bearer ${userToken}`
       });
 
       this.productDetails = response.data.data;

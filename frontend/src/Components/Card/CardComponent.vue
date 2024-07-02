@@ -14,8 +14,7 @@
                 <span>&#9733;</span>
                 <span>&#9734;</span>
               </div>
-              <router-link v-if="!store_user.accountUser" to="/register" class="btn btn-primary">Details</router-link>
-              <router-link v-else :to="{ name: 'produc_detail', params: { id: product.id} }" class="btn btn-primary">Details</router-link>
+              <router-link :to="{ name: 'produc_detail', params: { id: product.id} }" class="btn btn-primary">Details</router-link>
             </div>
           </div>
         </div>
@@ -24,17 +23,9 @@
   
   <script>
   import api from '../../views/api'
-  import { useUserStore } from '@/stores/user.js';
   export default {
     name: 'CardComponent',
     props: ['searchQuery', 'product'],
-    setup() {
-      const store_user = useUserStore();
-      store_user.loadUser();
-      return {
-        store_user,
-      }
-    },
     methods:{
       imageProduct(filename){
         return api.imageUrlProduct(filename)
