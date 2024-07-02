@@ -118,12 +118,12 @@
             this.selectedFile = null;
   
             // Refresh comments
-            await this.fetchComments(); // Assuming you have a method to fetch comments
+            window.location.href = `/product/${this.product_id}`;// Assuming you have a method to fetch comments
           } catch (error) {
             console.error('Error submitting feedback:', error);
           }
         } else {
-          alert('Please fill in all fields.');
+          // alert('Please fill in all fields.');
         }
       },
      
