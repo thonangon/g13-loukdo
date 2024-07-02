@@ -97,71 +97,77 @@ class StoreController extends Controller
    }
 
     public function update(Request $request, Store $store)
-    {
-        try {
-            // Validate incoming request
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'address' => 'nullable|string',
-                'description' => 'required|string',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:204800',
-            ]);
+{
+    try {
+        // Log incoming request data for debugging
+        Log::info('Request data:', $request->all());
 
-            // Handle validation errors
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validation error',
-                    'errors' => $validator->errors()
-                ], 422);
-            }
+        // Validate incoming request
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:30',
+            'address' => 'nullable|string',
+            'description' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:204800',
+        ]);
 
-            // Handle image update if provided
-            if ($request->hasFile('image')) {
-                // Delete previous image if exists
-                if ($store->image) {
-                    $imagePath = public_path('/api/stores/image/' . $store->image);
-                    if (file_exists($imagePath)) {
-                        unlink($imagePath);
-                    }
-                }
-
-                // Upload new image
-                $file = $request->file('image');
-                $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $extension = $file->getClientOriginalExtension();
-                $fileNameToStore = $fileName . '_' . time() . '.' . $extension;
-                $file->move(public_path('/api/stores/image/'), $fileNameToStore);
-
-                // Update image field in store
-                $store->image = $fileNameToStore;
-            }
-
-            // Update other fields
-            $store->name = $request->input('name', $store->name);
-            $store->address = $request->input('address', $store->address);
-            $store->description = $request->input('description', $store->description);
-
-            $store->save();
-
-
-            $store->image_url = $store->image ? asset('/api/stores/image/' . $store->image) : null;
-
-            // Return success response
-            return response()->json([
-                'status' => true,
-                'data' => new StoreResource($store),
-                'message' => 'Store updated successfully'
-            ]);
-        } catch (\Exception $error) {
-            // Return error response if an exception occurs
+        // Handle validation errors
+        if ($validator->fails()) {
+            Log::error('Validation errors:', $validator->errors()->toArray());
             return response()->json([
                 'status' => false,
-                'message' => 'Store update failed',
-                'error' => $error->getMessage()
-            ], 400);
+                'message' => 'Validation error',
+                'errors' => $validator->errors()
+            ], 422);
         }
+
+        // Handle image update if provided
+        if ($request->hasFile('image')) {
+            // Delete previous image if exists
+            if ($store->image) {
+                $imagePath = public_path('/api/stores/image/' . $store->image);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+
+            // Upload new image
+            $file = $request->file('image');
+            $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $file->getClientOriginalExtension();
+            $fileNameToStore = $fileName . '_' . time() . '.' . $extension;
+            $file->move(public_path('/api/stores/image/'), $fileNameToStore);
+
+            // Update image field in store
+            $store->image = $fileNameToStore;
+        }
+
+        // Update other fields
+        $store->name = $request->input('name', $store->name);
+        $store->address = $request->input('address', $store->address);
+        $store->description = $request->input('description', $store->description);
+
+        $store->save();
+
+        // Ensure the image_url is always available
+        $store->image_url = $store->image ? asset('/api/stores/image/' . $store->image) : null;
+
+        // Return success response
+        return response()->json([
+            'status' => true,
+            'data' => new StoreResource($store),
+            'message' => 'Store updated successfully'
+        ]);
+    } catch (\Exception $error) {
+        // Return error response if an exception occurs
+        Log::error('Exception:', ['error' => $error->getMessage()]);
+        return response()->json([
+            'status' => false,
+            'message' => 'Store update failed',
+            'error' => $error->getMessage()
+        ], 400);
     }
+}
+
 
 
     public function destroy($id)
