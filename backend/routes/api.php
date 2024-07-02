@@ -58,10 +58,10 @@ Route::prefix('products')->group(function () {
 
 // Route::get('/products/image/{id}', [ProductController::class, 'getImage']);
 
+Route::get('/products/pro_details/{product_id}', [ProductController::class, 'show'])->name('products.view');
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     // Route::get('/list', [ProductController::class, 'index']);
     Route::post('/create', [ProductController::class, 'store']);
-    Route::get('/view/{id}', [ProductController::class, 'show'])->name('products.view');
     Route::put('/update/{id}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/remove/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
