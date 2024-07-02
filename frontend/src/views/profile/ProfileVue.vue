@@ -15,7 +15,7 @@
                 />
                 <label for="inputGroupFile04" class="camera-icon position-absolute">
                   <i
-                    class="fas fa-camera fa-lg"
+                    class="fas fa-camera fa-lg text-dark"
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal"
                   ></i>
