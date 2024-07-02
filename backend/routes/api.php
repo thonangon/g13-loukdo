@@ -58,7 +58,7 @@ Route::prefix('products')->group(function () {
 
 // Route::get('/products/image/{id}', [ProductController::class, 'getImage']);
 
-Route::get('/pro_details/{product_id}', [ProductController::class, 'show'])->name('products.view');
+Route::get('/products/pro_details/{product_id}', [ProductController::class, 'show'])->name('products.view');
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     // Route::get('/list', [ProductController::class, 'index']);
     Route::post('/create', [ProductController::class, 'store']);
