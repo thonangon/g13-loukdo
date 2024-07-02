@@ -1,7 +1,7 @@
 <template>
   <section class="container">
     <div class="row">
-      <div class="col-md-3" v-for="(product, index) in filteredProducts" :key="index">
+      <div class="col-md-3" v-for="(product, index) in SearchProducts" :key="index">
         <div class="card mb-3 shadow-sm">
           <img src="../../assets/images/Group 52.png" class="card-img" alt="clothe" />
           <div class="card-body">
@@ -45,7 +45,7 @@
       }
     },
     computed: {
-      filteredProducts() {
+      SearchProducts() {
         if (!this.searchQuery) {
           return this.products;
         }
