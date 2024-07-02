@@ -16,7 +16,8 @@
                   <a class="text-dark custom-font-size nav-link" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <router-link to="/register" class="dropdown-item custom-font-size">Register</router-link>
-                    <!-- <router-link to="/profile" class="dropdown-item custom-font-size">profile</router-link> -->
+                    <router-link to="/profile" class="dropdown-item custom-font-size">profile</router-link>
+                    <li><a class="dropdown-item custom-font-size" href="#">Another action</a></li>
                     <li><a class="dropdown-item custom-font-size" href="#">Something else here</a></li>
                   </ul>
                 </div>
