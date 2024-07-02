@@ -1,13 +1,11 @@
 <template>
   <section class="container">
-    <div class="row">
-      <div class="col-md-3" v-for="(product, index) in filteredProducts" :key="index">
-        <div class="card mb-3 shadow-sm">
+        <div class="card mb-3 shadow-sm bg-light">
           <img :src="imageProduct(product.image)" class="card-img" alt="clothe" style="height: 400px;"/>
           <div class="card-body">
             <h5 class="card-title">{{ product.name }}</h5>
             <p class="card-text text-muted">{{ product.description }}</p>
-            <h5 class="card-price text-success">{{ product.price }}</h5>
+            <h5 class="card-price text-success">${{ product.price }}</h5>
             <div class="d-flex align-items-center justify-content-between mt-3">
               <div class="star-rating" style="font-size: 1.5em; color: #f39c12;">
                 <span>&#9733;</span>
@@ -21,8 +19,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
   </section>
   </template>
   
@@ -31,39 +27,12 @@
   import { useUserStore } from '@/stores/user.js';
   export default {
     name: 'CardComponent',
-    props: ['searchQuery'],
+    props: ['searchQuery', 'product'],
     setup() {
       const store_user = useUserStore();
       store_user.loadUser();
       return {
         store_user,
-      }
-    },
-    data() {
-      return {
-        products: [],
-      }
-    },
-    computed: {
-      filteredProducts() {
-        if (!this.searchQuery) {
-          return this.products;
-        }
-        return this.products.filter(product => 
-          product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
-      }
-    },
-    async created() {
-      try {
-        const response = await api.listProduct()
-        if (response.data.status) {
-          this.products = response.data.data
-        } else {
-          console.error('Error fetching products: ', response.data.message)
-        }
-      } catch (error) {
-        console.error('API error: ', error)
       }
     },
     methods:{
