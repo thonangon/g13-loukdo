@@ -107,9 +107,13 @@
         <p>100% secure payment method</p>
       </div>
     </div>
-    <div class="container mt-5">
-      <h3>Recently Add New Products</h3>
-      <cards_product class="mt-5" :searchQuery="searchQuery" />
+    <div class="mt-5">
+      <h3 class="border-bottom mb-5">Recently Add New Products</h3>
+      <div class="row">
+        <div class="col-md-3" v-for="(product, index) in products" :key="index">
+            <cards_product :searchQuery="searchQuery" :product="product"/>
+        </div>
+      </div>
     </div>
   </div>
   <div>
@@ -148,6 +152,8 @@
 <script>
 import cards_product from '@/Components/Card/CardComponent.vue'
 import Categories from '@/Components/Card/CategoriesSlide.vue'
+import api from '@/views/api';
+// import { useUserStore } from '@/stores/user.js';
 export default {
   name: 'HomeView',
   components: {
@@ -155,8 +161,30 @@ export default {
     Categories
   },
   data() {
-    return {}
-  }
+    return {products: [],}
+  },
+  computed: {
+        filteredProducts() {
+        if (!this.searchQuery) {
+          return this.products;
+        }
+        return this.products.filter(product => 
+          product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+      }
+    },
+    async created() {
+      try {
+        const response = await api.listProduct()
+        if (response.data.status) {
+          this.products = response.data.data
+        } else {
+          console.error('Error fetching products: ', response.data.message)
+        }
+      } catch (error) {
+        console.error('API error: ', error)
+      }
+    },
 }
 </script>
 
