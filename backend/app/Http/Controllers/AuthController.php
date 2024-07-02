@@ -13,15 +13,17 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    public function listUser(){
+    public function listUser()
+    {
         return User::all();
     }
+
     public function login(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'email'     => 'required|string|max:255',
             'password'  => 'required|string'
-          ]);
+        ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors());
@@ -34,25 +36,23 @@ class AuthController extends Controller
                 'message' => 'User not found'
             ], 401);
         }
-        $user   = User::where('email', $request->email)->firstOrFail();
-        $token  = $user->createToken('auth_token')->plainTextToken;
-        return response()->json(['data'=>$user,'success'=>true, 'token' => $token], 200);
+
+        $user = User::where('email', $request->email)->firstOrFail();
+        $token = $user->createToken('auth_token')->plainTextToken;
+        return response()->json(['data' => $user, 'success' => true, 'token' => $token], 200);
     }
 
     public function index(Request $request)
     {
         $user = $request->user();
-        // $permissions = $user->getAllPermissions();
-        // $roles = $user->getRoleNames();
         return response()->json([
             'message' => 'Login success',
-            'data' =>$user,
+            'data' => $user,
         ]);
     }
-    //forget password
+
     public function forgotPassword(Request $request): JsonResponse
     {
-        // Validate the incoming request
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
         ]);
@@ -76,10 +76,11 @@ class AuthController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Password reset link sent to your email','token' => $token
+            'message' => 'Password reset link sent to your email',
+            'token' => $token
         ]);
     }
-    //reset password
+
     public function resetPassword(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
@@ -114,6 +115,7 @@ class AuthController extends Controller
 
         return response()->json(['message' => 'Password reset successfully']);
     }
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -131,17 +133,16 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-        $user   = User::where('email', $request->email)->firstOrFail();
-        $token  = $user->createToken('auth_token')->plainTextToken;
 
+        $user = User::where('email', $request->email)->firstOrFail();
+        $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json(['data'=>$user,'success'=>true, 'token' => $token], 200);
+        return response()->json(['data' => $user, 'success' => true, 'token' => $token], 200);
     }
-    
 
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::user()->currentAccessToken()->delete();
+        $request->user()->currentAccessToken()->delete();
         return response()->json([
             'message' => 'Successfully logged out'
         ], 200);

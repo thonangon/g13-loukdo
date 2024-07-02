@@ -12,6 +12,7 @@ use App\Http\Controllers\ChartController;
 use App\Http\Controllers\Products\RateProductController;
 use App\Http\Controllers\Products\CommentProductController;
 use App\Http\Controllers\ReplyProduct\ReplyCommentController;
+use App\Http\Controllers\Auth\OTPController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,9 +39,15 @@ Route::get('/user/list', [AuthController::class, 'listUser']);
 // crud on categories
 Route::get('/categories/list', [CategoryController::class, 'index']);
 Route::post('/create/category', [CategoryController::class, 'store']);
-//forgot password
-Route::post('user/forgot-password', [AuthController::class, 'forgotPassword']);
-Route::post('user/reset-password', [AuthController::class, 'resetPassword']);
+// //forgot password
+// Route::post('user/forgot-password', [AuthController::class, 'forgotPassword']);
+// Route::post('user/reset-password', [AuthController::class, 'resetPassword']);
+
+// routes/api.php
+
+Route::post('/forgot-password', [OTPController::class, 'forgotPassword']);
+Route::post('/verify-otp', [OTPController::class, 'verifyOtp']);
+Route::post('/reset-password', [OTPController::class, 'resetPassword']);
 
 
 // Other routes that don't require authentication

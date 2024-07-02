@@ -42,9 +42,11 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
+            'throttle:60,1', // Limit to 60 requests per minute   
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\HandleInertiaRequests::class, // Add HandleInertiaRequests middleware here
+  \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
 
