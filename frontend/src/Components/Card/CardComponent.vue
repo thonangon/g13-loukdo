@@ -1,6 +1,6 @@
 <template>
   <section class="container">
-        <div class="card mb-3 shadow-sm bg-light">
+        <div class="card mb-3 shadow-sm bg-light"  >
           <img :src="imageProduct(product.image)" class="card-img" alt="clothe" style="height: 400px;"/>
           <div class="card-body">
             <h5 class="card-title">{{ product.name }}</h5>
@@ -32,8 +32,6 @@
       }
     }
   }
-  
-
 </script>
 
 <style scoped>
