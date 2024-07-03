@@ -123,8 +123,9 @@ Route::put('/orderProducts/{id}', [OrderController::class, 'update']);
 Route::delete('/orderProducts/delete/{id}', [OrderController::class, 'delete']);
 
 
-Route::get('/user/{id}', [UserProfileController::class, 'show']);
+Route::get('/myaccount', [UserProfileController::class, 'show'])->middleware('auth:sanctum');
 Route::post('/user/update', [UserProfileController::class, 'update'])->middleware('auth:sanctum');
+Route::get('/userproduct', [UserProfileController::class, 'userproduct']);
 
 // Crud on Add to Cart
 

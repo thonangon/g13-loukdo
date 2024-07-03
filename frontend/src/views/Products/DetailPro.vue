@@ -111,10 +111,7 @@ export default {
   async mounted() {
     try {
       const productId = this.id; // Assuming 'id' prop is passed to this component
-    //   const userToken = this.user_store.tokenUser;
-    //   console.log(userToken)
 
-      // Make the API request with authorization headers
       const response = await api.detailProduct(productId, {
         // Authorization: `Bearer ${userToken}`
       });

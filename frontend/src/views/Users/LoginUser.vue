@@ -23,6 +23,7 @@
       </div>
       <div>
         <a href="#" style="text-decoration: none">Forgot your password?</a>
+        <a href="/register" style="text-decoration: none">| Register</a>
       </div>
     </div>
   </form>
