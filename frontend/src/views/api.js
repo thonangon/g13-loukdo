@@ -41,6 +41,11 @@ export default {
     return axios.post(`${API_URL}/comment/create`, data, {
       headers: headers
     });
+  },
+  Order_Product(data, headers) {
+    return axios.post(`${API_URL}/orderProducts`, data, {
+      headers: headers
+    });
   }
 };
 
