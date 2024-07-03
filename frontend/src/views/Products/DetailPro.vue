@@ -4,7 +4,7 @@
       <div class="leftSide" style="width: 48%;">
         <div class="d-flex align-items-center" style="height: 60px;">
           <img src="../../assets/images/Male User.png" alt="User Image" style="height: 50px; width: 43px; margin-right: 10px;">
-          <p class="mb-0">{{ productDetails.data.pro_owner.name }}>Owner>{{ productDetails.data.name }}</p>
+          <p class="mb-0" v-if="productDetails.data.owner">{{ productDetails.data.owner.name }}</p>
         </div>
       </div>
       <div class="rightSide p-3 d-flex align-items-center gap-5 bg-light rounded shadow">
@@ -12,7 +12,7 @@
           <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner" style="height: 600px;">
               <div class="carousel-item active">
-                <img :src="product_img_url(productDetails.data.image)" class="d-block w-100" style="height: 100%;" alt="...">
+                <img :src="product_img_url(productDetails.data.image)" class="d-block w-100" style="height: 100%;" alt="Product Image">
               </div>
             </div>
           </div>
@@ -48,14 +48,17 @@
             <input type="number" v-model="quantity" class="p-4">
           </div>
           <div class="action d-flex justify-content-between mt-5 gap-2">
-            <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size"><button class="btn btn-success" style="width: 270px; height: 52px;">Add to cart!</button></router-link>
-            <button v-else type="submit" class="btn btn-success" style="width: 270px; height: 52px;">Add to cart!</button>
-            <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size text-danger"><button class="btn btn-primary" style="width: 270px; height: 52px;">Buy now!</button></router-link>
+            <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size">
+              <button class="btn btn-success" style="width: 270px; height: 52px;">Add to cart!</button>
+            </router-link>
+            <button v-else type="button" class="btn btn-success" style="width: 270px; height: 52px;" @click="addToCart">Add to cart!</button>
+            <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size text-danger">
+              <button class="btn btn-primary" style="width: 270px; height: 52px;">Buy now!</button>
+            </router-link>
             <router-link v-else to="/order" class="nav-link mr-0 custom-font-size text-danger">
               <button class="btn btn-primary" style="width: 270px; height: 52px;" @click.prevent="redirectToPayment">Buy now!</button>
             </router-link>
           </div>
-          
         </form>
       </div>
     </div>
@@ -135,9 +138,14 @@ export default {
     product_img_url(filename) {
       return api.imageUrlProduct(filename);
     },
+    addToCart() {
+      // Implement logic to add product to cart
+      alert('Product added to cart!');
+    },
     redirectToPayment() {
       const orderData = {
         product_id: this.productDetails.data.id,
+        product_name: this.productDetails.data.name,
         quantity: this.quantity,
         price: this.productDetails.data.price,
         total: this.productDetails.data.price * this.quantity,
