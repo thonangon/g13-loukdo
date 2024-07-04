@@ -32,9 +32,9 @@
               <!-- Profile -->
               <div class="d-flex justify-content-end align-items-center profile-section" style="width: 40%;">
                 <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size">Login</router-link>
-                <div v-else class="dropdown d-flex align-items-center">
-                  <h5 class="mb-0 username">{{ store_user.accountUser.name.toUpperCase() }}</h5>
-                  <img class="dropdown-toggle profile-img" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" src="../../assets/images/Male User.png" alt="">
+                <div v-else class="dropdown d-flex align-items-center profile-container" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img :src="profileImageUrl" class="profile-img" alt="">
+                  <span class="profile-name">{{ store_user.accountUser.name.toUpperCase() }}</span>
                   <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <router-link v-if="!store_user.accountUser" class="dropdown-item" active-class="active" exact to="/register">Profile</router-link>
                     <router-link v-else class="dropdown-item" active-class="active" exact to="/profile">Profile</router-link>
@@ -55,6 +55,7 @@ import { useUserStore } from '@/stores/user.js';
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { computed } from 'vue';
 
 export default {
   setup() {
@@ -86,16 +87,63 @@ export default {
         router.push('/profile');
       }
     };
+      
+    const profileImageUrl = computed(() => {
+      if (store_user.accountUser && store_user.accountUser.name) {
+        const name = store_user.accountUser.name;
+        const initials = `${name[0]}${name[name.length - 1]}`.toUpperCase();
+        return `https://dummyimage.com/100x100/000/fff&text=${initials}`;
+      }
+      return '../../assets/images/Male User.png';
+    });
+
     return {
       store_user,
       logout,
-      profile,
+      
+      profileImageUrl,
     };
   }
 };
 </script>
 
 <style>
+.profile-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.profile-container:hover .profile-img {
+  transform: scale(1.1);
+}
+
+.profile-name {
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: 0%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.profile-container:hover .profile-name {
+  display: block;
+}
+
 .custom-font-size {
   font-size: 18px;
   transition: color 0.3s, font-size 0.3s;

@@ -63,8 +63,14 @@ class User extends Authenticatable
         }
 
         // Define relationship with User
-        public function user()
+
+        public function comments()
         {
-            return $this->belongsTo(User::class);
+            return $this->hasMany(CommentProduct::class);
+        }
+    
+        public function replies()
+        {
+            return $this->hasMany(ReplyComment::class);
         }
 }

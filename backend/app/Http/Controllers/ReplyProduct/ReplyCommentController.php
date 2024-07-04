@@ -50,6 +50,8 @@ class ReplyCommentController extends Controller
      */
     public function show(string $id)
     {
+        $reply = replyComment::find($id);
+        return response()->json(['comment' => $reply,'message' => 'You can see the comment'], status:200);
         
     }
 

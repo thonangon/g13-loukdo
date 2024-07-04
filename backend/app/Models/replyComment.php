@@ -14,7 +14,13 @@ class replyComment extends Model
         'text',
     ];
 
-    public function CommentProduct(){
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function comment()
+    {
         return $this->belongsTo(CommentProduct::class);
     }
 }

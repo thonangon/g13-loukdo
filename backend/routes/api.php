@@ -59,10 +59,10 @@ Route::prefix('products')->group(function () {
 
 // Route::get('/products/image/{id}', [ProductController::class, 'getImage']);
 
+Route::get('/products/pro_details/{product_id}', [ProductController::class, 'show'])->name('products.view');
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     // Route::get('/list', [ProductController::class, 'index']);
     Route::post('/create', [ProductController::class, 'store']);
-    Route::get('/pro_details/{product_id}', [ProductController::class, 'show'])->name('products.view');
     Route::put('/update/{id}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/remove/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
@@ -97,6 +97,7 @@ Route::prefix('comment')->group(function () {
 // reply comments to products
 Route::prefix('reply')->group(function () {
     Route::get('/list', [ReplyCommentController::class, 'index']);
+    Route::get('/detail', [ReplyCommentController::class, 'show']);
     Route::post('/create', [ReplyCommentController::class, 'store'])->middleware('auth:sanctum');
     Route::put('/update/{id}', [ReplyCommentController::class, 'update']);
     Route::delete('/remove/{id}', [ReplyCommentController::class, 'destroy']);

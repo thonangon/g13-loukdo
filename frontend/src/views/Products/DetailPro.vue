@@ -64,18 +64,24 @@
          <div class="RateAndFeadback d-flex">
             <div class="feadback" style="width: 70%;">
                 <!-- __________________________________________rate_show________________________________ -->
-                <rate_show/>
+                <rate_show :product_id="id"/>
                 <!-- _________________________________________________________Show feadback______________________________________ -->
                  <div v-if="productDetails" class="feadback">
                     <div v-for="comment in productDetails.data.comments" :key="comment.id" class="">
                         <comment :comment="comment"/>
+                        <!-- {{ comment.replies}} -->
+                            <div v-for="reply in comment.replies" :key="reply.id">
+                            {{ reply.text }}
+                            </div>
                     </div>
                  </div>
 
             </div>
             <!-- ________________________________________PPPPPPPPPPPPPPPPPPPPPPP_____________________________________ -->
-            <div class="cardPro border-start d-flex flex-column align-items-end" style="width: 30%;">
-               <card/>
+            <div class="cardPro border-start" style="width: 30%">
+                <div class="" v-for="(product, index) in products" :key="index">
+                    <cards_product :product="product" style="width: 90%"/>
+                </div>
             </div>
          </div>
     </div>
@@ -83,33 +89,34 @@
 
 <script>
 import api from "@/views/api.js";
-import { useUserStore } from "@/stores/user.js";
+// import { useUserStore } from "@/stores/user.js";
 import rate_show from "@/Components/Card/RateProShow.vue"
 import comment from "@/Components/Card/CommentPro.vue"
-import card from "@/Components/Card/CardComponent.vue"
+import cards_product from '@/Components/Card/CardComponent.vue'
 
 export default {
   props: ['id'],
   components: {
     rate_show,
     comment,
-    card,
+    cards_product,
   },
   data() {
     return {
       productDetails: null,
-      user_store: useUserStore()
+    //   user_store: useUserStore(),
+      products: [],
     };
   },
   async mounted() {
     try {
       const productId = this.id; // Assuming 'id' prop is passed to this component
-      const userToken = this.user_store.tokenUser;
-      console.log(userToken)
+    //   const userToken = this.user_store.tokenUser;
+    //   console.log(userToken)
 
       // Make the API request with authorization headers
       const response = await api.detailProduct(productId, {
-        Authorization: `Bearer ${userToken}`
+        // Authorization: `Bearer ${userToken}`
       });
 
       this.productDetails = response.data.data;
@@ -118,6 +125,28 @@ export default {
       console.error('Error fetching product details:', error);
     }
   },
+  computed: {
+        filteredProducts() {
+        if (!this.searchQuery) {
+          return this.products;
+        }
+        return this.products.filter(product => 
+          product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+      }
+    },
+    async created() {
+      try {
+        const response = await api.listProduct()
+        if (response.data.status) {
+          this.products = response.data.data
+        } else {
+          console.error('Error fetching products: ', response.data.message)
+        }
+      } catch (error) {
+        console.error('API error: ', error)
+      }
+    },
   methods:{
     product_img_url(filename){
         return api.imageUrlProduct(filename);
