@@ -24,4 +24,10 @@ class Plans extends Model
     {
         return $this->belongsTo(Plans::class);
     }
+    public static function store($request, $id = null)
+    {
+        $data = $request->only('name','slug','price','description',);
+        $data= self::updateOrCreate(['id'=>$id],$data);
+        return $data;
+    }
 }

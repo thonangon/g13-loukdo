@@ -6,8 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\Plans;
 use Illuminate\Http\Request;
 
-class PlanController extends Controller
+class PlansController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('admin')->only([
+            'store',
+            'update',
+            'destroy',
+        ]);
+    }
     public function index()
     {
         $plans = Plans::all();
@@ -23,9 +31,9 @@ class PlanController extends Controller
             'description' => 'required|string',
         ]);
 
-        $plan = Plans::create($request->all());
+        $plans = Plans::store($request);
 
-        return response()->json(['plan' => $plan], 201);
+        return response()->json(['plan' => $plans], 201);
     }
 
     public function show($id)
@@ -57,6 +65,5 @@ class PlanController extends Controller
 
         return response()->json(['message' => 'Plan deleted successfully']);
     }
+
 }
-
-
