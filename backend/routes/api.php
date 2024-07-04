@@ -14,6 +14,9 @@ use App\Http\Controllers\Products\CommentProductController;
 use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 use App\Http\Controllers\addToCartController;
 use App\Http\Controllers\Order\PaymentController;
+use App\Http\Controllers\Plans\PlanController;
+use App\Http\Controllers\Plans\PlansController;
+use App\Http\Controllers\Plans\SubscriptionController;
 
 ;
 
@@ -142,3 +145,13 @@ Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
     Route::put('/update/{id}', [addToCartController::class, 'update']);
     Route::delete('/remove/{id}', [addToCartController::class, 'destroy']);
 });
+
+// custmer charge for product
+Route::get('/plans', [PlanController::class, 'index']);
+Route::post('/plans', [PlanController::class, 'store']);
+Route::get('/plans/{id}', [PlanController::class, 'show']);
+Route::put('/plans/{id}', [PlanController::class, 'update']);
+Route::delete('/plans/{id}', [PlanController::class, 'destroy']);
+
+Route::post('/subscriptions', [SubscriptionController::class, 'subscribe']);
+Route::get('/users/{userId}/subscriptions', [SubscriptionController::class, 'userSubscriptions']);
