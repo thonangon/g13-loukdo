@@ -40,7 +40,7 @@
         <div class="d-flex align-items-center">
           <input type="file" class="form-control flex-grow-1" id="product-image" @change="handleFileUpload" ref="imageInput" required />
           <button type="submit" class="btn btn-dark ms-3" :disabled="loading">
-            <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span @click="chargeMoney" v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             Post
           </button>
         </div>
@@ -119,7 +119,8 @@ export default {
       this.quantity = null;
       this.description = '';
       this.image = null;
-    }
+    },
+    
   },
   watch: {
     name(newName) {

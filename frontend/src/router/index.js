@@ -11,6 +11,7 @@ import Viewprofile from '../views/profile/ProfileVue.vue'
 import UserPostProduct from '../views/Products/ProductPostUser.vue'  
 import ProductShow from '../views/Products/ProductShow.vue';
 import userprodcuts from '../views/Users/ProductVue.vue'
+import Charge_Moeny from '../views/Products/Charge/PlansView.vue'
 
 const routes = [
     { 
@@ -63,6 +64,11 @@ const routes = [
         path: '/userprodcuts',
         name: 'userprodcuts', 
         component: userprodcuts
+    },
+    {
+        path: '/chargeMoeny',
+        name: 'chargeMoeny', 
+        component: Charge_Moeny
     },
 ]
 
