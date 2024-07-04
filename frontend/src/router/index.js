@@ -11,6 +11,7 @@ import Viewprofile from '../views/profile/ProfileVue.vue'
 import UserPostProduct from '../views/Products/ProductPostUser.vue'  
 import ProductShow from '../views/Products/ProductShow.vue';
 import userprodcuts from '../views/Users/ProductVue.vue'
+import payment from '../views/Order/PaymentOrder.vue'
 
 const routes = [
     { 
@@ -64,6 +65,12 @@ const routes = [
         name: 'userprodcuts', 
         component: userprodcuts
     },
+    {
+        path: '/payment',
+        name: 'payment',  
+        component: payment
+    },
+    
 ]
 
 const router = createRouter({
