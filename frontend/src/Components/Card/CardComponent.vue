@@ -1,6 +1,6 @@
 <template>
   <section class="container">
-        <div class="card mb-3 shadow-sm bg-light">
+        <div class="card mb-3 shadow-sm bg-light"  >
           <img :src="imageProduct(product.image)" class="card-img" alt="clothe" style="height: 400px;"/>
           <div class="card-body">
             <h5 class="card-title">{{ product.name }}</h5>
@@ -19,60 +19,19 @@
           </div>
         </div>
   </section>
-</template>
-
-<script>
-import api from '../../views/api'
-import { useUserStore } from '@/stores/user.js';
-export default {
-  name: 'CardComponent',
-   props: ['searchQuery', 'product'],
-  setup() {
-    const store_user = useUserStore();
-    store_user.loadUser();
-    return {
-      store_user,
-    }
-  },
-  data() {
-    return {
-      products: [],
-    }
-  },
-  computed: {
-    filteredProducts() {
-      if (!this.searchQuery) {
-        return this.products;
-      }
-      return this.products.filter(product =>
-        product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    }
-  },
-  methods: {
-    imageProduct(filename) {
-      return api.imageUrlProduct(filename);
-    },
-    async fetchProducts() {
-      try {
-        const response = await api.listProduct();
-        if (response.data.status) {
-          this.products = response.data.data;
-          this.$emit('products-loaded', this.products);
-        } else {
-          console.error('Error fetching products: ', response.data.message);
-        }
-      } catch (error) {
-        console.error('API error: ', error);
-      }
-   }
-  },
-  created() {
-    this.fetchProducts();
-  }
+  </template>
   
-}
-
+  <script>
+  import api from '../../views/api'
+  export default {
+    name: 'CardComponent',
+    props: ['searchQuery', 'product'],
+    methods:{
+      imageProduct(filename){
+        return api.imageUrlProduct(filename)
+      }
+    }
+  }
 </script>
 
 <style scoped>

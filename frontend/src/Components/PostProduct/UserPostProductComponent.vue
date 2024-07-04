@@ -49,7 +49,7 @@
   </form>
 </template>
 <script>
-import api from '../../views/api'
+import api from '../../views/api';
 import { useUserStore } from '@/stores/user.js';
 
 export default {

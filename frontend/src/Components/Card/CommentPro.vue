@@ -25,7 +25,6 @@
     <div class="mt-3">
       <span>{{comment.user.name}} reply:</span>
     </div>
-     <!-- {{comment.replies}} -->
   </div>
 </template>
 

@@ -21,7 +21,9 @@ class Order extends Model
     {
         return $this->belongsToMany(Product::class, 'order_products')->withPivot('qty');
     }
-
+    public function payments(){
+        return $this->hasMany(Payment::class);
+    }
     public static function list()
     {
         return self::all();

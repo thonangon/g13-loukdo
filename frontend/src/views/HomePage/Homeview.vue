@@ -107,6 +107,7 @@
         <p>100% secure payment method</p>
       </div>
     </div>
+    
     <div class="mt-5">
       <h3 class="border-bottom mb-5">Recently Add New Products</h3>
       <div class="row">
@@ -115,45 +116,44 @@
         </div>
       </div>
     </div>
-  </div>
-  <div>
-  <div>
-    <div class="container mt-5">
-      <h3> The Populer Categories</h3>
-      <categories class="mt-5"/>
-  </div>
-  </div>
-  </div>
-  <div class="container mt-5">
-    <div class="row align-items-center">
-      <div class="col-md-6">
-        <div class="text-center">
-          <h1>second hand Goods!</h1>
-          <p class="content">
-            	encourages recycling and reduces waste, promoting a more sustainable lifestyle.
-            	Small businesses and individuals can reach a wider audience, increasing their chances of selling items.
-            	Small businesses and thrift stores can expand their market reach and increase revenue through online sales.
-              Individuals can earn money by selling items they no longer need, providing an additional source of income.
-            	Reducing the demand for new products
-            	Save money 
-            	Encourages users to know about products, where products are reused and recycled rather than discarded.
 
-          </p>
-          <p><a class="btn btn-primary btn-lg mt-5" href="#" role="button">Explore Now</a></p>
-        </div>
+    <div>
+      <div class="container mt-5">
+        <h3>The Popular Categories</h3>
+        <categories class="mt-5"/>
       </div>
-      <div class="col-md-6 position-relative">
-        <img src="../../assets/images/reuse.jpg" class="img-fluid" alt="Shoes" />
-        
+    </div>
+
+    <div class="container mt-5">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <div class="text-center">
+            <h1>Second hand Goods!</h1>
+            <p class="content">
+              encourages recycling and reduces waste, promoting a more sustainable lifestyle.
+              Small businesses and individuals can reach a wider audience, increasing their chances of selling items.
+              Small businesses and thrift stores can expand their market reach and increase revenue through online sales.
+              Individuals can earn money by selling items they no longer need, providing an additional source of income.
+              Reducing the demand for new products
+              Save money 
+              Encourages users to know about products, where products are reused and recycled rather than discarded.
+            </p>
+            <p><a class="btn btn-primary btn-lg mt-5" href="#" role="button">Explore Now</a></p>
+          </div>
+        </div>
+        <div class="col-md-6 position-relative">
+          <img src="../../assets/images/reuse.jpg" class="img-fluid" alt="Shoes" />
+        </div>
       </div>
     </div>
   </div>
 </template>
+
 <script>
 import cards_product from '@/Components/Card/CardComponent.vue'
 import Categories from '@/Components/Card/CategoriesSlide.vue'
 import api from '@/views/api';
-// import { useUserStore } from '@/stores/user.js';
+
 export default {
   name: 'HomeView',
   components: {
@@ -161,30 +161,33 @@ export default {
     Categories
   },
   data() {
-    return {products: [],}
+    return {
+      products: [],
+      searchQuery: ''
+    }
   },
   computed: {
-        filteredProducts() {
-        if (!this.searchQuery) {
-          return this.products;
-        }
-        return this.products.filter(product => 
-          product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
+    filteredProducts() {
+      if (!this.searchQuery) {
+        return this.products;
       }
-    },
-    async created() {
-      try {
-        const response = await api.listProduct()
-        if (response.data.status) {
-          this.products = response.data.data
-        } else {
-          console.error('Error fetching products: ', response.data.message)
-        }
-      } catch (error) {
-        console.error('API error: ', error)
+      return this.products.filter(product => 
+        product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    }
+  },
+  async created() {
+    try {
+      const response = await api.listProduct()
+      if (response.data.status) {
+        this.products = response.data.data
+      } else {
+        console.error('Error fetching products: ', response.data.message)
       }
-    },
+    } catch (error) {
+      console.error('API error: ', error)
+    }
+  },
 }
 </script>
 
@@ -234,9 +237,7 @@ body {
 .feature-icons {
   background-color: #efe8e865;
   border: 1px solid #ffffff;
-
   text-align: center;
-
   border-radius: 20px;
 }
 
