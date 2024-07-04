@@ -16,8 +16,13 @@ class CommentProduct extends Model
         'comment',
         'image'
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
-    public function replyComment(){
-        return $this->hasMany(replyComment::class);
+    public function replies()
+    {
+        return $this->hasMany(ReplyComment::class);
     }
 };
