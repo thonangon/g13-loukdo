@@ -10,6 +10,7 @@ import register from '../views/Users/ReginsterAcc.vue'
 import Viewprofile from '../views/profile/ProfileVue.vue'
 import UserPostProduct from '../views/Products/ProductPostUser.vue'  
 import ProductShow from '../views/Products/ProductShow.vue';
+import userprodcuts from '../views/Users/ProductVue.vue'
 
 const routes = [
     { 
@@ -57,6 +58,11 @@ const routes = [
         path: '/profile',
         name: 'profile', 
         component: Viewprofile
+    },
+    {
+        path: '/userprodcuts',
+        name: 'userprodcuts', 
+        component: userprodcuts
     },
 ]
 

@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\userproductresource;
 
 class UserProfileController extends Controller
 {
@@ -16,19 +17,25 @@ class UserProfileController extends Controller
      * @param  int  $id
      * @return JsonResponse
      */
-    public function show($id): JsonResponse
+    public function show(): JsonResponse
     {
-        $user = User::findOrFail($id);
-        return response()->json([
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'profile' => asset('storage/' . $user->profile),
-            'email_verified_at' => $user->email_verified_at,
-            'two_factor_confirmed_at' => $user->two_factor_confirmed_at,
-            'created_at' => $user->created_at,
-            'updated_at' => $user->updated_at,
-        ]);
+        $user_id = auth()->id();
+        $user = User::findOrFail($user_id);
+        try{
+            return response()->json(['user' => $user,'message' => 'You can see your profile'], status:200);
+        }catch(\Exception $e){
+            return response()->json(['message'=> $e->getMessage()], status:500);
+        }
+    }
+
+    public function userproduct(Request $request){
+        $user_id = $request->id;
+        $user = User::findOrFail($user_id);
+        try{
+            return response()->json(['data'=> userproductresource::make($user),'message'=> 'get all users product', 'status'=>200]);
+        }catch(\Exception $e){
+            return response()->json(['message'=> $e->getMessage()], status:500);
+        }
     }
 
     /**
@@ -71,9 +78,8 @@ class UserProfileController extends Controller
 
             // Store the new profile image
             $profilePath = $request->file('profile')->store('profiles', 'public');
-            $image_path = asset('/storage'.'/'. $profilePath);
             $user->profile = $profilePath;
-            $user->profile_path = $image_path;
+
           
         }
 
@@ -82,7 +88,6 @@ class UserProfileController extends Controller
         return response()->json([
             'data'=>$user,
             'message' => 'User updated successfully',
-            'image_path' => asset('/storage'.'/'. $profilePath),
        
         ], 200);
     }}

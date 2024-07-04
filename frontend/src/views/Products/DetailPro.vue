@@ -105,8 +105,12 @@ export default {
   },
   async mounted() {
     try {
-      const productId = this.id;
-      const response = await api.detailProduct(productId);
+      const productId = this.id; // Assuming 'id' prop is passed to this component
+
+      const response = await api.detailProduct(productId, {
+        // Authorization: `Bearer ${userToken}`
+      });
+
       this.productDetails = response.data.data;
     } catch (error) {
       console.error('Error fetching product details:', error);

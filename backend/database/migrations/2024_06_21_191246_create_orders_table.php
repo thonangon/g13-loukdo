@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id'); 
             $table->date('order_date'); 
+            $table->string('status')->default('pending');
             $table->softDeletes(); 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

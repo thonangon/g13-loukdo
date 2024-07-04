@@ -12,7 +12,10 @@ use App\Http\Controllers\ChartController;
 use App\Http\Controllers\Products\RateProductController;
 use App\Http\Controllers\Products\CommentProductController;
 use App\Http\Controllers\ReplyProduct\ReplyCommentController;
-use App\Http\Controllers\addToCartController;;
+use App\Http\Controllers\addToCartController;
+use App\Http\Controllers\Order\PaymentController;
+
+;
 
 /*
 |--------------------------------------------------------------------------
@@ -121,10 +124,15 @@ Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orderProducts', [OrderController::class, 'store']);
 Route::put('/orderProducts/{id}', [OrderController::class, 'update']);
 Route::delete('/orderProducts/delete/{id}', [OrderController::class, 'delete']);
+//Payment
 
-
+Route::middleware('auth:sanctum')->prefix('payment')->group(function () {
+    Route::post('/create', [PaymentController::class, 'createPayment']);
+   
+});
 Route::get('/user/{id}', [UserProfileController::class, 'show']);
 Route::post('/user/update', [UserProfileController::class, 'update'])->middleware('auth:sanctum');
+Route::get('/userproduct', [UserProfileController::class, 'userproduct']);
 
 // Crud on Add to Cart
 
