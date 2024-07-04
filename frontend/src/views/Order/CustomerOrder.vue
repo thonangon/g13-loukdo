@@ -5,23 +5,28 @@
       <div class="col-md-6 mb-4" style="padding-top: 25px;">
         <div class="card border-0">
           <div class="row no-gutters">
-            <div class="col-4">
-              <img src="https://i.pinimg.com/564x/e2/33/f5/e233f5b0c5a358449398f202b03f063a.jpg" class="card-img" alt="ABA" @click="selectBank('ABA')">
-              <span>ABA</span>
+            <div class="col-4" @click="selectBank('ABA')">
+              <img src="https://i.pinimg.com/564x/e2/33/f5/e233f5b0c5a358449398f202b03f063a.jpg" class="card-img" alt="ABA">
+              <span class="mt-2">Pay with ABA</span>
             </div>
-            <div class="col-4">
-              <img src="https://i.pinimg.com/736x/25/e8/7c/25e87cd478a762a4f9c3d79c35246cda.jpg" class="card-img" alt="Wing" @click="selectBank('Wing')">
-              <span>Wing</span>
+            <div class="col-4" @click="selectBank('Wing')">
+              <img src="https://i.pinimg.com/736x/25/e8/7c/25e87cd478a762a4f9c3d79c35246cda.jpg" class="card-img" alt="Wing">
+              <span class="mt-2">Pay with Wing</span>
             </div>
-            <div class="col-4">
-              <img src="https://i.pinimg.com/564x/84/0e/9e/840e9e6497547428463c05a21bd5c3d4.jpg" class="card-img" alt="Canadia" @click="selectBank('Canadia')">
-              <span>Canadia</span>
+            <div class="col-4" @click="selectBank('Canadia')">
+              <img src="https://i.pinimg.com/564x/84/0e/9e/840e9e6497547428463c05a21bd5c3d4.jpg" class="card-img" alt="Canadia">
+              <span class="mt-2">Pay with Canadia</span>
             </div>
           </div>
           <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center" style="padding-top: 30px;">
-              <button class="btn me-2 w-50 border-0" style="background-color: #f0f0f0;">Contact Owner</button>
-              <button class="btn btn-outline-secondary w-50 border-0" style="background-color: black;" @click="createOrder">Buy Now</button>
+            <div v-if="selectedBank">
+              <h5 class="text-center mb-4">Confirm Payment Method</h5>
+              <div class="text-center">
+                <button class="btn btn-success me-2" @click="payWithSelectedBank">Proceed to Pay</button>
+              </div>
+            </div>
+            <div v-else>
+              <p class="text-muted text-center mt-3">Please select a payment method to continue.</p>
             </div>
           </div>
         </div>
@@ -66,15 +71,15 @@ export default {
     };
   },
   created() {
-    const storedOrderData = JSON.parse(localStorage.getItem('orderData'));
-    if (storedOrderData) {
+    const orderProducts = JSON.parse(localStorage.getItem('orderData'));
+    if (orderProducts) {
       this.orderData = {
-        product_id: storedOrderData.product_id,
-        product_name: storedOrderData.product_name,
-        price: storedOrderData.price,
-        quantity: storedOrderData.quantity,
-        delivery: storedOrderData.delivery,
-        total: storedOrderData.total
+        product_id: orderProducts.product_id,
+        product_name: orderProducts.product_name,
+        price: orderProducts.price,
+        quantity: orderProducts.quantity,
+        delivery: orderProducts.delivery,
+        total: orderProducts.total
       };
     }
   },
@@ -82,8 +87,13 @@ export default {
     selectBank(bank) {
       this.selectedBank = bank;
     },
-    async createOrder() {
+    async payWithSelectedBank() {
       try {
+        if (!this.selectedBank) {
+          alert('Please select a payment method.');
+          return;
+        }
+        
         const store_user = useUserStore();
         const orderData = {
           user_id: store_user.accountUser.id,
@@ -97,15 +107,18 @@ export default {
           bank: this.selectedBank
         };
 
-        console.log('Order Data:', orderData); // Debugging line
+        console.log('Order Data:', orderData); 
 
         const response = await api.Order_Product(orderData);
         console.log('Order created:', response.data);
-        alert('Order created successfully!');
+        this.showOrderSuccessPopup(); 
       } catch (error) {
         console.error('Error creating order:', error.response ? error.response.data : error.message); // Debugging line
         alert('Failed to create order. Please try again later.');
       }
+    },
+    showOrderSuccessPopup() {
+      alert('Order created successfully!');
     }
   }
 };
