@@ -69,6 +69,10 @@
                  <div v-if="productDetails" class="feadback">
                     <div v-for="comment in productDetails.data.comments" :key="comment.id" class="">
                         <comment :comment="comment"/>
+                        <!-- {{ comment.replies}} -->
+                            <div v-for="reply in comment.replies" :key="reply.id">
+                            {{ reply.text }}
+                            </div>
                     </div>
                  </div>
 

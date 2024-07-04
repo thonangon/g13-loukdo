@@ -41,6 +41,10 @@ export default {
     return axios.post(`${API_URL}/comment/create`, data, {
       headers: headers
     });
+  },
+
+  replycomment(formData, config) {
+    return axios.post(`${API_URL}/reply/create`, formData, config);
   }
 };
 
