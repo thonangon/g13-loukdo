@@ -51,6 +51,9 @@ export default {
     });
   },
 
+  replycomment(formData, config) {
+    return axios.post(`${API_URL}/reply/create`, formData, config);
+  },
   userproduct(id) {
     return axios.get(`${API_URL}/userproduct`, {
       params: { id: id }

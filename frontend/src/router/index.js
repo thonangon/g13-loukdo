@@ -13,6 +13,8 @@ import ProductShow from '../views/Products/ProductShow.vue';
 import userprodcuts from '../views/Users/ProductVue.vue'
 import Charge_Moeny from '../views/Products/Charge/PlansView.vue'
 import payment from '../views/Order/PaymentOrder.vue'
+// import ProductShow from '../views/Products/ProductShow.vue';
+import addcard from '../views/CardAdd/addCard.vue';
 
 const routes = [
     { 
@@ -62,9 +64,10 @@ const routes = [
         component: Viewprofile
     },
     {
-        path: '/userprodcuts',
-        name: 'userprodcuts', 
-        component: userprodcuts
+        path: '/card',
+        name: 'card', 
+        component: addcard,
+        props: true
     },
     {
         path: '/chargeMoeny',

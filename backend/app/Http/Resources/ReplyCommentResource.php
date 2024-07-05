@@ -18,7 +18,7 @@ class ReplyCommentResource extends JsonResource
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
-            'comment_id' => $this->CommentProduct(),
+            'comment_id' => $this->comment_id,
             'text' => $this->text,  
         ];
         

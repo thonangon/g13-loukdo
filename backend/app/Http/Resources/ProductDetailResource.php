@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Models\User;
 use App\Models\CommentProduct;
+use App\Models\replyComment;
 use App\Models\Category;
 
 class ProductDetailResource extends JsonResource
@@ -31,6 +32,12 @@ class ProductDetailResource extends JsonResource
         $category = Category::select('id', 'category_name')
                             ->where('id', $this->category_id)
                             ->first();
+
+        // load reply comments inline
+        $reply = replyComment::select('id', 'comment_id', 'user_id','text')
+        ->where('comment_id', $this->id)
+        ->get();
+
 
         return [
             'data' => [
@@ -60,6 +67,7 @@ class ProductDetailResource extends JsonResource
                         'user' => User::select('id', 'name', 'email')
                                       ->where('id', $comment->user_id)
                                       ->first(),
+                     'replies' => replyComment::where('comment_id', $comment->id)->get(),
                     ];
                 }),
                 'created_at' => $this->created_at,

@@ -14,6 +14,7 @@ use App\Http\Controllers\Products\CommentProductController;
 use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 use App\Http\Controllers\addToCartController;
 use App\Http\Controllers\Order\PaymentController;
+use App\Http\Controllers\Stripe\StripeController;
 
 ;
 
@@ -100,15 +101,11 @@ Route::prefix('comment')->group(function () {
 // reply comments to products
 Route::prefix('reply')->group(function () {
     Route::get('/list', [ReplyCommentController::class, 'index']);
+    Route::get('/detail', [ReplyCommentController::class, 'show']);
     Route::post('/create', [ReplyCommentController::class, 'store'])->middleware('auth:sanctum');
     Route::put('/update/{id}', [ReplyCommentController::class, 'update']);
     Route::delete('/remove/{id}', [ReplyCommentController::class, 'destroy']);
 });
-
-
-
-
-
 
 // messages chat
 Route::middleware('auth:sanctum')->prefix('message')->group(function () {
@@ -142,3 +139,5 @@ Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
     Route::put('/update/{id}', [addToCartController::class, 'update']);
     Route::delete('/remove/{id}', [addToCartController::class, 'destroy']);
 });
+// charge the money
+Route::post('/stripe/payment', [StripeController::class, 'makePayment']);
