@@ -33,8 +33,8 @@
                   <del>Sed ut perspiciatis</del>
                 </li>
               </ul>
-  
-              <button class="btn btn-primary btn-block shadow rounded-pill">Buy Now</button>
+                <button class="btn btn-primary btn-block shadow rounded-pill">Buy Now</button>
+              
             </div>
           </div>
   
@@ -67,8 +67,9 @@
                   <del>Sed ut perspiciatis</del>
                 </li>
               </ul>
-  
-              <router-link :to="'/plans/' + plan.slug" class="btn btn-primary btn-block shadow rounded-pill">Buy Now</router-link>
+              <a href="/payment">
+                <button class="btn btn-primary btn-block shadow rounded-pill">Buy Now</button>
+              </a>
             </div>
           </div>
         </div>
