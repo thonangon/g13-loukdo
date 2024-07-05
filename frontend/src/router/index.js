@@ -11,6 +11,8 @@ import Viewprofile from '../views/profile/ProfileVue.vue'
 import UserPostProduct from '../views/Products/ProductPostUser.vue'  
 import ProductShow from '../views/Products/ProductShow.vue';
 import userprodcuts from '../views/Users/ProductVue.vue'
+// import ProductShow from '../views/Products/ProductShow.vue';
+import addcard from '../views/CardAdd/addCard.vue';
 
 const routes = [
     { 
@@ -60,9 +62,10 @@ const routes = [
         component: Viewprofile
     },
     {
-        path: '/userprodcuts',
-        name: 'userprodcuts', 
-        component: userprodcuts
+        path: '/card',
+        name: 'card', 
+        component: addcard,
+        props: true
     },
 ]
 
