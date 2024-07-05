@@ -102,10 +102,83 @@
 </template>
 
 <script>
+import { loadStripe } from '@stripe/stripe-js';
+import api from '../../api'
 export default {
   data() {
-    return {};
+    return {
+      stripe: null,
+      elements: null,
+      cardElement: null,
+      amount: 0,
+    };
   },
+  async mounted() {
+    // Load Stripe
+    this.stripe = await loadStripe('pk_test_51PZ1M92KMJfWGuxDbOviEzE7eldlNfD2vLtPaweyyJPTAJEmEy7APiGipQYtve6F0MNP4iJTAxK15MAS9R25DRyG00GuyPPGZh'); // Replace with your publishable key
+
+    // Create an instance of Elements
+    this.elements = this.stripe.elements();
+
+    // Create a Card Element and mount it to the #card-element div
+    this.cardElement = this.elements.create('card', {
+      style: {
+        base: {
+          iconColor: '#666EE8',
+          color: '#31325F',
+          fontWeight: 400,
+          fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif',
+          fontSize: '16px',
+          '::placeholder': {
+            color: '#CFD7E0',
+          },
+        },
+      },
+    });
+    this.cardElement.mount('#card-element');
+
+    // Handle real-time validation errors from the card Element
+    this.cardElement.on('change', (event) => {
+      const displayError = document.getElementById('card-errors');
+      if (event.error) {
+        displayError.textContent = event.error.message;
+      } else {
+        displayError.textContent = '';
+      }
+    });
+  },
+  methods: {
+    async submitPayment() {
+      try {
+        // Create a Payment Intent on the backend
+        const { data } = await axios.post('http://127.0.0.1:8000/api/stripe/payment', {
+          amount: this.amount * 100, // Convert amount to cents
+        });
+
+        // Confirm the Card Payment
+        const { error, paymentIntent } = await this.stripe.confirmCardPayment(data.clientSecret, {
+          payment_method: {
+            card: this.cardElement,
+          }
+        });
+
+        if (error) {
+          // Show error to your customer
+          console.error(error.message);
+          const displayError = document.getElementById('card-errors');
+          displayError.textContent = error.message;
+        } else {
+          if (paymentIntent.status === 'succeeded') {
+            console.log('Payment succeeded:', paymentIntent);
+            // Show a success message to your customer
+            alert('Payment succeeded!');
+          }
+        }
+      } catch (error) {
+        console.error('Error creating payment intent:', error);
+      }
+    }
+  }
 };
 </script>
 

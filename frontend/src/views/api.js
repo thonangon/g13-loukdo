@@ -56,5 +56,11 @@ export default {
       params: { id: id }
     });
   },
+  ChargeMoney(data, headers) {
+    return axios.post(`${API_URL}/`, data, {
+      headers: headers
+    });
+  },
+
 };
 
