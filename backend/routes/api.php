@@ -16,6 +16,7 @@ use App\Http\Controllers\addToCartController;
 use App\Http\Controllers\Order\PaymentController;
 
 ;
+use App\Http\Controllers\Store\StoreController;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,10 +107,13 @@ Route::prefix('reply')->group(function () {
     Route::delete('/remove/{id}', [ReplyCommentController::class, 'destroy']);
 });
 
-
-
-
-
+// User creat stores
+Route::prefix('store')->group(function () {
+    Route::get('/list', [StoreController::class, 'index']);
+    Route::post('/create', [StoreController::class, 'store'])->middleware('auth:sanctum');
+    Route::put('/update', [StoreController::class, 'update']);
+    Route::delete('/remove/{id}', [StoreController::class, 'destroy']);
+});
 
 // messages chat
 Route::middleware('auth:sanctum')->prefix('message')->group(function () {
@@ -118,7 +122,6 @@ Route::middleware('auth:sanctum')->prefix('message')->group(function () {
     Route::post('/chat/messages/{roomId}', [ChartController::class, 'newMessage']);
     Route::post('/chat/room', [ChartController::class, 'createRoom']);
 });
-
 
 // customer orders the product
 Route::get('/orders', [OrderController::class, 'index']);
