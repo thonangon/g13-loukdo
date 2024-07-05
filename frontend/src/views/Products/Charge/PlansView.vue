@@ -151,7 +151,7 @@ export default {
     async submitPayment() {
       try {
         // Create a Payment Intent on the backend
-        const { data } = await axios.post('http://127.0.0.1:8000/api/stripe/payment', {
+        const { data } = await api.ChargeMoney( {
           amount: this.amount * 100, // Convert amount to cents
         });
 

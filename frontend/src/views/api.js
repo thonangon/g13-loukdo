@@ -60,7 +60,7 @@ export default {
     });
   },
   ChargeMoney(data, headers) {
-    return axios.post(`${API_URL}/`, data, {
+    return axios.post(`${API_URL}/stripe/payment`, data, {
       headers: headers
     });
   },
