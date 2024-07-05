@@ -34,6 +34,10 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="total">Amount</label>
+                            <input type="total" class="form-control" id="total" v-model="total" placeholder="total">
+                        </div>
                         <div v-if="paymentMethod === 'card'">
                             <div class="form-group">
                                 <label for="cardInfo">Card information</label>
@@ -47,25 +51,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="nameOnCard">Name on card</label>
-                                <input type="text" class="form-control" id="nameOnCard" v-model="nameOnCard" placeholder="Name on card">
-                            </div>
+                            
                         </div>
-                        <div class="form-group">
-                            <label for="country">Country or region</label>
-                            <select class="form-control" id="country" v-model="country">
-                                <option>Philippines</option>
-                                <option>United States</option>
-                                <option>Cambodia</option>
-                                <option>United Kingdom</option>
-                                <option>Thailand</option>
-                                <option>Laov</option>
-                                <option>China</option>
-                                <option>France</option>
-                                
-                            </select>
-                        </div>
+                        
                         <div class="form-group form-check">
                             <input type="checkbox" class="form-check-input" id="saveInfo" v-model="saveInfo">
                             <label class="form-check-label" for="saveInfo">Securely save my information for 1-click checkout</label>
