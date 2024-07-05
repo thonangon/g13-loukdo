@@ -51,12 +51,20 @@
                         <h2>QUANTITY</h2>
                         <input type="number" value="1" class="p-4">
                     </div>
-                    <div class="action d-flex justify-content-between mt-5 gap-2">
-                        <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size"><button class="btn btn-success" style="width: 270px; height: 52px;">Add to chart!</button></router-link>
-                        <router-link v-else to="/" class="nav-link mr-0 custom-font-size"><button class="btn btn-success" style="width: 270px; height: 52px;">Add to chart!</button></router-link>
-                        <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size text-danger"><button class="btn btn-primary" style="width: 270px; height: 52px;">Buy now!</button></router-link>
-                        <router-link v-else to="/" class="nav-link mr-0 custom-font-size text-danger"><button class="btn btn-primary" style="width: 270px; height: 52px;">Buy now!</button></router-link>
-                    </div>
+<div class="action d-flex justify-content-between mt-5 gap-2">
+        <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size">
+          <button class="btn btn-success" style="width: 270px; height: 52px;">Add to chart!</button>
+        </router-link>
+        <router-link v-else to="/" class="nav-link mr-0 custom-font-size">
+          <button @click="addToCart(productDetails.data)" class="btn btn-success" style="width: 270px; height: 52px;">Add to chart!</button>
+        </router-link>
+        <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size text-danger">
+          <button class="btn btn-primary" style="width: 270px; height: 52px;">Buy now!</button>
+        </router-link>
+        <router-link v-else to="/" class="nav-link mr-0 custom-font-size text-danger">
+          <button class="btn btn-primary" style="width: 270px; height: 52px;">Buy now!</button>
+        </router-link>
+      </div>
                 </form>
             </div>   
         </div>
@@ -88,9 +96,9 @@
 <script>
 import api from "@/views/api.js";
 import { useUserStore } from "@/stores/user.js";
-import rate_show from "@/Components/Card/RateProShow.vue"
-import comment from "@/Components/Card/CommentPro.vue"
-import cards_product from '@/Components/Card/CardComponent.vue'
+import rate_show from "@/Components/Card/RateProShow.vue";
+import comment from "@/Components/Card/CommentPro.vue";
+import cards_product from '@/Components/Card/CardComponent.vue';
 
 export default {
   props: ['id'],
@@ -99,62 +107,52 @@ export default {
     comment,
     cards_product,
   },
-
   data() {
     return {
       productDetails: null,
-    //   user_store: useUserStore(),
       products: [],
       store_user: useUserStore()
     };
   },
   async mounted() {
     try {
-      const productId = this.id; // Assuming 'id' prop is passed to this component
-    //   const userToken = this.user_store.tokenUser;
-    //   console.log(userToken)
-
-      // Make the API request with authorization headers
-      const response = await api.detailProduct(productId, {
-        // Authorization: `Bearer ${userToken}`
-      });
-
+      const productId = this.id;
+      const response = await api.detailProduct(productId);
       this.productDetails = response.data.data;
-      console.log(this.productDetails)
+      console.log(this.productDetails);
     } catch (error) {
       console.error('Error fetching product details:', error);
     }
   },
   computed: {
-        filteredProducts() {
-        if (!this.searchQuery) {
-          return this.products;
-        }
-        return this.products.filter(product => 
-          product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
+    filteredProducts() {
+      if (!this.searchQuery) {
+        return this.products;
       }
-    },
-    async created() {
-      try {
-        const response = await api.listProduct()
-        if (response.data.status) {
-          this.products = response.data.data
-        } else {
-          console.error('Error fetching products: ', response.data.message)
-        }
-      } catch (error) {
-        console.error('API error: ', error)
+      return this.products.filter(product => product.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+    }
+  },
+  async created() {
+    try {
+      const response = await api.listProduct();
+      if (response.data.status) {
+        this.products = response.data.data;
+      } else {
+        console.error('Error fetching products: ', response.data.message);
       }
+    } catch (error) {
+      console.error('API error: ', error);
+    }
+  },
+  methods: {
+    product_img_url(filename) {
+      return api.imageUrlProduct(filename);
     },
-  methods:{
-    product_img_url(filename){
-        return api.imageUrlProduct(filename);
-    },
+    addToCart(product) {
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+      cart.push(product);
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
   }
 };
 </script>
-
-<style>
-/* Your component styles */
-</style>
