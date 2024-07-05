@@ -4,25 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Plans extends Model
 {
     use HasFactory,SoftDeletes;
     protected $fillable = [
-        'name',
-        'slug',
-        'price',
-        'description',
+        'user_id',
+        'plan',
+        'starts_at',
+        'ends_at',
     ];
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function plan()
+    public function subscription(): HasOne
     {
-        return $this->belongsTo(Plans::class);
+        return $this->hasOne(Subscription::class);
     }
     public static function store($request, $id = null)
     {

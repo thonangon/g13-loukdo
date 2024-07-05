@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug');
-            $table->integer('price');
-            $table->string('description');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->enum('plan', ['free', 'basic', 'premium']);
+            $table->timestamp('starts_at')->nullable();
+            $table->timestamp('ends_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

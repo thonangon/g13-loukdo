@@ -8,14 +8,7 @@ use Illuminate\Http\Request;
 
 class PlansController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('admin')->only([
-            'store',
-            'update',
-            'destroy',
-        ]);
-    }
+    
     public function index()
     {
         $plans = Plans::all();
@@ -26,9 +19,7 @@ class PlansController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'slug' => 'required|string|unique:plans',
             'price' => 'required|integer',
-            'description' => 'required|string',
         ]);
 
         $plans = Plans::store($request);
@@ -48,11 +39,8 @@ class PlansController extends Controller
 
         $request->validate([
             'name' => 'required|string',
-            'slug' => 'required|string|unique:plans,slug,' . $plan->id,
             'price' => 'required|integer',
-            'description' => 'required|string',
         ]);
-
         $plan->update($request->all());
 
         return response()->json(['plan' => $plan], 200);
@@ -62,7 +50,6 @@ class PlansController extends Controller
     {
         $plan = Plans::findOrFail($id);
         $plan->delete();
-
         return response()->json(['message' => 'Plan deleted successfully']);
     }
 
