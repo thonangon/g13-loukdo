@@ -13,6 +13,7 @@ import ProductShow from '../views/Products/ProductShow.vue';
 import userprodcuts from '../views/Users/ProductVue.vue'
 // import ProductShow from '../views/Products/ProductShow.vue';
 import addcard from '../views/CardAdd/addCard.vue';
+import PageStore from '../views/PageStore/StorePage.vue';
 
 const routes = [
     { 
@@ -61,11 +62,17 @@ const routes = [
         name: 'profile', 
         component: Viewprofile
     },
+    
     {
         path: '/card',
         name: 'card', 
         component: addcard,
         props: true
+    },
+    {
+        path: '/storepage',
+        name: 'storepage', 
+        component: PageStore
     },
 ]
 
