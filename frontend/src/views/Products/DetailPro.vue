@@ -4,10 +4,11 @@
         <div v-if="productDetails" class="">
             <div class="leftSide" style="width: 48%;">
                 <div class="d-flex align-items-center" style="height: 60px;">
-                    <img src="../../assets/images/Male User.png" alt="User Image" style="height: 50px; width: 43px; margin-right: 10px;">
+                    <img v-if="productDetails.data.pro_owner.profile" :src="profile_url(productDetails.data.pro_owner.profile)" alt="User Image" class="text-dark m-3 nav-link profile-img">
+                    <img v-else :src="ownerprofileName(productDetails.data.pro_owner.name)" alt="User Image" class="text-dark m-3 nav-link profile-img">
                     <p class="mb-0">{{ productDetails.data.pro_owner.name }}>Owner>{{ productDetails.data.name }}</p>
+                  </div>
                 </div>
-            </div>
             <!-- <p>{{ productDetails }}</p> -->
             <!-- _______________________________________________PPPPPPP_______________________________________________ -->
             <div class="rightSide p-3 d-flex align-items-center gap-5 bg-light rounded shadow">
@@ -117,7 +118,7 @@ export default {
       });
 
       this.productDetails = response.data.data;
-      console.log(this.productDetails)
+      // console.log(this.productDetails)
     } catch (error) {
       console.error('Error fetching product details:', error);
     }
@@ -144,10 +145,35 @@ export default {
         console.error('API error: ', error)
       }
     },
+  // setup() {
+  //   const profileImageUrl = computed(() => {
+  //     if (store_user.accountUser && store_user.accountUser.name) {
+  //       const name = store_user.accountUser.name;
+  //       const initials = `${name[0]}${name[name.length - 1]}`.toUpperCase();
+  //       return `https://dummyimage.com/100x100/000/fff&text=${initials}`;
+  //     }
+  //     return '../../assets/images/Male User.png';
+  //   });
+
+  // },
   methods:{
     product_img_url(filename){
         return api.imageUrlProduct(filename);
     },
+
+    profile_url(filename){
+      return api.profile(filename)
+    },
+    ownerprofileName(username){
+      // const profileImageUrl = computed(() => {
+        if (username) {
+            const name = username;
+            const initials = `${name[0]}${name[name.length - 1]}`.toUpperCase();
+            return `https://dummyimage.com/100x100/000/fff&text=${initials}`;
+          }
+          return '../../assets/images/Male User.png';
+        // });
+    }
   }
 };
 </script>

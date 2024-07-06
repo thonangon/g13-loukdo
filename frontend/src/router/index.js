@@ -11,6 +11,7 @@ import Viewprofile from '../views/profile/ProfileVue.vue'
 import UserPostProduct from '../views/Products/ProductPostUser.vue'  
 import ProductShow from '../views/Products/ProductShow.vue';
 import userprodcuts from '../views/Users/ProductVue.vue'
+import userchats from '../views/Users/Chat/ChatView.vue'
 
 const routes = [
     { 
@@ -57,13 +58,20 @@ const routes = [
     {
         path: '/profile',
         name: 'profile', 
-        component: Viewprofile
+        component: Viewprofile,
+        children: [
+            {
+                path: '/userprodcuts',
+                name: 'userprodcuts', 
+                component: userprodcuts
+            },
+        ]
     },
     {
-        path: '/userprodcuts',
-        name: 'userprodcuts', 
-        component: userprodcuts
-    },
+        path: '/chats',
+        name: '/chats', 
+        component: userchats
+    }
 ]
 
 const router = createRouter({
