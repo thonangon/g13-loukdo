@@ -14,6 +14,8 @@ import userprodcuts from '../views/Users/ProductVue.vue'
 // import ProductShow from '../views/Products/ProductShow.vue';
 import addcard from '../views/CardAdd/addCard.vue';
 import userchats from '../views/Users/Chat/ChatView.vue'
+import plans from '../views/Charge/ChargeMoney.vue'
+import ChargeMoney from '../views/Order/PaymentOrder.vue';
 
 const routes = [
     { 
@@ -79,6 +81,16 @@ const routes = [
         path: '/chats',
         name: '/chats', 
         component: userchats
+    },
+    {
+        path: '/plans',
+        name: '/plans', 
+        component: plans
+    },
+    {
+        path: '/charge',
+        name: '/charge', 
+        component: ChargeMoney
     }
 ]
 

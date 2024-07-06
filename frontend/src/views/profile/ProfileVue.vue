@@ -51,7 +51,7 @@
               </div>
               <div class="d-flex align-items-center gap-1">
                 <button class="btn bg-light-gray btn">...</button>
-                <a href="/product-post">
+                <a href="/plans">
                   <button class="btn btn-dark btn">Post</button>
                 </a>
                 {{ num_products }}
