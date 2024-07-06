@@ -15,6 +15,9 @@ use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 use App\Http\Controllers\addToCartController;
 use App\Http\Controllers\Order\PaymentController;
 use App\Http\Controllers\Stripe\StripeController;
+use App\Http\Controllers\Plans\PlansController;
+use App\Http\Controllers\Plans\PlansController\PlanController;
+use App\Http\Controllers\Plans\SubscriptionController;
 
 ;
 
@@ -141,3 +144,13 @@ Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
 });
 // charge the money
 Route::post('/stripe/payment', [StripeController::class, 'makePayment']);
+
+// custmer charge for product
+Route::get('/plans', [PlansController::class, 'index']);
+Route::post('/plans/store', [PlansController::class, 'store']);
+Route::get('/plans/{id}', [PlansController::class, 'show']);
+Route::put('/plans/{id}', [PlansController::class, 'update']);
+Route::delete('/plans/{id}', [PlansController::class, 'destroy']);
+
+Route::post('/subscriptions', [SubscriptionController::class, 'subscribe']);
+Route::get('/users/{userId}/subscriptions', [SubscriptionController::class, 'userSubscriptions']);
