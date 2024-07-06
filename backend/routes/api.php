@@ -118,6 +118,9 @@ Route::middleware('auth:sanctum')->prefix('message')->group(function () {
     Route::post('/chat/room', [ChartController::class, 'createRoom']);
 });
 
+Route::get('/myaccount', [UserProfileController::class, 'show'])->middleware('auth:sanctum');
+Route::post('/user/update', [UserProfileController::class, 'update'])->middleware('auth:sanctum');
+Route::get('/userproduct', [UserProfileController::class, 'userproduct']);
 
 // customer orders the product
 Route::get('/orders', [OrderController::class, 'index']);
