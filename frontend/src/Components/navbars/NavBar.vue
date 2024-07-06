@@ -44,20 +44,8 @@
                     </span>
                   </router-link>
                 </div>
-                <router-link
-                  v-if="!store_user.accountUser"
-                  to="/login"
-                  class="nav-link mr-0 custom-font-size"
-                  >Login</router-link
-                >
-                <div
-                  v-else
-                  class="dropdown d-flex align-items-center profile-container"
-                  id="dropdownMenuButton"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <img :src="profileImageUrl" class="profile-img" alt="" />
+                <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size">Login</router-link>
+                <div v-else class="dropdown d-flex align-items-center profile-container">
                   <span class="profile-name">{{ store_user.accountUser.name.toUpperCase() }}</span>
                   <img v-if="store_user.accountUser.profile" :src="profile_url(store_user.accountUser.profile)" class="text-dark custom-font-size nav-link profile-img" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">
                   <img v-else :src="profileImageUrl" class="text-dark custom-font-size nav-link profile-img" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">
@@ -98,15 +86,7 @@ export default {
   mounted() {
     this.loadCart();
   },
-  methods:{
-    loadCart() {
-      this.cart = JSON.parse(localStorage.getItem('cart')) || 0;
-      this.numcart = this.cart.length;
-    },
-  },
-  created() {
-    this.loadCart();
-  },
+
   setup() {
     const store_user = useUserStore()
     store_user.loadUser() // Ensure user data is loaded from localStorage
@@ -147,9 +127,15 @@ export default {
   methods: {
     profile_url(filename){
       return api.profile(filename)
-    }
-
+    },
+    loadCart() {
+      this.cart = JSON.parse(localStorage.getItem('cart')) || 0;
+      this.numcart = this.cart.length;
+    },
   },
+  created() {
+  this.loadCart();
+},
 };
 </script>
 
