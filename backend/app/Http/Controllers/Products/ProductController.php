@@ -59,20 +59,7 @@ class ProductController extends Controller
 
             // Get the authenticated user
             $user = Auth::user();
-            $plan = $user->plan;
-            if($plan && $plan->plan === 'premium' && $plan->ends_at->isFuture()){
-                throw new Exception('Premium plan users can only create products up to 100 per day.');
-            }else{
-                $productCount = Product::where('user_id', $user->id)->count();
-
-                // If the user has created 10 or more products, prevent further creation
-                if ($productCount >= 10) {
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'You have reached the maximum number of 10 products. Please upgrade your plan to add more products.'
-                    ], 403); // 403 Forbidden
-                }
-            }
+          
             
 
             // Create new product instance and associate with the user
