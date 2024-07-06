@@ -1,4 +1,6 @@
 <template>
+    <!-- success for payment -->
+ 
     <div class="payment-form">
       <div class="card payment-details">
         <div class="card-header">
@@ -54,12 +56,27 @@
           </div>
         </div>
       </div>
+      <div v-if="showModal" class="custom-modal-overlay">
+      <div class="custom-modal">
+        <div class="custom-modal-header">
+          <h5><i class="bi bi-check-circle-fill me-2 text-success"></i> Payment Successful!</h5>
+          <button type="button" @click="closeModal" class="close-button">&times;</button>
+        </div>
+        <div class="custom-modal-body">
+          <p>Your payment was processed successfully.</p>
+        </div>
+        <div class="custom-modal-footer">
+          <button type="button" @click="closeModal" class="btn btn-secondary">Close</button>
+        </div>
+      </div>
     </div>
+    </div>
+   
   </template>
   
   <script>
   import { loadStripe } from '@stripe/stripe-js';
-  import api from "../../views/api";
+  import axios from "axios";
   export default {
     data() {
       return {
@@ -68,7 +85,7 @@
         cardElement: null,
         email: '',
         paymentMethod: 'card',
-        amount: 0.00,
+        amount: 0,
         saveInfo: false,
       };
     },
@@ -110,10 +127,9 @@
       async submitPayment() {
         try {
           // Create a Payment Intent on the backend
-          const { data } = await api.ChargeMoney({
+          const { data } = await axios.post('http://127.0.0.1:8000/api/stripe/payment', {
             amount: this.amount * 100, // Convert amount to cents
           });
-  
           // Confirm the Card Payment
           const { error, paymentIntent } = await this.stripe.confirmCardPayment(data.clientSecret, {
             payment_method: {
@@ -131,15 +147,16 @@
             displayError.textContent = error.message;
           } else {
             if (paymentIntent.status === 'succeeded') {
-              console.log('Payment succeeded:', paymentIntent);
-              // Show a success message to your customer
-              alert('Payment succeeded!');
-            }
-          }
+              this.showModal = true;
+           }
+          }  
         } catch (error) {
           console.error('Error creating payment intent:', error);
         }
       },
+      closeModal() {
+      this.showModal = false;
+    },
     },
   };
   </script>
