@@ -19,13 +19,14 @@ class ProductDetailResource extends JsonResource
     public function toArray($request)
     {
         // Load owner details
-        $owner = User::select('id', 'name', 'email')
+        $owner = User::select('id', 'name', 'email', 'profile')
                     ->where('id', $this->user_id)
                     ->first();
 
         // Load comments inline
         $comments = CommentProduct::select('id', 'user_id', 'comment', 'image', 'created_at')
                                   ->where('product_id', $this->id)
+                                  ->orderByDesc('created_at')
                                   ->get();
 
         // Load category inline

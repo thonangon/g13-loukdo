@@ -18,47 +18,9 @@
             <div class="d-flex w-100 justify-content-between align-items-center">
               <!-- Left side of the navbar -->
               <div class="d-flex flex-grow-1">
-                <router-link
-                  to="/"
-                  class="me-5 mb-0 custom-font-size nav-link"
-                  active-class="active text-primary border-bottom"
-                  >Home</router-link
-                >
-                <router-link
-                  to="/product"
-                  class="me-5 mb-0 custom-font-size nav-link"
-                  active-class="active text-primary border-bottom"
-                  >Products</router-link
-                >
-                <div class="dropdown me-5 custom-font-size">
-                  <a
-                    class="text-dark custom-font-size nav-link"
-                    href="#"
-                    role="button"
-                    id="dropdownMenuLink"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    >Categories</a
-                  >
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <router-link to="/register" class="dropdown-item custom-font-size"
-                      >Register</router-link
-                    >
-                    <router-link to="/profile" class="dropdown-item custom-font-size"
-                      >Profile</router-link
-                    >
-                    <li><a class="dropdown-item custom-font-size" href="#">Another action</a></li>
-                    <li>
-                      <a class="dropdown-item custom-font-size" href="#">Something else here</a>
-                    </li>
-                  </ul>
-                </div>
-                <router-link
-                  to="/product-post"
-                  class="me-5 mb-0 custom-font-size nav-link"
-                  active-class="active text-primary border-bottom"
-                  >More...</router-link
-                >
+                <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-box home"></i> Home</router-link>
+                <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-box me-2"></i>Products</router-link>
+                <router-link to="/product-post" class="me-5 text-secondary mb-0 custom-font-size nav-link" active-class="text-dark active border-bottom">More...</router-link>
               </div>
 
               <!-- Logo -->
@@ -97,24 +59,18 @@
                 >
                   <img :src="profileImageUrl" class="profile-img" alt="" />
                   <span class="profile-name">{{ store_user.accountUser.name.toUpperCase() }}</span>
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <router-link
-                      v-if="!store_user.accountUser"
-                      class="dropdown-item"
-                      active-class="active"
-                      exact
-                      to="/register"
-                      >Profile</router-link
-                    >
-                    <router-link
-                      v-else
-                      class="dropdown-item"
-                      active-class="active"
-                      exact
-                      to="/profile"
-                      >Profile</router-link
-                    >
-                    <button class="dropdown-item" @click="logout">Logout</button>
+                  <img v-if="store_user.accountUser.profile" :src="profile_url(store_user.accountUser.profile)" class="text-dark custom-font-size nav-link profile-img" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">
+                  <img v-else :src="profileImageUrl" class="text-dark custom-font-size nav-link profile-img" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                    <li>
+                      <router-link class="dropdown-item" to="/profile" active-class="active"><i class="fas fa-user me-2"></i>Profile</router-link>
+                    </li>
+                    <li>
+                      <router-link to="/product" class="dropdown-item text-secondary" active-class="active border-bottom"><i class="fas fa-box me-2"></i>Products</router-link>
+                    </li>
+                    <li>
+                      <button class="dropdown-item" @click="logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -127,9 +83,10 @@
 </template>
 
 <script>
-import { useUserStore } from '@/stores/user.js'
-import axios from 'axios'
-import { computed } from 'vue'
+import { useUserStore } from '@/stores/user.js';
+import axios from 'axios';
+import { computed } from 'vue';
+import api from '@/views/api.js';
 
 export default {
   data(){
@@ -184,10 +141,16 @@ export default {
     return {
       store_user,
       logout,
-      profileImageUrl
-    }
+      profileImageUrl,
+    };
   },
-}
+  methods: {
+    profile_url(filename){
+      return api.profile(filename)
+    }
+
+  },
+};
 </script>
 
 <style>
@@ -234,7 +197,7 @@ export default {
 }
 .custom-font-size:hover {
   color: blue; /* Change text color to blue on hover */
-  font-size: 20px;
+  /* font-size: 20px; */
 }
 .navbar-shadow {
   box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.1);

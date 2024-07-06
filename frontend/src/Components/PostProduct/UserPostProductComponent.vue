@@ -1,3 +1,6 @@
+
+
+
 <template>
   <form @submit.prevent="createProduct">
     <div class="container bg-light p-4 rounded shadow w-50">
@@ -39,22 +42,47 @@
         <label for="product-image" class="form-label fw-bold">Photo</label>
         <div class="d-flex align-items-center">
           <input type="file" class="form-control flex-grow-1" id="product-image" @change="handleFileUpload" ref="imageInput" required />
-          <button type="submit" class="btn btn-dark ms-3" :disabled="loading">
-            <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Post
+          <button v-if="num_products >= 1 || userInfo.user_qrimage !== null" type="submit" class="btn btn-dark ms-3" :disabled="loading">
+            <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Post
+          </button>
+          <button v-else type="button" class="btn btn-dark ms-3" data-bs-toggle="modal" data-bs-target="#isProduct">
+            <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Post
           </button>
         </div>
       </div>
     </div>
   </form>
+  <!-- Modal -->
+  <div class="modal fade" id="isProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Please put your QR code!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form @submit.prevent="uploadQRimage" enctype="multipart/form-data">
+          <div class="modal-body">
+            <input type="file" class="form-control" aria-label="Upload" accept="image/*" @change="onFileChange" required />
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </template>
+
 <script>
 import api from '../../views/api';
+import axios from 'axios';
 import { useUserStore } from '@/stores/user.js';
 
 export default {
   data() {
     return {
+      userqr_image: null,
       category: '',
       name: '',
       price: null,
@@ -68,9 +96,28 @@ export default {
       errorDescription: '',
       errorCategory: '',
       store_user: useUserStore(),
+      num_products: localStorage.getItem('numproduct'),
+      userInfo: {},
     };
   },
+  mounted() {
+    this.getuser();
+  },
   methods: {
+    async getuser(){
+      try{
+        const response = await axios.get('http://127.0.0.1:8000/api/myaccount', {
+          headers: {
+            Authorization: `Bearer ${this.store_user.tokenUser}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        this.userInfo = response.data.user;
+        console.log(this.userInfo)
+      }catch(error){
+        console.error('Error getting user data: ', error);
+      }
+    },
     async createProduct() {
       try {
         this.loading = true;
@@ -81,9 +128,8 @@ export default {
         formData.append('description', this.description);
         formData.append('image', this.image);
         formData.append('category_id', this.category);
-        console.log(this.store_user.tokenUser)
 
-        const token = localStorage.getItem('authToken'); // Assuming you store JWT token in localStorage
+        const token = localStorage.getItem('authToken');
 
         const response = await api.createProduct(formData, {
           headers: {
@@ -92,15 +138,10 @@ export default {
           }
         });
         if (response.data.status) {
-          // Handle success
-          this.$router.push('/'); // Navigate to home page
+          this.$router.push('/');
         } else {
-          // Handle error response
           console.error('Error posting product: ', response.data.message);
         }
-
-        console.log('Product created:', response.data);
-        this.resetForm();
       } catch (error) {
         console.error('Error creating product:', error);
         if (error.response && error.response.status === 401) {
@@ -119,6 +160,44 @@ export default {
       this.quantity = null;
       this.description = '';
       this.image = null;
+    },
+    onFileChange(e) {
+      this.userqr_image = e.target.files[0];
+    },
+    async uploadQRimage() {
+      if (!this.userqr_image) {
+        console.error('No file selected.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('user_qrimage', this.userqr_image);
+
+      console.log(formData);
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/api/user/update', formData, {
+          headers: {
+            Authorization: `Bearer ${this.store_user.tokenUser}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        window.location.href = '/product-post';
+        if (response.data.status) {
+          // Successfully uploaded QR image
+          const modal = document.getElementById('isProduct');
+          const modalInstance = bootstrap.Modal.getInstance(modal);
+          modalInstance.hide();
+          this.createProduct(); // Proceed with creating the product
+        } else {
+          console.error('Error uploading QR image: ', response.data.message);
+        }
+      } catch (error) {
+        if (error.response && error.response.data) {
+          console.error('Error:', error.response.data);
+        } else {
+          console.error('Error:', error.message);
+        }
+      }
     }
   },
   watch: {
@@ -157,11 +236,9 @@ export default {
         this.errorCategory = null;
       }
     }
-  },
+  }
 };
-
 </script>
-
 
 <style>
 </style>

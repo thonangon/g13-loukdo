@@ -59,5 +59,11 @@ export default {
       params: { id: id }
     });
   },
+
+  chatrooms(headers) {
+    return axios.get(`${API_URL}/message/chat/rooms`, {
+      headers: headers
+    });
+  },
 };
 
