@@ -23,13 +23,10 @@ class StripeController extends Controller
         // Get the amount from the request
         $amount = $request->amount;
 
-        // Convert the amount to cents (smallest unit for USD)
-        $amountInCents = $amount * 100; // Assuming the amount is provided in dollars
-
         try {
             // Create a PaymentIntent to charge a customer
             $paymentIntent = PaymentIntent::create([
-                'amount' => $amountInCents, // Amount in cents
+                'amount' => $amount, // Amount in cents
                 'currency' => 'usd', // Use USD as the currency
                 'payment_method_types' => ['card'],
                 'description' => 'Example Payment',
