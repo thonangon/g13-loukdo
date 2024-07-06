@@ -84,7 +84,7 @@ export default {
         console.log(this.store_user.tokenUser)
 
         const token = localStorage.getItem('authToken'); // Assuming you store JWT token in localStorage
-
+        
         const response = await api.createProduct(formData, {
           headers: {
             'Content-Type': 'multipart/form-data',

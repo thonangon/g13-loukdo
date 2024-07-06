@@ -14,6 +14,8 @@ import userprodcuts from '../views/Users/ProductVue.vue'
 // import ProductShow from '../views/Products/ProductShow.vue';
 import addcard from '../views/CardAdd/addCard.vue';
 import PageStore from '../views/PageStore/StorePage.vue';
+import Createstore from '../views/PageStore/CreateStore.vue'
+import FormCreate from '../views/PageStore/FormCreate.vue'
 
 const routes = [
     { 
@@ -73,6 +75,16 @@ const routes = [
         path: '/storepage',
         name: 'storepage', 
         component: PageStore
+    },
+    {
+        path: '/createstore',
+        name: 'createstore', 
+        component: Createstore
+    },
+    {
+        path: '/formCreate',
+        name: 'formCreate', 
+        component: FormCreate,
     },
 ]
 

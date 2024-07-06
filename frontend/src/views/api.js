@@ -18,6 +18,9 @@ export default {
   imageUrlProduct(filename) {
     return `${API_URL}/products/image/${filename}`;
   },
+  imageUrlStore(filename) {
+    return `${API_URL}/stores/image/${filename}`;
+  },
   
   imageComment(filename) {
     return `${URL_PORT}/images/product/${filename}`;
@@ -59,5 +62,11 @@ export default {
       params: { id: id }
     });
   },
+  createStore(formData, config){
+    return axios.post(`${API_URL}/store/create`, formData, config)
+  },
+  getStores(){
+    return axios.get(`${API_URL}/store/list`);
+  }
 };
 
