@@ -10,10 +10,9 @@ import register from '../views/Users/ReginsterAcc.vue'
 import Viewprofile from '../views/profile/ProfileVue.vue'
 import UserPostProduct from '../views/Products/ProductPostUser.vue'  
 import ProductShow from '../views/Products/ProductShow.vue';
-import userprodcuts from '../views/Users/ProductVue.vue'
-// import ProductShow from '../views/Products/ProductShow.vue';
 import addcard from '../views/CardAdd/addCard.vue';
 import userchats from '../views/Users/Chat/ChatView.vue'
+import payment from '../views/Order/PaymentOrder.vue'
 
 const routes = [
     { 
@@ -61,13 +60,13 @@ const routes = [
         path: '/profile',
         name: 'profile', 
         component: Viewprofile,
-        children: [
-            {
-                path: '/userprodcuts',
-                name: 'userprodcuts', 
-                component: userprodcuts
-            },
-        ]
+        // children: [
+        //     {
+        //         path: '/userprodcuts',
+        //         name: 'userprodcuts', 
+        //         component: userprodcuts
+        //     },
+        // ]
     },
     {
         path: '/card',
@@ -79,7 +78,13 @@ const routes = [
         path: '/chats',
         name: '/chats', 
         component: userchats
+    },
+    {
+        path: '/payment',
+        name: 'payment',  
+        component: payment
     }
+    
 ]
 
 const router = createRouter({
