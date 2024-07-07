@@ -43,7 +43,7 @@
                 <div class="mx-2 nav-item">About</div>
                 <router-link to="/userprodcuts" class="mx-2 nav-item">Product</router-link>
                 <div class="mx-2 nav-item">Add to chart</div>
-                <div class="mx-2 nav-item">Book</div>
+                <router-link to="/booking" class="mx-2 nav-item">Booking</router-link>
                 <router-link to="/chats" class="mx-2 nav-item">Chats</router-link>
                 <div class="d-flex flex-grow-1">
               </div>

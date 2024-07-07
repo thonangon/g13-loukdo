@@ -13,7 +13,8 @@ import ProductShow from '../views/Products/ProductShow.vue';
 import userprodcuts from '../views/Users/ProductVue.vue'
 // import ProductShow from '../views/Products/ProductShow.vue';
 import addcard from '../views/CardAdd/addCard.vue';
-import userchats from '../views/Users/Chat/ChatView.vue'
+import userchats from '../views/Users/Chat/ChatView.vue';
+import booking from '../views/Order/InOrder.vue'
 
 const routes = [
     { 
@@ -66,6 +67,11 @@ const routes = [
                 path: '/userprodcuts',
                 name: 'userprodcuts', 
                 component: userprodcuts
+            },
+            {
+                path: '/booking',
+                name: 'booking', 
+                component: booking
             },
         ]
     },
