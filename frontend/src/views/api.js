@@ -65,5 +65,8 @@ export default {
       headers: headers
     });
   },
+  getAllCate(){
+    return axios.get(`${API_URL}/categories/list`);
+  }
 };
 
