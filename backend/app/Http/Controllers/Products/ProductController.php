@@ -48,7 +48,7 @@ class ProductController extends Controller
                     'errors' => $validator->errors()
                 ], 422);
             }
-
+            
             // Handle image upload if provided
             $imageName = null;
             if ($request->hasFile('image')) {

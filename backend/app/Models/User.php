@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 // use Laravel\Fortify\TwoFactorAuthenticatable;
 // use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Product;
 
 class User extends Authenticatable
 {
@@ -77,4 +79,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Plans::class);
     }
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
+    
 }
