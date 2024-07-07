@@ -4,7 +4,7 @@
       <div class="card-header">
         <h5>Livelab Dev <span class="badge badge-warning">TEST MODE</span></h5>
         <p class="mt-2 mb-0 font-weight-bold">Asus Vivobook 17 Laptop - Intel Core 10th</p>
-        <h2 class="mt-1">$0.00</h2>
+        <h2 class="mt-1">{{ formattedAmount }}</h2>
         <div class="stripe-logo mt-5">
           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Visa.svg/1200px-Visa.svg.png" alt="visa">
           <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="mastercard">
@@ -16,7 +16,7 @@
         <form @submit.prevent="submitPayment">
           <div class="form-group">
             <label for="email">Contact information</label>
-            <input type="email" class="form-control" id="email" v-model="email" placeholder="Email">
+            <input type="email" class="form-control" id="email" v-model="email" placeholder="Email" required>
           </div>
           <div class="form-group">
             <label for="paymentMethod">Payment method</label>
@@ -33,7 +33,7 @@
           </div>
           <div class="form-group">
             <label for="total">Amount</label>
-            <input type="number" class="form-control" id="total" v-model.number="amount" placeholder="total">
+            <input type="number" class="form-control" id="total" v-model.number="amount" placeholder="Total" required>
           </div>
           <div v-if="paymentMethod === 'card'">
             <div class="form-group">
@@ -74,6 +74,7 @@
 <script>
 import { loadStripe } from '@stripe/stripe-js';
 import axios from "axios";
+import { useUserStore } from '@/stores/user.js';
 
 export default {
   data() {
@@ -86,7 +87,13 @@ export default {
       amount: 0,
       saveInfo: false,
       showModal: false,
+      store_user: useUserStore(),
     };
+  },
+  computed: {
+    formattedAmount() {
+      return `$${(this.amount / 100).toFixed(2)}`;
+    }
   },
   async mounted() {
     this.stripe = await loadStripe('pk_test_51PZ1M92KMJfWGuxDbOviEzE7eldlNfD2vLtPaweyyJPTAJEmEy7APiGipQYtve6F0MNP4iJTAxK15MAS9R25DRyG00GuyPPGZh');
@@ -137,6 +144,7 @@ export default {
         } else {
           if (paymentIntent.status === 'succeeded') {
             this.showModal = true;
+            this.store_user.updateUserStatus(); // Assuming a method to update user's payment status
           }
         }
       } catch (error) {
@@ -145,6 +153,7 @@ export default {
     },
     closeModal() {
       this.showModal = false;
+      this.$router.push('/product-post'); // Redirect to product creation page after payment
     },
   },
 };
