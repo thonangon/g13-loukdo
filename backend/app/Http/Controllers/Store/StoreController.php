@@ -100,7 +100,7 @@ class StoreController extends Controller
 {
     try {
         // Log incoming request data for debugging
-        Log::info('Request data:', $request->all());
+        // Log::info('Request data:', $request->all());
 
         // Validate incoming request
         $validator = Validator::make($request->all(), [
