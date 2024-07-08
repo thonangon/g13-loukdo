@@ -13,6 +13,7 @@ use App\Http\Controllers\Products\RateProductController;
 use App\Http\Controllers\Products\CommentProductController;
 use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 use App\Http\Controllers\addToCartController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Order\PaymentController;
 use App\Http\Controllers\Stripe\StripeController;
 
@@ -141,3 +142,8 @@ Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
 });
 // charge the money
 Route::post('/stripe/payment', [StripeController::class, 'makePayment']);
+//user post product information
+Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
+Route::post('/paid', [ProductController::class, 'updateUserStatus']);
+Route::middleware('auth:sanctum')->prefix('status')->group(function () {
+});

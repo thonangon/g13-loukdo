@@ -26,6 +26,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'post_count',
+        'unlimited_posts'
     ];
 
     /**
@@ -73,4 +75,5 @@ class User extends Authenticatable
         {
             return $this->hasMany(ReplyComment::class);
         }
+        
 }

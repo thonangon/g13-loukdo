@@ -29,68 +29,87 @@ class ProductController extends Controller
     }
 
     public function store(Request $request)
-    {
-        try {
-            // Validate incoming request
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'price' => 'required|numeric',
-                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:204800', // Adjust max file size as needed
-                'category_id' => 'required|exists:categories,id',
-            ]);
+{
+    try {
+        // Validate incoming request
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:204800', // Adjust max file size as needed
+            'category_id' => 'required|exists:categories,id',
+        ]);
 
-            // Handle validation errors
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Validation error',
-                    'errors' => $validator->errors()
-                ], 422);
-            }
-
-            // Handle image upload if provided
-            $imageName = null;
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('/api/products/image/'), $imageName);
-            }
-
-            // Get the authenticated user
-            $user = Auth::user();
-
-            // Create new product instance and associate with the user
-            $product = new Product([
-                'name' => $request->name,
-                'description' => $request->description,
-                'price' => $request->price,
-                'image' => $imageName, // Store the file name
-                'category_id' => $request->category_id,
-                'user_id' => $user->id, // Associate the product with the authenticated user
-            ]);
-
-            // Save the product to the database
-            $product->save();
-
-            // Prepare the response with correct image URL if an image was uploaded
-            $product->image_url = $imageName ? asset('/api/products/image/' . $imageName) : null;
-
-            // Return success response
-            return response()->json([
-                'status' => true,
-                'data' => $product, // Assuming you're returning the product directly
-                'message' => 'Product created successfully'
-            ], 201);
-        } catch (\Exception $error) {
-            // Return error response if an exception occurs
+        // Handle validation errors
+        if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Product creation failed',
-                'error' => $error->getMessage()
-            ], 400);
+                'message' => 'Validation error',
+                'errors' => $validator->errors()
+            ], 422);
         }
+
+        // Handle image upload if provided
+        $imageName = null;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('/api/products/image/'), $imageName);
+        }
+
+        // Get the authenticated user
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User not authenticated',
+            ], 401);
+        }
+
+        // Debug: Log user information
+        Log::info('Authenticated user:', $user->toArray());
+
+        // Create new product instance and associate with the user
+        $product = new Product([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'image' => $imageName, // Store the file name
+            'category_id' => $request->category_id,
+            'user_id' => $user->id, // Associate the product with the authenticated user
+        ]);
+
+        // Save the product to the database
+        $product->save();
+
+        // Increment the user's post_count
+        $user->increment('post_count');
+
+        // Debug: Check if post_count is incremented
+        $user->refresh(); // Refresh the user instance to get the updated post_count
+        Log::info('User post_count after increment:', ['post_count' => $user->post_count]);
+
+        // Prepare the response with correct image URL if an image was uploaded
+        $product->image_url = $imageName ? asset('/api/products/image/' . $imageName) : null;
+
+        // Return success response
+        return response()->json([
+            'status' => true,
+            'data' => $product, // Assuming you're returning the product directly
+            'message' => 'Product created successfully'
+        ], 201);
+    } catch (\Exception $error) {
+        // Return error response if an exception occurs
+        return response()->json([
+            'status' => false,
+            'message' => 'Product creation failed',
+            'error' => $error->getMessage()
+        ], 400);
     }
+}
+
 
    public function show(Request $request, $id)
    {
@@ -285,5 +304,16 @@ class ProductController extends Controller
                 'error' => $error->getMessage(),
             ], 500);
         }
+    }
+    public function updateUserStatus(Request $request)
+    {
+        $user = $request->user();
+        $user->has_paid = true; 
+        $user->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'User status updated successfully.',
+        ]);
     }
 }
