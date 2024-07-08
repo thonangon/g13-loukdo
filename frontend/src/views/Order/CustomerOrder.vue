@@ -1,73 +1,124 @@
 <template>
-<div class="container my-5">
-  <h3 class="mb-3" style="padding-top: 50px;">Payment Bank</h3>
-  <div class="row">
-    <div class="col-md-6 mb-4" style="padding-top: 25px;">
-      <div class="card border-0">
-        <div class="row no-gutters">
-          <div class="col-4">
-            <img src="https://i.pinimg.com/564x/e2/33/f5/e233f5b0c5a358449398f202b03f063a.jpg" class="card-img" alt="Product 1">
-            <span>ABA</span>
+  <div class="container mt-4">
+    <h3 class="mb-4 text-center">Payment Bank</h3>
+    <div class="row">
+      <!-- Left Side: Bank Information -->
+      <div class="col-lg-8 mb-4 d-flex flex-column align-items-center" style="width:50%;">
+        <div class="card text-center shadow-sm" style="width: 100%;">
+          <div class="card-body">
+            <img src="../../assets/images/Group 52.png" alt="Bank Logo" class="img-fluid mb-3" style="width: 150px; height: 150px;">
+            <h5 class="card-title">BANK NAME</h5>
           </div>
-          <div class="col-4">
-            <img src="https://i.pinimg.com/736x/25/e8/7c/25e87cd478a762a4f9c3d79c35246cda.jpg" class="card-img" alt="Product 2">
-            <span>Wing</span>
-          </div>
-          <div class="col-4">
-            <img src="https://i.pinimg.com/564x/84/0e/9e/840e9e6497547428463c05a21bd5c3d4.jpg" class="card-img" alt="Product 3">
-            <span>Canadia</span>
+          <div class="card-footer d-flex justify-content-between">
+            <button class="btn btn-secondary" style="width: 48%">
+              <router-link to="/chats" class="text-white">Contact</router-link>
+              <!-- <router-link to="/chats" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-box home"></i> Home</router-link> -->
+            </button>
+            <router-link to="" class="text-white" style="width: 48%;" @click="OrderProduct">
+              <button class="btn btn-primary" style="width: 100%;">Order</button>
+            </router-link>
           </div>
         </div>
-        <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center" style="padding-top: 30px;">
-            <button class="btn me-2 w-50 border-0 " style="background-color: #f0f0f0;">Contact Owner</button>
-            <button class="btn btn-outline-secondary w-50 border-0" style="background-color: black;">Order</button>
-        </div>
+      </div>
+
+      <!-- Right Side: Order Summary -->
+      <div class="col-lg-4" style="width: 50%;">
+        <div class="card shadow-sm">
+          <div class="card-header bg-success text-white text-center">
+            Order Summary
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Product name:</span> <span>{{store_user.productDetails.data.name}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Price:</span> <span>${{store_user.productDetails.data.price}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Delivery:</span> <span>$2</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Quantity:</span> <span>{{ store_user.quantity  }}</span>
+            </li>
+          </ul>
+          <div class="card-footer text-center">
+            <strong>Total Items: <span>${{store_user.productDetails.data.price * store_user.quantity+2}}</span></strong>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="col-md-6 mb-4">
-    <div class="card border-0">
-        <div class="card-body" style="padding-left: 130px;">
-        <h2 class="card-title mb-4">Terra Cotta Studio Top</h2>
-        <div class="d-flex   mb-3">
-            <span>Price:</span>
-            <span style="margin-left: 150px;"><b>$99.99</b></span>
-        </div>
-        <div class="d-flex  mb-3">
-            <span>Delivery:</span>
-            <span style="margin-left: 130px;"><b>$9.99</b></span>
-        </div>
-        <div class="d-flex  mb-4">
-            <span>Total:</span>
-            <span style="margin-left: 155px;"><b>$109.98</b></span>
-        </div>
-        <div class="d-flex  mb-4">
-            <span>Quantities:</span>
-            <span style="margin-left: 120px;"><b>10 Stock</b></span>
-        </div>
-        <div class="d-flex  mb-4">
-            <span>Delivery Start:</span>
-            <span style="margin-left: 100px;"><b>8:45AM</b></span>
-        </div>
-        <div class="d-flex  mb-4">
-            <span>Arrived:</span>
-            <span style="margin-left: 145px;"><b>10:30AM</b></span>
-        </div>
-        </div>
-    </div>
-    </div>
   </div>
-</div>
 </template>
 
-<script>
-export default {
 
+<script>
+import { useUserStore } from "@/stores/user.js";
+import api from "@/views/api.js";
+export default {
+  data() {
+    return {
+      store_user: useUserStore(),
+      products: [
+        { id: 1, name: 'Product 1', description: 'Description for product 1', image: 'https://via.placeholder.com/150' },
+        { id: 2, name: 'Product 2', description: 'Description for product 2', image: 'https://via.placeholder.com/150' },
+        { id: 3, name: 'Product 3', description: 'Description for product 3', image: 'https://via.placeholder.com/150' },
+        // Add more products as needed
+      ],
+    }
+  },
+  computed: {
+    totalItems() {
+      return this.summary.reduce((total, item) => total + item.quantity, 0);
+    }
+  },
+
+  methods: {
+    async OrderProduct() {
+      try {
+        const product_id = this.store_user.productDetails.data.id;
+        const quantity = this.store_user.quantity;
+
+        const orderData = {
+          product_id: product_id,
+          quantity: quantity,
+        };
+
+        const headers = { Authorization: `Bearer ${this.store_user.tokenUser}` };
+        const response = await api.createOrderProduct(orderData, headers);
+
+        console.log(response.data); // Optional: handle response as needed
+
+        // Redirect to '/order' route after successful order creation
+        this.$router.push('/booking');
+      } catch (error) {
+        console.error('Error ordering product:', error);
+        // Handle error scenario, e.g., show error message to user
+      }
+    },
+
+    addToSummary(product) {
+      const existingProduct = this.summary.find(item => item.id === product.id);
+      if (existingProduct) {
+        existingProduct.quantity += 1;
+      } else {
+        this.summary.push({ ...product, quantity: 1 });
+      }
+    }
+  }
 }
 </script>
+<style scoped>
+.card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
 
-<style>
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
 
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
 </style>

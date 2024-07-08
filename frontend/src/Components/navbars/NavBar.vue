@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar-shadow sticky-xl-top mb-5">
+  <div class="navbar-shadow sticky-xl-top">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -18,7 +18,7 @@
             <div class="d-flex w-100 justify-content-between align-items-center">
               <!-- Left side of the navbar -->
               <div class="d-flex flex-grow-1">
-                <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-box home"></i> Home</router-link>
+                <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-home"></i> Home</router-link>
                 <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-box me-2"></i>Products</router-link>
                 <router-link to="/product-post" class="me-5 text-secondary mb-0 custom-font-size nav-link" active-class="text-dark active border-bottom">More...</router-link>
               </div>

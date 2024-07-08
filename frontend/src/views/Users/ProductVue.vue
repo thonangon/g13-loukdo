@@ -33,7 +33,8 @@ export default {
         if (response.data.status === 200) {
           this.products = response.data.data.product;  // Adjusted to access 'product' array
           console.log('Products:', this.products.length);
-          localStorage.setItem('numproduct', this.products.length);
+          // localStorage.setItem('numproduct', this.products.length);
+          this.store_user.get_num_products(this.products.length)
         } else {
           console.error('Error fetching products:', response.data.message);
         }

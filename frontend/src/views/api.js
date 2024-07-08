@@ -73,6 +73,34 @@ export default {
   },
   updateProduct(formData, config) {
     return axios.put(`${API_URL}/products/update/${id}`, formData, config);
+  },
+
+   // New CRUD methods for OrderProduct
+   listOrderProducts(headers) {
+    return axios.get(`${API_URL}/order/list`, { headers: headers });
+  },
+   listSellerProducts(headers) {
+    return axios.get(`${API_URL}/order/list/seller`, { headers: headers });
+  },
+
+  createOrderProduct(data, headers) {
+    return axios.post(`${API_URL}/order/create/order`, data, { headers: headers });
+  },
+
+  updateOrderProduct(id, data, headers) {
+    return axios.put(`${API_URL}/order/update/${id}`, data, { headers: headers });
+  },
+
+  deleteOrderProduct(id, headers) {
+    console.log(`${API_URL}/order/remove/${id}`)
+    return axios.delete(`${API_URL}/order/remove/${id}`, { headers: headers });
+  },
+
+  updateOrderStatus(orderId, status, token) {
+    const headers = {
+      'Authorization': `Bearer ${token}`
+    };
+    return axios.put(`${API_URL}/order/update/status/${orderId}`, { status: status }, { headers: headers });
   }
 };
 

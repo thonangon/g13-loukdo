@@ -140,4 +140,5 @@ class UserController extends Controller
         $role->delete();
         return redirect()->back()->withSuccess('Role deleted !!!');
     }
+    
 }

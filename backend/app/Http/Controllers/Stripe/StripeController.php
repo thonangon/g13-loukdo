@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Stripe;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
 use Stripe\Stripe;
@@ -23,13 +24,10 @@ class StripeController extends Controller
         // Get the amount from the request
         $amount = $request->amount;
 
-        // Convert the amount to cents (smallest unit for USD)
-        $amountInCents = $amount * 100; // Assuming the amount is provided in dollars
-
         try {
             // Create a PaymentIntent to charge a customer
             $paymentIntent = PaymentIntent::create([
-                'amount' => $amountInCents, // Amount in cents
+                'amount' => $amount, // Amount in cents
                 'currency' => 'usd', // Use USD as the currency
                 'payment_method_types' => ['card'],
                 'description' => 'Example Payment',
@@ -42,4 +40,5 @@ class StripeController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+    
 }

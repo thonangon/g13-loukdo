@@ -51,27 +51,27 @@
         </div>
       </div>
     </div>
-  </form>
-  <!-- Modal -->
-  <div class="modal fade" id="isProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Please put your QR code!</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- Modal -->
+    <div class="modal fade" id="isProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Please put your QR code!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form @submit.prevent="uploadQRimage" enctype="multipart/form-data">
+            <div class="modal-body">
+              <input type="file" class="form-control" aria-label="Upload" accept="image/*" @change="onFileChange" required />
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
         </div>
-        <form @submit.prevent="uploadQRimage" enctype="multipart/form-data">
-          <div class="modal-body">
-            <input type="file" class="form-control" aria-label="Upload" accept="image/*" @change="onFileChange" required />
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Save</button>
-          </div>
-        </form>
       </div>
     </div>
-  </div>
+  </form>
 </template>
 <script>
 import api from '../../views/api';
@@ -96,7 +96,7 @@ export default {
       errorDescription: '',
       errorCategory: '',
       store_user: useUserStore(),
-      num_products: localStorage.getItem('numproduct'),
+      num_products: 0,
       userInfo: {},
     };
   },
@@ -106,6 +106,7 @@ export default {
   },
   methods: {
     async getCateList() {
+      this.num_products = this.store_user.num_products;
       try {
         const response = await api.getAllCate();
         if (response.data.data) {
