@@ -67,6 +67,12 @@ export default {
   },
   getAllCate(){
     return axios.get(`${API_URL}/categories/list`);
+  },
+  deleteProduct(id, config) {
+    return axios.delete(`${API_URL}/products/remove/${id}`, config);
+  },
+  updateProduct(formData, config) {
+    return axios.put(`${API_URL}/products/update/${id}`, formData, config);
   }
 };
 

@@ -7,7 +7,7 @@
     <p class="text-center mb-4">All in ONE!</p>
     <div class="row">
       <div class="col-md-3" v-for="(product, index) in filteredProducts" :key="index">
-        <cards_product :product="product"/>
+        <cards_product :product="product"  @productDeleted="removeProduct"/>
       </div>
     </div>
   </div>
@@ -47,6 +47,9 @@ export default {
       return this.products.filter(product =>
         product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
+    },
+    removeProduct() {
+      this.products = this.products.filter(product => product.id!== product.id)
     }
   },
   async created() {
