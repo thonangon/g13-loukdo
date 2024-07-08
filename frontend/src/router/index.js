@@ -11,11 +11,11 @@ import Viewprofile from '../views/profile/ProfileVue.vue'
 import UserPostProduct from '../views/Products/ProductPostUser.vue'  
 import ProductShow from '../views/Products/ProductShow.vue';
 import userprodcuts from '../views/Users/ProductVue.vue'
-// import ProductShow from '../views/Products/ProductShow.vue';
 import addcard from '../views/CardAdd/addCard.vue';
 import PageStore from '../views/PageStore/StorePage.vue';
 import Createstore from '../views/PageStore/CreateStore.vue'
 import FormCreate from '../views/PageStore/FormCreate.vue'
+import editStore from '../views/PageStore/EditStore.vue'
 
 const routes = [
     { 
@@ -85,6 +85,12 @@ const routes = [
         path: '/formCreate',
         name: 'formCreate', 
         component: FormCreate,
+    },
+    {
+        path: '/editStore/:id',
+        name: 'editStore', 
+        component: editStore,
+        props: true
     },
 ]
 

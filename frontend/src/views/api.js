@@ -67,6 +67,12 @@ export default {
   },
   getStores(){
     return axios.get(`${API_URL}/store/list`);
+  },
+  updateStore(storeId, formData, config) {
+    return axios.put(`${API_URL}/store/update/${storeId}`, formData, config);
+  },
+  deleteStore(storeId) {
+    return axios.delete(`${API_URL}/store/remove/${storeId}`);
   }
 };
 
