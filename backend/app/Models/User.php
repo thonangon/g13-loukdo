@@ -27,6 +27,7 @@ class User extends Authenticatable
         'email',
         'password',
         'post_count',
+        'has_paid',
         'unlimited_posts'
     ];
 

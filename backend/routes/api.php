@@ -142,8 +142,8 @@ Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
 });
 // charge the money
 Route::post('/stripe/payment', [StripeController::class, 'makePayment']);
+Route::post('/payment/success', [StripeController::class, 'handlePaymentSuccess']);
+Route::post('/stripe/success', [StripeController::class, 'paymentSuccess']);
 //user post product information
 Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
-Route::post('/paid', [ProductController::class, 'updateUserStatus']);
-Route::middleware('auth:sanctum')->prefix('status')->group(function () {
-});
+

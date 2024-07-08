@@ -67,7 +67,14 @@ class ProductController extends Controller
                 'message' => 'User not authenticated',
             ], 401);
         }
-
+        $postLimit = 10;
+        if ($user->post_count >= $postLimit && !$user->has_paid) {
+            return response()->json([
+                'status' => false,
+                'message' => 'You have reached the maximum number of posts allowed. Please make a payment to continue posting.',
+                'payment_url' => '/charge', 
+            ], 403); 
+        }
         // Debug: Log user information
         Log::info('Authenticated user:', $user->toArray());
 
@@ -76,9 +83,9 @@ class ProductController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
-            'image' => $imageName, // Store the file name
+            'image' => $imageName, 
             'category_id' => $request->category_id,
-            'user_id' => $user->id, // Associate the product with the authenticated user
+            'user_id' => $user->id, 
         ]);
 
         // Save the product to the database
@@ -86,9 +93,7 @@ class ProductController extends Controller
 
         // Increment the user's post_count
         $user->increment('post_count');
-
-        // Debug: Check if post_count is incremented
-        $user->refresh(); // Refresh the user instance to get the updated post_count
+        $user->refresh(); 
         Log::info('User post_count after increment:', ['post_count' => $user->post_count]);
 
         // Prepare the response with correct image URL if an image was uploaded
@@ -97,7 +102,7 @@ class ProductController extends Controller
         // Return success response
         return response()->json([
             'status' => true,
-            'data' => $product, // Assuming you're returning the product directly
+            'data' => $product, 
             'message' => 'Product created successfully'
         ], 201);
     } catch (\Exception $error) {
