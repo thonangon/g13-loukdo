@@ -13,6 +13,7 @@ use App\Http\Controllers\Products\RateProductController;
 use App\Http\Controllers\Products\CommentProductController;
 use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 use App\Http\Controllers\addToCartController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Order\PaymentController;
 use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\Plans\PlansController;
@@ -157,3 +158,8 @@ Route::delete('/plans/{id}', [PlansController::class, 'destroy']);
 
 Route::post('/subscriptions', [SubscriptionController::class, 'subscribe']);
 Route::get('/users/{userId}/subscriptions', [SubscriptionController::class, 'userSubscriptions']);
+Route::post('/payment/success', [StripeController::class, 'handlePaymentSuccess']);
+Route::post('/stripe/success', [StripeController::class, 'paymentSuccess']);
+//user post product information
+Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
+
