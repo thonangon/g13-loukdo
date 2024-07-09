@@ -40,11 +40,11 @@
           <div class="p-4 text-black">
             <div class="d-flex justify-content-between align-items-center">
               <div class="d-flex justify-content-center">
-                <div class="mx-2 nav-item">About</div>
-                <router-link to="/userprodcuts" class="mx-2 nav-item">Product</router-link>
-                <div class="mx-2 nav-item">Add to chart</div>
-                <div class="mx-2 nav-item">Book</div>
-                <router-link to="/chats" class="mx-2 nav-item">Chats</router-link>
+                <router-link to="/userprodcuts" class="mx-2 nav-item" active-class="text-dark active btn">Product</router-link>
+                <!-- <div class="mx-2 nav-item">Add to chart</div> -->
+                <router-link to="/booking" class="mx-2 nav-item" active-class="text-dark active btn">Booking</router-link>
+                <router-link to="/selling" class="mx-2 nav-item" active-class="text-dark active btn">Selling</router-link>
+                <router-link to="/chats" class="mx-2 nav-item" active-class="text-dark active btn">Chats</router-link>
                 <div class="d-flex flex-grow-1">
               </div>
 
@@ -233,5 +233,8 @@ body,
 .section p {
   margin: 0;
   color: #666;
+}
+.nav-item{
+  text-decoration: none;
 }
 </style>

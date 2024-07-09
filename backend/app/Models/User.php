@@ -26,6 +26,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'post_count',
+        'has_paid',
+        'unlimited_posts'
     ];
 
     /**
@@ -77,4 +80,5 @@ class User extends Authenticatable
     {
         return $this->hasOne(Plans::class);
     }
+        
 }
