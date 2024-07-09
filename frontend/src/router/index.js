@@ -10,9 +10,18 @@ import register from '../views/Users/ReginsterAcc.vue'
 import Viewprofile from '../views/profile/ProfileVue.vue'
 import UserPostProduct from '../views/Products/ProductPostUser.vue'  
 import ProductShow from '../views/Products/ProductShow.vue';
+<<<<<<< HEAD
 import addcard from '../views/CardAdd/addCard.vue';
 import userchats from '../views/Users/Chat/ChatView.vue'
 import payment from '../views/Order/PaymentOrder.vue'
+=======
+import userprodcuts from '../views/Users/ProductVue.vue'
+import addcard from '../views/CardAdd/addCard.vue';
+import PageStore from '../views/PageStore/StorePage.vue';
+import Createstore from '../views/PageStore/CreateStore.vue'
+import FormCreate from '../views/PageStore/FormCreate.vue'
+import editStore from '../views/PageStore/EditStore.vue'
+>>>>>>> Createstore
 
 const routes = [
     { 
@@ -68,6 +77,7 @@ const routes = [
         //     },
         // ]
     },
+    
     {
         path: '/card',
         name: 'card', 
@@ -75,6 +85,7 @@ const routes = [
         props: true
     },
     {
+<<<<<<< HEAD
         path: '/chats',
         name: '/chats', 
         component: userchats
@@ -85,6 +96,28 @@ const routes = [
         component: payment
     }
     
+=======
+        path: '/storepage',
+        name: 'storepage', 
+        component: PageStore
+    },
+    {
+        path: '/createstore',
+        name: 'createstore', 
+        component: Createstore
+    },
+    {
+        path: '/formCreate',
+        name: 'formCreate', 
+        component: FormCreate,
+    },
+    {
+        path: '/editStore/:id',
+        name: 'editStore', 
+        component: editStore,
+        props: true
+    },
+>>>>>>> Createstore
 ]
 
 const router = createRouter({

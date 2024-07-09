@@ -18,9 +18,54 @@
             <div class="d-flex w-100 justify-content-between align-items-center">
               <!-- Left side of the navbar -->
               <div class="d-flex flex-grow-1">
+<<<<<<< HEAD
                 <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-box home"></i> Home</router-link>
                 <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-box me-2"></i>Products</router-link>
                 <router-link to="/product-post" class="me-5 text-secondary mb-0 custom-font-size nav-link" active-class="text-dark active border-bottom">More...</router-link>
+=======
+                <router-link
+                  to="/"
+                  class="me-5 mb-0 custom-font-size nav-link"
+                  active-class="active text-primary border-bottom"
+                  >Home</router-link
+                >
+                <router-link
+                  to="/product"
+                  class="me-5 mb-0 custom-font-size nav-link"
+                  active-class="active text-primary border-bottom"
+                  >Products</router-link
+                >
+                <div class="dropdown me-5 custom-font-size">
+                  <a
+                    class="text-dark custom-font-size nav-link"
+                    href="#"
+                    role="button"
+                    id="dropdownMenuLink"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    >Categories</a
+                  >
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <router-link to="/register" class="dropdown-item custom-font-size"
+                      >Register</router-link
+                    >
+                    <router-link to="/profile" class="dropdown-item custom-font-size"
+                      >Profile</router-link
+                    >
+                    <li><a class="dropdown-item custom-font-size" href="#">Another action</a></li>
+                    <li>
+                      <a class="dropdown-item custom-font-size" href="#">Something else here</a>
+                    </li>
+                  </ul>
+                </div>
+                <router-link
+                  to="/product-post"
+                  class="me-5 mb-0 custom-font-size nav-link"
+                  active-class="active text-primary border-bottom"
+                  >More...</router-link
+                >
+                <router-link to="/createstore" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">Store</router-link>
+>>>>>>> Createstore
               </div>
 
               <!-- Logo -->

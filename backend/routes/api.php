@@ -21,6 +21,7 @@ use App\Http\Controllers\Plans\PlansController\PlanController;
 use App\Http\Controllers\Plans\SubscriptionController;
 
 ;
+use App\Http\Controllers\Store\StoreController;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,6 +110,14 @@ Route::prefix('reply')->group(function () {
     Route::post('/create', [ReplyCommentController::class, 'store'])->middleware('auth:sanctum');
     Route::put('/update/{id}', [ReplyCommentController::class, 'update']);
     Route::delete('/remove/{id}', [ReplyCommentController::class, 'destroy']);
+});
+
+// User creat stores
+Route::prefix('store')->group(function () {
+    Route::get('/list', [StoreController::class, 'index']);
+    Route::post('/create', [StoreController::class, 'store'])->middleware('auth:sanctum');
+    Route::put('/update/{id}', [StoreController::class, 'update']);
+    Route::delete('/remove/{id}', [StoreController::class, 'destroy']);
 });
 
 // messages chat

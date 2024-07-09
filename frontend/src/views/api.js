@@ -18,6 +18,9 @@ export default {
   imageUrlProduct(filename) {
     return `${API_URL}/products/image/${filename}`;
   },
+  imageUrlStore(filename) {
+    return `${API_URL}/stores/image/${filename}`;
+  },
   
   imageComment(filename) {
     return `${URL_PORT}/images/product/${filename}`;
@@ -59,6 +62,7 @@ export default {
       params: { id: id }
     });
   },
+<<<<<<< HEAD
 
   chatrooms(headers) {
     return axios.get(`${API_URL}/message/chat/rooms`, {
@@ -67,6 +71,19 @@ export default {
   },
   getAllCate(){
     return axios.get(`${API_URL}/categories/list`);
+=======
+  createStore(formData, config){
+    return axios.post(`${API_URL}/store/create`, formData, config)
+  },
+  getStores(){
+    return axios.get(`${API_URL}/store/list`);
+  },
+  updateStore(storeId, formData, config) {
+    return axios.put(`${API_URL}/store/update/${storeId}`, formData, config);
+  },
+  deleteStore(storeId) {
+    return axios.delete(`${API_URL}/store/remove/${storeId}`);
+>>>>>>> Createstore
   }
 };
 
