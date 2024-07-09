@@ -10,9 +10,11 @@ import register from '../views/Users/ReginsterAcc.vue'
 import Viewprofile from '../views/profile/ProfileVue.vue'
 import UserPostProduct from '../views/Products/ProductPostUser.vue'  
 import ProductShow from '../views/Products/ProductShow.vue';
+import userprodcuts from '../views/Users/ProductVue.vue'
 import addcard from '../views/CardAdd/addCard.vue';
 import userchats from '../views/Users/Chat/ChatView.vue';
 import booking from '../views/Order/InOrder.vue'
+import sellProduct from '../views/Order/InSell.vue'
 import payment from '../views/Order/PaymentOrder.vue'
 
 const routes = [
@@ -71,6 +73,11 @@ const routes = [
                 path: '/booking',
                 name: 'booking', 
                 component: booking
+            },
+            {
+                path: '/selling',
+                name: 'sellProduct', 
+                component: sellProduct
             },
         ]
     },

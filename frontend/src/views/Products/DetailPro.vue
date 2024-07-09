@@ -46,7 +46,7 @@
           </div>
           <div class="quantity">
             <h2>QUANTITY</h2>
-            <input type="number" v-model="quantity" class="p-4">
+            <input type="number" v-model="form.quantity" class="p-4">
           </div>
           <div class="action d-flex justify-content-between mt-5 gap-2">
             <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size">
@@ -56,8 +56,8 @@
             <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size text-danger">
               <button class="btn btn-primary" style="width: 270px; height: 52px;">Buy now!</button>
             </router-link>
-            <router-link v-else to="/order" class="nav-link mr-0 custom-font-size text-danger">
-              <button class="btn btn-primary" style="width: 270px; height: 52px;" @click.prevent="redirectToPayment">Buy now!</button>
+            <router-link v-else to="" class="nav-link mr-0 custom-font-size text-danger">
+              <button class="btn btn-primary" style="width: 270px; height: 52px;" @click="buyNow()">Buy now!</button>
             </router-link>
           </div>
         </form>
@@ -101,7 +101,10 @@ export default {
       productDetails: null,
       quantity: 1,
       products: [],
-      store_user: useUserStore()
+      store_user: useUserStore(),
+      form:{
+        quantity: 1,
+      }
     };
   },
   async mounted() {
@@ -131,9 +134,19 @@ export default {
         return this.products;
       }
       return this.products.filter(product => product.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
-    }
+    },
   },
   methods: {
+    buyNow() {
+      console.log(
+        this.form.quantity,
+        this.productDetails.data
+      );
+      const orderStore = this.store_user;
+      orderStore.setOrderData(this.form.quantity, this.productDetails);
+      this.$router.push('/order');
+    },
+   
     product_img_url(filename) {
       return api.imageUrlProduct(filename);
     },
