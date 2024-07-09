@@ -71,10 +71,14 @@ export default {
   deleteProduct(id, config) {
     return axios.delete(`${API_URL}/products/remove/${id}`, config);
   },
-  updateProduct(formData, config) {
-    return axios.put(`${API_URL}/products/update/${id}`, formData, config);
-  },
+// __________________________pro_________________
 
+  updateProduct(pro_id, data, token) {
+    const headers = {
+      'Authorization': `Bearer ${token}`
+    };
+    return axios.put(`${API_URL}/products/update/${pro_id}`, data, { headers: headers });
+  },
    // New CRUD methods for OrderProduct
    listOrderProducts(headers) {
     return axios.get(`${API_URL}/order/list`, { headers: headers });
