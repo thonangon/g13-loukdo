@@ -13,12 +13,16 @@ return new class extends Migration
     {
         Schema::create('order_products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id');
-            $table->foreignId('product_id');
+            $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('product_id');
             $table->integer('qty');
             $table->decimal('totalPrice', 10, 2);
+            $table->integer('status')->nullable()->default('0');  // pending, confirmed, delivered, returned, cancelled
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('order_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 
