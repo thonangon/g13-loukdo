@@ -7,7 +7,6 @@
             <table class="table table-dark table-striped">
                 <thead>
                     <tr>
-                    <th scope="col">ID</th>
                     <th scope="col">Products</th>
                     <th scope="col">User Name</th>
                     <th scope="col">Quantities</th>
@@ -16,7 +15,6 @@
                 </thead>
                 <tbody v-for="(sell) in currentSeller" :key="sell.id" >
                     <tr v-if="sell.status !== 2">
-                        <th scope="row">{{ sell.id }}</th>
                         <td>{{sell.products[0].name}}</td>
                         <td>{{sell.buyer.name}}</td>
                         <td>{{ sell.quantity }}</td>
@@ -32,16 +30,14 @@
             <table class="table table-dark table-striped">
                 <thead>
                     <tr>
-                    <th scope="col">ID</th>
                     <th scope="col">Products</th>
                     <th scope="col">User Name</th>
                     <th scope="col">Quantities</th>
                     <th scope="col">Totals</th>
                     </tr>
                 </thead>
-                <tbody>
-                  <tr v-for="(sell, index) in currentSeller" :key="sell.id">
-                    <th scope="row">{{ index + 1 }}</th>
+                <tbody v-for="(sell) in currentSeller" :key="sell.id">
+                  <tr v-if="sell.status == 2">
                     <td>{{ sell.products[0].name }}</td>
                     <td>{{ sell.buyer.name }}</td>
                     <td>{{ sell.quantity }}</td>
