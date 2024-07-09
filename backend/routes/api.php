@@ -13,6 +13,7 @@ use App\Http\Controllers\Products\RateProductController;
 use App\Http\Controllers\Products\CommentProductController;
 use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 use App\Http\Controllers\addToCartController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Order\PaymentController;
 use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\Plans\PlansController;
@@ -147,13 +148,11 @@ Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
 });
 // charge the money
 Route::post('/stripe/payment', [StripeController::class, 'makePayment']);
+Route::post('/payment/success', [StripeController::class, 'handlePaymentSuccess']);
+Route::post('/stripe/success', [StripeController::class, 'paymentSuccess']);
 
-// custmer charge for product
-Route::get('/plans', [PlansController::class, 'index']);
-Route::post('/plans/store', [PlansController::class, 'store']);
-Route::get('/plans/{id}', [PlansController::class, 'show']);
-Route::put('/plans/{id}', [PlansController::class, 'update']);
-Route::delete('/plans/{id}', [PlansController::class, 'destroy']);
 
-Route::post('/subscriptions', [SubscriptionController::class, 'subscribe']);
-Route::get('/users/{userId}/subscriptions', [SubscriptionController::class, 'userSubscriptions']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
+    Route::post('/products', [ProductController::class, 'store']);
+});

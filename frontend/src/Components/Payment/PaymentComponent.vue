@@ -73,10 +73,11 @@
 
 <script>
 import { loadStripe } from '@stripe/stripe-js';
-import axios from "axios";
+import axios from 'axios';
 import { useUserStore } from '@/stores/user.js';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
   data() {
     return {
       stripe: null,
@@ -87,7 +88,6 @@ export default {
       amount: 0,
       saveInfo: false,
       showModal: false,
-      store_user: useUserStore(),
     };
   },
   computed: {
@@ -143,8 +143,11 @@ export default {
           displayError.textContent = error.message;
         } else {
           if (paymentIntent.status === 'succeeded') {
+            // Dispatch action to update user status
+            useUserStore().updateUserStatus();
+            
+            // Show success modal
             this.showModal = true;
-            this.store_user.updateUserStatus(); // Assuming a method to update user's payment status
           }
         }
       } catch (error) {
@@ -153,10 +156,11 @@ export default {
     },
     closeModal() {
       this.showModal = false;
-      this.$router.push('/product-post'); // Redirect to product creation page after payment
+      // Optionally navigate to another route or perform additional actions
+      this.$router.push('/product-post');
     },
   },
-};
+});
 </script>
 
 <style scoped>

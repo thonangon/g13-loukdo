@@ -1,10 +1,13 @@
+// stores/user.js
 
 import { defineStore } from 'pinia';
 
-export const useUserStore = defineStore('user', {
+export const useUserStore = defineStore({
+  id: 'user',
   state: () => ({
     accountUser: null,
     tokenUser: null,
+    numProducts: 0, // Example: Number of products user can post
   }),
   actions: {
     setUser(data) {
@@ -25,8 +28,13 @@ export const useUserStore = defineStore('user', {
     logout() {
       this.accountUser = null;
       this.tokenUser = null;
+      this.numProducts = 0; // Reset number of products on logout
       localStorage.removeItem('user_token');
       localStorage.removeItem('userAccount');
-    }
-  }
+    },
+    updateUserStatus() {
+      // Example: Update numProducts after successful payment
+      this.numProducts = Math.max(this.numProducts - 1, 0);
+    },
+  },
 });
