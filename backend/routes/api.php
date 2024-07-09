@@ -19,6 +19,7 @@ use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\Plans\PlansController;
 use App\Http\Controllers\Plans\PlansController\PlanController;
 use App\Http\Controllers\Plans\SubscriptionController;
+use App\Http\Controllers\Order\OrderProductController;
 
 ;
 
@@ -146,6 +147,16 @@ Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
     Route::put('/update/{id}', [addToCartController::class, 'update']);
     Route::delete('/remove/{id}', [addToCartController::class, 'destroy']);
 });
+
+Route::middleware('auth:sanctum')->prefix('order')->group(function () {
+    Route::get('/list', [OrderProductController::class, 'index']);
+    Route::get('/list/seller', [OrderProductController::class, 'userSeller']);
+    Route::post('/create/order', [OrderProductController::class, 'store']);
+    Route::put('/update/{id}', [OrderProductController::class, 'update']);
+    Route::put('/update/status/{id}', [OrderProductController::class, 'updateStatus']);
+    Route::delete('/remove/{id}', [OrderProductController::class, 'destroy']);
+});
+
 // charge the money
 Route::post('/stripe/payment', [StripeController::class, 'makePayment']);
 
