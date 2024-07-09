@@ -10,18 +10,12 @@ import register from '../views/Users/ReginsterAcc.vue'
 import Viewprofile from '../views/profile/ProfileVue.vue'
 import UserPostProduct from '../views/Products/ProductPostUser.vue'  
 import ProductShow from '../views/Products/ProductShow.vue';
-<<<<<<< HEAD
 import userprodcuts from '../views/Users/ProductVue.vue'
 import addcard from '../views/CardAdd/addCard.vue';
 import PageStore from '../views/PageStore/StorePage.vue';
 import Createstore from '../views/PageStore/CreateStore.vue'
 import FormCreate from '../views/PageStore/FormCreate.vue'
 import editStore from '../views/PageStore/EditStore.vue'
-=======
-import addcard from '../views/CardAdd/addCard.vue';
-import userchats from '../views/Users/Chat/ChatView.vue'
-import payment from '../views/Order/PaymentOrder.vue'
->>>>>>> 878e3632b5a0a223b1265481aedb88425302cefb
 
 const routes = [
     { 
@@ -68,14 +62,7 @@ const routes = [
     {
         path: '/profile',
         name: 'profile', 
-        component: Viewprofile,
-        // children: [
-        //     {
-        //         path: '/userprodcuts',
-        //         name: 'userprodcuts', 
-        //         component: userprodcuts
-        //     },
-        // ]
+        component: Viewprofile
     },
     
     {
@@ -85,7 +72,6 @@ const routes = [
         props: true
     },
     {
-<<<<<<< HEAD
         path: '/storepage',
         name: 'storepage', 
         component: PageStore
@@ -106,18 +92,6 @@ const routes = [
         component: editStore,
         props: true
     },
-=======
-        path: '/chats',
-        name: '/chats', 
-        component: userchats
-    },
-    {
-        path: '/payment',
-        name: 'payment',  
-        component: payment
-    }
-    
->>>>>>> 878e3632b5a0a223b1265481aedb88425302cefb
 ]
 
 const router = createRouter({
