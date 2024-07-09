@@ -7,6 +7,7 @@ export const useUserStore = defineStore('user', {
     tokenUser: null,
     quantity: null,
     productDetails: null,
+    num_products: 0,
   }),
   actions: {
     setUser(data) {
@@ -33,6 +34,9 @@ export const useUserStore = defineStore('user', {
     setOrderData(quantity, productDetails) {
       this.quantity = quantity;
       this.productDetails = productDetails;
+    },
+    get_num_products(num_products) {
+      this.num_products = num_products;
     },
   }
 });
