@@ -62,6 +62,7 @@ export default {
       params: { id: id }
     });
   },
+<<<<<<< HEAD
   createStore(formData, config){
     return axios.post(`${API_URL}/store/create`, formData, config)
   },
@@ -73,6 +74,16 @@ export default {
   },
   deleteStore(storeId) {
     return axios.delete(`${API_URL}/store/remove/${storeId}`);
+=======
+
+  chatrooms(headers) {
+    return axios.get(`${API_URL}/message/chat/rooms`, {
+      headers: headers
+    });
+  },
+  getAllCate(){
+    return axios.get(`${API_URL}/categories/list`);
+>>>>>>> 878e3632b5a0a223b1265481aedb88425302cefb
   }
 };
 

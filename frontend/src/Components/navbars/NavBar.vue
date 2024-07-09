@@ -18,6 +18,7 @@
             <div class="d-flex w-100 justify-content-between align-items-center">
               <!-- Left side of the navbar -->
               <div class="d-flex flex-grow-1">
+<<<<<<< HEAD
                 <router-link
                   to="/"
                   class="me-5 mb-0 custom-font-size nav-link"
@@ -60,6 +61,11 @@
                   >More...</router-link
                 >
                 <router-link to="/createstore" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">Store</router-link>
+=======
+                <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-box home"></i> Home</router-link>
+                <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-box me-2"></i>Products</router-link>
+                <router-link to="/product-post" class="me-5 text-secondary mb-0 custom-font-size nav-link" active-class="text-dark active border-bottom">More...</router-link>
+>>>>>>> 878e3632b5a0a223b1265481aedb88425302cefb
               </div>
 
               <!-- Logo -->
@@ -83,39 +89,21 @@
                     </span>
                   </router-link>
                 </div>
-                <router-link
-                  v-if="!store_user.accountUser"
-                  to="/login"
-                  class="nav-link mr-0 custom-font-size"
-                  >Login</router-link
-                >
-                <div
-                  v-else
-                  class="dropdown d-flex align-items-center profile-container"
-                  id="dropdownMenuButton"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <img :src="profileImageUrl" class="profile-img" alt="" />
+                <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size">Login</router-link>
+                <div v-else class="dropdown d-flex align-items-center profile-container">
                   <span class="profile-name">{{ store_user.accountUser.name.toUpperCase() }}</span>
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <router-link
-                      v-if="!store_user.accountUser"
-                      class="dropdown-item"
-                      active-class="active"
-                      exact
-                      to="/register"
-                      >Profile</router-link
-                    >
-                    <router-link
-                      v-else
-                      class="dropdown-item"
-                      active-class="active"
-                      exact
-                      to="/profile"
-                      >Profile</router-link
-                    >
-                    <button class="dropdown-item" @click="logout">Logout</button>
+                  <img v-if="store_user.accountUser.profile" :src="profile_url(store_user.accountUser.profile)" class="text-dark custom-font-size nav-link profile-img" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">
+                  <img v-else :src="profileImageUrl" class="text-dark custom-font-size nav-link profile-img" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                    <li>
+                      <router-link class="dropdown-item" to="/profile" active-class="active"><i class="fas fa-user me-2"></i>Profile</router-link>
+                    </li>
+                    <li>
+                      <router-link to="/product" class="dropdown-item text-secondary" active-class="active border-bottom"><i class="fas fa-box me-2"></i>Products</router-link>
+                    </li>
+                    <li>
+                      <button class="dropdown-item" @click="logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -128,9 +116,10 @@
 </template>
 
 <script>
-import { useUserStore } from '@/stores/user.js'
-import axios from 'axios'
-import { computed } from 'vue'
+import { useUserStore } from '@/stores/user.js';
+import axios from 'axios';
+import { computed } from 'vue';
+import api from '@/views/api.js';
 
 export default {
   data(){
@@ -142,15 +131,7 @@ export default {
   mounted() {
     this.loadCart();
   },
-  methods:{
-    loadCart() {
-      this.cart = JSON.parse(localStorage.getItem('cart')) || 0;
-      this.numcart = this.cart.length;
-    },
-  },
-  created() {
-    this.loadCart();
-  },
+
   setup() {
     const store_user = useUserStore()
     store_user.loadUser() // Ensure user data is loaded from localStorage
@@ -185,10 +166,22 @@ export default {
     return {
       store_user,
       logout,
-      profileImageUrl
-    }
+      profileImageUrl,
+    };
   },
-}
+  methods: {
+    profile_url(filename){
+      return api.profile(filename)
+    },
+    loadCart() {
+      this.cart = JSON.parse(localStorage.getItem('cart')) || 0;
+      this.numcart = this.cart.length;
+    },
+  },
+  created() {
+  this.loadCart();
+},
+};
 </script>
 
 <style>
@@ -235,7 +228,7 @@ export default {
 }
 .custom-font-size:hover {
   color: blue; /* Change text color to blue on hover */
-  font-size: 20px;
+  /* font-size: 20px; */
 }
 .navbar-shadow {
   box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.1);

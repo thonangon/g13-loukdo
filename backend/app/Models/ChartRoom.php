@@ -25,4 +25,10 @@ class ChartRoom extends Model
     {
         return $this->hasMany(ChartMessages::class);
     }
+
+        // Define a relationship to get the latest message
+    public function latestMessage()
+    {
+        return $this->hasOne(ChartMessages::class)->latest();
+    }
 }

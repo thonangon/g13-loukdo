@@ -44,7 +44,7 @@
                 <router-link to="/userprodcuts" class="mx-2 nav-item">Product</router-link>
                 <div class="mx-2 nav-item">Add to chart</div>
                 <div class="mx-2 nav-item">Book</div>
-                <div class="mx-2 nav-item">Chats</div>
+                <router-link to="/chats" class="mx-2 nav-item">Chats</router-link>
                 <div class="d-flex flex-grow-1">
               </div>
 
@@ -54,9 +54,11 @@
                 <a href="/product-post">
                   <button class="btn btn-dark btn">Post</button>
                 </a>
+                {{ num_products }}
               </div>
             </div>
           </div>
+         
           <!-- Additional Sections -->
           <div class="p-4 text-black">
             <router-view/>
@@ -71,7 +73,7 @@
 import axios from 'axios';
 import { useUserStore } from '@/stores/user.js';
 import api from '@/views/api.js';
-  import cards_product from '@/Components/Card/CardComponent.vue'
+import cards_product from '@/Components/Card/CardComponent.vue'
 
 export default {
   name: 'Profile',
@@ -81,7 +83,7 @@ export default {
       profile: null,
       cover: null,
       myAccount:{},
-      cards_product
+      cards_product,
     };
   },
   mounted() {
@@ -135,7 +137,6 @@ export default {
         }
       }
     },
-
     profile_url(filename){
       return api.profile(filename)
     }

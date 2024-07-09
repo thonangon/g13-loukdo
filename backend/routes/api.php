@@ -13,7 +13,12 @@ use App\Http\Controllers\Products\RateProductController;
 use App\Http\Controllers\Products\CommentProductController;
 use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 use App\Http\Controllers\addToCartController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Order\PaymentController;
+use App\Http\Controllers\Stripe\StripeController;
+use App\Http\Controllers\Plans\PlansController;
+use App\Http\Controllers\Plans\PlansController\PlanController;
+use App\Http\Controllers\Plans\SubscriptionController;
 
 ;
 use App\Http\Controllers\Store\StoreController;
@@ -123,6 +128,10 @@ Route::middleware('auth:sanctum')->prefix('message')->group(function () {
     Route::post('/chat/room', [ChartController::class, 'createRoom']);
 });
 
+Route::get('/myaccount', [UserProfileController::class, 'show'])->middleware('auth:sanctum');
+Route::post('/user/update', [UserProfileController::class, 'update'])->middleware('auth:sanctum');
+Route::get('/userproduct', [UserProfileController::class, 'userproduct']);
+
 // customer orders the product
 Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orderProducts', [OrderController::class, 'store']);
@@ -146,3 +155,20 @@ Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
     Route::put('/update/{id}', [addToCartController::class, 'update']);
     Route::delete('/remove/{id}', [addToCartController::class, 'destroy']);
 });
+// charge the money
+Route::post('/stripe/payment', [StripeController::class, 'makePayment']);
+
+// custmer charge for product
+Route::get('/plans', [PlansController::class, 'index']);
+Route::post('/plans/store', [PlansController::class, 'store']);
+Route::get('/plans/{id}', [PlansController::class, 'show']);
+Route::put('/plans/{id}', [PlansController::class, 'update']);
+Route::delete('/plans/{id}', [PlansController::class, 'destroy']);
+
+Route::post('/subscriptions', [SubscriptionController::class, 'subscribe']);
+Route::get('/users/{userId}/subscriptions', [SubscriptionController::class, 'userSubscriptions']);
+Route::post('/payment/success', [StripeController::class, 'handlePaymentSuccess']);
+Route::post('/stripe/success', [StripeController::class, 'paymentSuccess']);
+//user post product information
+Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
+

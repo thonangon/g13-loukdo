@@ -26,8 +26,8 @@ class UserProfileController extends Controller
         }catch(\Exception $e){
             return response()->json(['message'=> $e->getMessage()], status:500);
         }
+        
     }
-
     public function userproduct(Request $request){
         $user_id = $request->id;
         $user = User::findOrFail($user_id);
@@ -53,7 +53,8 @@ class UserProfileController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|max:255|unique:users,email,' . $user_id,
-            'profile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', 
+            'profile' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
+            'user_qrimage' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
         ]);
 
         if ($validator->fails()) {
@@ -81,6 +82,11 @@ class UserProfileController extends Controller
             $user->profile = $profilePath;
 
           
+        }
+        if ($request->hasFile('user_qrimage')) {
+            // Store the new profile image
+            $userqr_image = $request->file('user_qrimage')->store('userqrimage', 'public');
+            $user->user_qrimage = $userqr_image;
         }
 
         $user->save();

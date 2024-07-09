@@ -32,7 +32,8 @@ export default {
         const response = await axios.get(`http://127.0.0.1:8000/api/userproduct?id=${id}`);
         if (response.data.status === 200) {
           this.products = response.data.data.product;  // Adjusted to access 'product' array
-          console.log('Products:', this.products);
+          console.log('Products:', this.products.length);
+          localStorage.setItem('numproduct', this.products.length);
         } else {
           console.error('Error fetching products:', response.data.message);
         }

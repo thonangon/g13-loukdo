@@ -9,7 +9,7 @@
         <div class="form-group flex-grow-1">
           <label for="product-name" class="form-label fw-bold">Name</label>
           <input type="text" class="form-control" id="product-name" placeholder="Product name" v-model="name" required />
-          <span style="color:red"> {{errorName}}</span>
+          <span style="color:red"> {{ errorName }}</span>
         </div>
         <div class="form-group flex-grow-1">
           <label for="product-price" class="form-label fw-bold">Price</label>
@@ -17,32 +17,57 @@
             <span class="input-group-text">$</span>
             <input type="number" class="form-control" id="product-price" placeholder="Price" v-model="price" required />
           </div>
-          <span style="color:red">{{errorPrice}}</span>
+          <span style="color:red">{{ errorPrice }}</span>
         </div>
       </div>
       <div class="mb-3">
         <label for="product-quantity" class="form-label fw-bold">Quantity</label>
         <input type="number" class="form-control" id="product-quantity" placeholder="Quantity" v-model="quantity" required />
-        <span style="color:red"> {{errorQuantity}}</span>
+        <span style="color:red"> {{ errorQuantity }}</span>
       </div>
       <div class="mb-3">
-        <label for="product-quantity" class="form-label fw-bold">Category</label>
-        <input type="number" class="form-control" id="product-quantity" placeholder="Category" v-model="category" required />
-        <span style="color:red"> {{errorCategory}}</span>
+        <label for="product-category" class="form-label fw-bold">Category</label>
+        <select class="form-control" id="product-category" v-model="category" required>
+          <option value="" hidden>Select a category</option>
+          <option v-for="categories in allCate" :key="categories.id" :value="categories.id">{{ categories.category_name }}</option>
+        </select>
+        <span style="color:red"> {{ errorCategory }}</span>
       </div>
       <div class="mb-3">
         <label for="product-description" class="form-label fw-bold">Description</label>
         <textarea class="form-control" id="product-description" placeholder="Enter details about your product!" v-model="description" required></textarea>
-        <span style="color:red"> {{errorDescription}}</span>
+        <span style="color:red"> {{ errorDescription }}</span>
       </div>
       <div class="mb-3">
         <label for="product-image" class="form-label fw-bold">Photo</label>
         <div class="d-flex align-items-center">
           <input type="file" class="form-control flex-grow-1" id="product-image" @change="handleFileUpload" ref="imageInput" required />
-          <button type="submit" class="btn btn-dark ms-3" :disabled="loading">
-            <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Post
+          <button v-if="num_products >= 1 || userInfo.user_qrimage !== null" type="submit" class="btn btn-dark ms-3" :disabled="loading">
+            <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Post
           </button>
+          <button v-else type="button" class="btn btn-dark ms-3" data-bs-toggle="modal" data-bs-target="#isProduct">
+            <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Post
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="isProduct" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Please put your QR code!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form @submit.prevent="uploadQRimage" enctype="multipart/form-data">
+            <div class="modal-body">
+              <input type="file" class="form-control" aria-label="Upload" accept="image/*" @change="onFileChange" required />
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
@@ -50,12 +75,15 @@
 </template>
 <script>
 import api from '../../views/api';
+import axios from 'axios';
 import { useUserStore } from '@/stores/user.js';
 
 export default {
   data() {
     return {
-      category: '',
+      allCate: [],
+      userqr_image: null,
+      category: '', // Ensure this is correctly bound to the selected category
       name: '',
       price: null,
       quantity: null,
@@ -68,9 +96,42 @@ export default {
       errorDescription: '',
       errorCategory: '',
       store_user: useUserStore(),
+      num_products: localStorage.getItem('numproduct'),
+      userInfo: {},
     };
   },
+  mounted() {
+    this.getuser();
+    this.getCateList();
+  },
   methods: {
+    async getCateList() {
+      try {
+        const response = await api.getAllCate();
+        if (response.data.data) {
+          this.allCate = response.data.data;
+          console.log(this.allCate);
+        } else {
+          console.error('Error getting category list:', response.data.message);
+        }
+      } catch (error) {
+        console.error('Error getting category list:', error);
+      }
+    },
+    async getuser() {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/myaccount', {
+          headers: {
+            Authorization: `Bearer ${this.store_user.tokenUser}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        this.userInfo = response.data.user;
+        console.log(this.userInfo);
+      } catch (error) {
+        console.error('Error getting user data: ', error);
+      }
+    },
     async createProduct() {
       try {
         this.loading = true;
@@ -80,11 +141,15 @@ export default {
         formData.append('quantity', this.quantity);
         formData.append('description', this.description);
         formData.append('image', this.image);
-        formData.append('category_id', this.category);
-        console.log(this.store_user.tokenUser)
+        formData.append('category_id', this.category); // Ensure this matches the selected category
 
+<<<<<<< HEAD
         const token = localStorage.getItem('authToken'); // Assuming you store JWT token in localStorage
         
+=======
+        const token = localStorage.getItem('authToken');
+
+>>>>>>> 878e3632b5a0a223b1265481aedb88425302cefb
         const response = await api.createProduct(formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -92,15 +157,10 @@ export default {
           }
         });
         if (response.data.status) {
-          // Handle success
-          this.$router.push('/'); // Navigate to home page
+          this.$router.push('/');
         } else {
-          // Handle error response
           console.error('Error posting product: ', response.data.message);
         }
-
-        console.log('Product created:', response.data);
-        this.resetForm();
       } catch (error) {
         console.error('Error creating product:', error);
         if (error.response && error.response.status === 401) {
@@ -119,6 +179,44 @@ export default {
       this.quantity = null;
       this.description = '';
       this.image = null;
+    },
+    onFileChange(e) {
+      this.userqr_image = e.target.files[0];
+    },
+    async uploadQRimage() {
+      if (!this.userqr_image) {
+        console.error('No file selected.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('user_qrimage', this.userqr_image);
+
+      console.log(formData);
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/api/user/update', formData, {
+          headers: {
+            Authorization: `Bearer ${this.store_user.tokenUser}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        window.location.href = '/product-post';
+        if (response.data.status) {
+          // Successfully uploaded QR image
+          const modal = document.getElementById('isProduct');
+          const modalInstance = bootstrap.Modal.getInstance(modal);
+          modalInstance.hide();
+          this.createProduct(); // Proceed with creating the product
+        } else {
+          console.error('Error uploading QR image: ', response.data.message);
+        }
+      } catch (error) {
+        if (error.response && error.response.data) {
+          console.error('Error:', error.response.data);
+        } else {
+          console.error('Error:', error.message);
+        }
+      }
     }
   },
   watch: {
@@ -157,11 +255,6 @@ export default {
         this.errorCategory = null;
       }
     }
-  },
+  }
 };
-
 </script>
-
-
-<style>
-</style>
