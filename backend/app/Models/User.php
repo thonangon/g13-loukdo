@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
@@ -11,7 +11,7 @@ use Spatie\Permission\Traits\HasRoles;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class User extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
@@ -42,7 +42,10 @@ class User extends Model
         'two_factor_recovery_codes',
         'two_factor_secret',
     ];
-
+    protected $attributes = [
+        'post_count' => 0,
+        'has_paid' => 0,
+    ];
     /**
      * The attributes that should be cast.
      *

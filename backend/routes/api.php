@@ -148,8 +148,10 @@ Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
 });
 // charge the money
 Route::post('/stripe/payment', [StripeController::class, 'makePayment']);
-Route::post('/payment/success', [StripeController::class, 'handlePaymentSuccess']);
-
+Route::middleware('auth:api')->group(function () {
+   
+    Route::post('/payment/confirm', [StripeController::class, 'confirm']);
+});
 
 
 Route::middleware('auth:sanctum')->group(function () {
