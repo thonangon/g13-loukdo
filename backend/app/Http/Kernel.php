@@ -46,6 +46,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\HandleInertiaRequests::class, // Add HandleInertiaRequests middleware here
         ],
+    
     ];
 
     /**

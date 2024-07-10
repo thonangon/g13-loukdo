@@ -8,11 +8,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Store extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
+
     protected $fillable = [
-        'user_id', 'name', 'address','description', 'image'
+        'name', 'address', 'description', 'image',
     ];
 
+    /**
+     * Get the user that owns the store.
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
