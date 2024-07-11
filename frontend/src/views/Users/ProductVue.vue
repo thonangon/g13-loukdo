@@ -1,10 +1,12 @@
 <template>
   <div>
     <cate_nav/>
-    <div class="row">
+    <div class="scrollable-container">
+      <div class="row">
         <div class="col-md-3" v-for="(product, index) in products" :key="index">
-            <cards_product :product="product"/>
+          <cards_product :product="product" />
         </div>
+      </div>
     </div>
   </div>
 </template>

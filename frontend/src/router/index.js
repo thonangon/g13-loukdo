@@ -16,6 +16,7 @@ import userchats from '../views/Users/Chat/ChatView.vue';
 import booking from '../views/Order/InOrder.vue'
 import sellProduct from '../views/Order/InSell.vue'
 import payment from '../views/Order/PaymentOrder.vue'
+import productCategory from '../views/Products/ProductCategories.vue'
 
 const routes = [
     { 
@@ -96,6 +97,12 @@ const routes = [
         path: '/payment',
         name: 'payment',  
         component: payment
+    },
+    {
+        path: '/product/category/:id',
+        name: 'product/category',
+        component: productCategory,
+        props: true
     }
     
 ]

@@ -6,8 +6,8 @@
       <div class="col-lg-8 mb-4 d-flex flex-column align-items-center" style="width:50%;">
         <div class="card text-center shadow-sm" style="width: 100%;">
           <div class="card-body">
-            <img src="../../assets/images/Group 52.png" alt="Bank Logo" class="img-fluid mb-3" style="width: 150px; height: 150px;">
-            <h5 class="card-title">BANK NAME</h5>
+            <img :src="qrimage_url(store_user.productDetails.data.pro_owner.qrimage)" alt="Bank Logo" class="img-fluid mb-3" style="width: 150px; height: 150px;">
+            <!-- <h5 class="card-title">BANK NAME</h5> -->
           </div>
           <div class="card-footer d-flex justify-content-between">
             <button class="btn btn-secondary" style="width: 48%">
@@ -94,6 +94,9 @@ export default {
         console.error('Error ordering product:', error);
         // Handle error scenario, e.g., show error message to user
       }
+    },
+    qrimage_url(filename){
+      return api.profile(filename)
     },
 
     addToSummary(product) {
