@@ -29,7 +29,7 @@ class ProductController extends Controller
             'data' => ProductResource::collection($products),
         ]);
     }
-
+   
     public function store(Request $request)
 {
     try {
@@ -70,13 +70,22 @@ class ProductController extends Controller
             ], 401);
         }
         $postLimit = 10;
-        if ($user->post_count >= $postLimit && !$user->has_paid) {
-            return response()->json([
-                'status' => false,
-                'message' => 'You have reached the maximum number of posts allowed. Please make a payment to continue posting.',
-                'payment_url' => '/plans', 
-            ], 403); 
+
+        // Check if the user has paid and reset post_count if necessary
+        if ($user->post_count >= $postLimit) {
+            if ($user->has_paid) {
+                $user->post_count = 0;
+                $user->has_paid = 0; // Reset has_paid status after resetting post_count
+                $user->save();
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You have reached the maximum number of posts allowed. Please make a payment to continue posting.',
+                    'payment_url' => '/plans',
+                ], 403);
+            }
         }
+        
         // Debug: Log user information
         Log::info('Authenticated user:', $user->toArray());
 
@@ -97,8 +106,6 @@ class ProductController extends Controller
         $user->increment('post_count');
         $user->refresh(); 
         Log::info('User post_count after increment:', ['post_count' => $user->post_count]);
-
-        // Prepare the response with correct image URL if an image was uploaded
         $product->image_url = $imageName ? asset('/api/products/image/' . $imageName) : null;
 
         // Return success response
@@ -312,15 +319,6 @@ class ProductController extends Controller
             ], 500);
         }
     }
-    public function updateUserStatus(Request $request)
-    {
-        $user = $request->user();
-        $user->has_paid = true; 
-        $user->save();
+    
 
-        return response()->json([
-            'status' => true,
-            'message' => 'User status updated successfully.',
-        ]);
-    }
 }

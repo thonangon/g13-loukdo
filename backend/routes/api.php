@@ -15,11 +15,10 @@ use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 use App\Http\Controllers\addToCartController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Order\PaymentController;
-use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\Plans\PlansController;
 use App\Http\Controllers\Plans\PlansController\PlanController;
 use App\Http\Controllers\Plans\SubscriptionController;
-
+use App\Http\Controllers\Stripe\StripeController
 ;
 
 /*
@@ -77,7 +76,6 @@ Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     Route::get('/ratings/{productId}', [ProductController::class, 'getProductRatings']);
 
     Route::get('/image/{id}', [ProductController::class, 'getImage']);
-
 });
 
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
@@ -97,24 +95,24 @@ Route::prefix('comment')->group(function () {
 });
 // // chart messages
 // Route::prefix('messages')->group(function () {
-//     Route::post('/send', [CommentProductController::class, 'store'])->middleware('auth:sanctum');
-//     Route::get('/view/{id}', [CommentProductController::class, 'show']);
-//     Route::put('/update/{id}', [CommentProductController::class, 'update']);
-//     Route::delete('/remove/{id}', [CommentProductController::class, 'destroy']);
-
-// reply comments to products
-Route::prefix('reply')->group(function () {
-    Route::get('/list', [ReplyCommentController::class, 'index']);
-    Route::get('/detail', [ReplyCommentController::class, 'show']);
-    Route::post('/create', [ReplyCommentController::class, 'store'])->middleware('auth:sanctum');
-    Route::put('/update/{id}', [ReplyCommentController::class, 'update']);
-    Route::delete('/remove/{id}', [ReplyCommentController::class, 'destroy']);
-});
-
-// messages chat
-Route::middleware('auth:sanctum')->prefix('message')->group(function () {
-    Route::get('/chat/rooms', [ChartController::class, 'rooms']);
-    Route::get('/chat/messages/{roomId}', [ChartController::class, 'messages']);
+    //     Route::post('/send', [CommentProductController::class, 'store'])->middleware('auth:sanctum');
+    //     Route::get('/view/{id}', [CommentProductController::class, 'show']);
+    //     Route::put('/update/{id}', [CommentProductController::class, 'update']);
+    //     Route::delete('/remove/{id}', [CommentProductController::class, 'destroy']);
+    
+    // reply comments to products
+    Route::prefix('reply')->group(function () {
+        Route::get('/list', [ReplyCommentController::class, 'index']);
+        Route::get('/detail', [ReplyCommentController::class, 'show']);
+        Route::post('/create', [ReplyCommentController::class, 'store'])->middleware('auth:sanctum');
+        Route::put('/update/{id}', [ReplyCommentController::class, 'update']);
+        Route::delete('/remove/{id}', [ReplyCommentController::class, 'destroy']);
+    });
+    
+    // messages chat
+    Route::middleware('auth:sanctum')->prefix('message')->group(function () {
+        Route::get('/chat/rooms', [ChartController::class, 'rooms']);
+        Route::get('/chat/messages/{roomId}', [ChartController::class, 'messages']);
     Route::post('/chat/messages/{roomId}', [ChartController::class, 'newMessage']);
     Route::post('/chat/room', [ChartController::class, 'createRoom']);
 });
@@ -132,7 +130,7 @@ Route::delete('/orderProducts/delete/{id}', [OrderController::class, 'delete']);
 
 Route::middleware('auth:sanctum')->prefix('payment')->group(function () {
     Route::post('/create', [PaymentController::class, 'createPayment']);
-   
+    
 });
 Route::get('/user/{id}', [UserProfileController::class, 'show']);
 Route::post('/user/update', [UserProfileController::class, 'update'])->middleware('auth:sanctum');
@@ -145,15 +143,14 @@ Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
     Route::post('/add', [addToCartController::class, 'store'])->middleware('auth:sanctum');
     Route::put('/update/{id}', [addToCartController::class, 'update']);
     Route::delete('/remove/{id}', [addToCartController::class, 'destroy']);
+    
 });
 // charge the money
 Route::post('/stripe/payment', [StripeController::class, 'makePayment']);
-Route::middleware('auth:api')->group(function () {
-   
-    Route::post('/payment/confirm', [StripeController::class, 'confirm']);
+
+Route::middleware('api')->group(function () {
+    Route::post('stripe/confirm-payment', [StripeController::class, 'confirmPayment']);
 });
-
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
     Route::post('/products', [ProductController::class, 'store']);

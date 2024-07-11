@@ -21,7 +21,6 @@ class StripeResource extends JsonResource
             'status' => $this->status,
             'description' => $this->description,
             'payment_method' => $this->payment_method,
-            'created' => $this->created,
             'client_secret' => $this->client_secret,
         ];
     }
