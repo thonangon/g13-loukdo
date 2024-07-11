@@ -92,7 +92,7 @@ export default defineComponent({
   },
   computed: {
     formattedAmount() {
-      return `$${(this.amount / 100).toFixed(2)}`;
+      return `$${(this.amount)}`;
     }
   },
   async mounted() {
@@ -126,9 +126,12 @@ export default defineComponent({
     async submitPayment() {
       try {
         const { data } = await axios.post('http://127.0.0.1:8000/api/stripe/payment', {
-          amount: this.amount * 100,
+          amount: this.amount,
         });
-        const { error, paymentIntent } = await this.stripe.confirmCardPayment(data.clientSecret, {
+
+        const clientSecret = Response.data.client_secret;
+
+        const { error, paymentIntent } = await this.stripe.confirmCardPayment(clientSecret, {
           payment_method: {
             card: this.cardElement,
             billing_details: {
@@ -142,24 +145,26 @@ export default defineComponent({
           const displayError = document.getElementById('card-errors');
           displayError.textContent = error.message;
         } else {
-          if (paymentIntent.status === 'succeeded') {
-            // Dispatch action to update user status
-            useUserStore().updateUserStatus();
-            
-            // Show success modal
-            this.showModal = true;
+          if (paymentIntent.status === 'requires_payment_method') {
+            await axios.post('http://127.0.0.1:8000/api/stripe/handlePaymentSuccess', {
+              payment_intent_id: paymentIntent.id,
+            });
+            this.showModal = true; // Show success modal
           }
         }
       } catch (error) {
         console.error('Error creating payment intent:', error);
+        // Handle error and display message to the user
       }
     },
     closeModal() {
       this.showModal = false;
       // Optionally navigate to another route or perform additional actions
-      this.$router.push('/product-post');
+      this.$router.push('/'); // Example: Navigate to home page after closing modal
     },
   },
+
+  
 });
 </script>
 

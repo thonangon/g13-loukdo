@@ -55,7 +55,6 @@ import { useUserStore } from '@/stores/user.js';
 export default {
   data() {
     return {
-      userqr_image: null,
       category: '',
       name: '',
       price: null,
@@ -89,7 +88,14 @@ export default {
     async createProduct() {
       try {
         this.loading = true;
-        
+
+        // Check if the user can post
+        if (!this.canPost) {
+          console.log('User has exceeded the post limit, redirecting to /plans');
+          this.$router.push('/plans');
+          return;
+        }
+
         // Prepare form data
         const formData = new FormData();
         formData.append('name', this.name);
@@ -98,13 +104,6 @@ export default {
         formData.append('description', this.description);
         formData.append('image', this.image);
         formData.append('category_id', this.category);
-
-        // Check if the user can post
-        if (!this.canPost) {
-          console.log('User has exceeded the post limit, redirecting to /plans');
-          this.$router.push('/plans');
-          return;
-        }
 
         // API call to create product
         const response = await api.createProduct(formData, {
@@ -120,10 +119,16 @@ export default {
           this.$router.push('/'); // Redirect to home page after successful product creation
         } else {
           console.error('Error posting product:', response.data.message);
+          // Handle specific error messages if needed
         }
       } catch (error) {
-        console.error('Error creating product:', error);
-       
+        if (error.response && error.response.status === 403) {
+          console.error('403 Forbidden:', error.response.data.message);
+          this.$router.push('/plans'); // Redirect to payment page on 403 error
+        } else {
+          console.error('Error creating product:', error);
+          // Handle general error
+        }
       } finally {
         this.loading = false;
       }

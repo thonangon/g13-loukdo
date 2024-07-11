@@ -20,6 +20,7 @@ use App\Http\Controllers\Plans\PlansController\PlanController;
 use App\Http\Controllers\Plans\SubscriptionController;
 use App\Http\Controllers\Stripe\StripeController
 ;
+use App\Http\Controllers\Stripe\StripePaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -146,11 +147,9 @@ Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
     
 });
 // charge the money
-Route::post('/stripe/payment', [StripeController::class, 'makePayment']);
+Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
+Route::post('/stripe/handlePaymentSuccess', [StripePaymentController::class, 'handlePaymentSuccess']);
 
-Route::middleware('api')->group(function () {
-    Route::post('stripe/confirm-payment', [StripeController::class, 'confirmPayment']);
-});
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
     Route::post('/products', [ProductController::class, 'store']);

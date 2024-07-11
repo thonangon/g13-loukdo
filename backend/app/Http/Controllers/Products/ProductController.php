@@ -81,7 +81,6 @@ class ProductController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'You have reached the maximum number of posts allowed. Please make a payment to continue posting.',
-                    'payment_url' => '/plans',
                 ], 403);
             }
         }

@@ -14,7 +14,7 @@ export default {
   createProduct(formData, config) {
     return axios.post(`${API_URL}/products/create`, formData, config);
   },
-
+  
   imageUrlProduct(filename) {
     return `${API_URL}/products/image/${filename}`;
   },
