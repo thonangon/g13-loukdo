@@ -69,7 +69,7 @@ export default {
     return axios.get(`${API_URL}/categories/list`);
   },
 
-   // New CRUD methods for OrderProduct
+   // New CRUD methods for OrderProduct__________________
    listOrderProducts(headers) {
     return axios.get(`${API_URL}/order/list`, { headers: headers });
   },
@@ -95,6 +95,16 @@ export default {
       'Authorization': `Bearer ${token}`
     };
     return axios.put(`${API_URL}/order/update/status/${orderId}`, { status: status }, { headers: headers });
-  }
+  },
+
+  // ____________________CATEGORY________________
+  listCategories(){
+    return axios.get(`${API_URL}/categories/list`);
+  },
+
+  productCategory(cateId) {
+    return axios.get(`${API_URL}/products/category/${cateId}`);
+  },
+
 };
 

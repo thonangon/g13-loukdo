@@ -8,6 +8,7 @@ export const useUserStore = defineStore('user', {
     quantity: null,
     productDetails: null,
     num_products: 0,
+    cateId: null,
   }),
   actions: {
     setUser(data) {
@@ -38,5 +39,9 @@ export const useUserStore = defineStore('user', {
     get_num_products(num_products) {
       this.num_products = num_products;
     },
+    getCateProId(id){
+      this.cateId = id;
+    }
   }
 });
+

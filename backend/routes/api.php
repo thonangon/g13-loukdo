@@ -54,9 +54,9 @@ Route::post('user/reset-password', [AuthController::class, 'resetPassword']);
 
 
 // Other routes that don't require authentication
+
 Route::put('/update/category/{id}', [CategoryController::class, 'update']);
 Route::delete('/delete/category/{id}', [CategoryController::class, 'destroy']);
-
 
 
 
@@ -68,6 +68,7 @@ Route::prefix('products')->group(function () {
 
 // Route::get('/products/image/{id}', [ProductController::class, 'getImage']);
 
+Route::get('/products/category/{id}', [ProductController::class, 'productCate']);
 Route::get('/products/pro_details/{product_id}', [ProductController::class, 'show'])->name('products.view');
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     // Route::get('/list', [ProductController::class, 'index']);
@@ -96,12 +97,6 @@ Route::prefix('comment')->group(function () {
     Route::put('/update/{id}', [CommentProductController::class, 'update'])->middleware('auth:sanctum');
     Route::delete('/remove/{id}', [CommentProductController::class, 'destroy'])->middleware('auth:sanctum');
 });
-// // chart messages
-// Route::prefix('messages')->group(function () {
-//     Route::post('/send', [CommentProductController::class, 'store'])->middleware('auth:sanctum');
-//     Route::get('/view/{id}', [CommentProductController::class, 'show']);
-//     Route::put('/update/{id}', [CommentProductController::class, 'update']);
-//     Route::delete('/remove/{id}', [CommentProductController::class, 'destroy']);
 
 // reply comments to products
 Route::prefix('reply')->group(function () {

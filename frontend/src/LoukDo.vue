@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav-bar/>
-    <div class="container">
+    <div class="container bg-white">
       <router-view/>
     </div>
     <Footer/>
