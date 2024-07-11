@@ -8,7 +8,7 @@
               <div class="col-md-6">
                 <div class="carousel-caption text-center">
                   <h1>Welcome For All Owner Business And Individual For Selling</h1>
-                  <p><a class="btn btn-primary btn-lg mt-5" href="#" role="button">Shop Now</a></p>
+                  <p><a class="btn btn-primary btn-lg mt-5" href="/product" role="button">Shop Now</a></p>
                 </div>
               </div>
               <div class="col-md-6 position-relative">
@@ -26,7 +26,7 @@
                   <h1>New Arrivals!</h1>
                   <p class="content">Post for selling everywhere and everytime</p>
                   <p>
-                    <a class="btn btn-primary btn-lg mt-5" href="#" role="button">Explore Now</a>
+                    <a class="btn btn-primary btn-lg mt-5" href="/product" role="button">Explore Now</a>
                   </p>
                 </div>
               </div>
@@ -49,7 +49,7 @@
                     discarded.
                   </p>
                   <p>
-                    <a class="btn btn-primary btn-lg mt-5" href="#" role="button">Explore Now</a>
+                    <a class="btn btn-primary btn-lg mt-5" href="/product" role="button">Explore Now</a>
                   </p>
                 </div>
               </div>
