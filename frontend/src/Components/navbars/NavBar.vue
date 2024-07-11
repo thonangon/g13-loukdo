@@ -66,6 +66,7 @@
         </nav>
       </div>
     </div>
+    
     <div class="container">
       <nav v-if="ifProduct" class="d-flex">
         <ul v-for="cate in listCategories" :key="cate.id" class="nav nav-tabs">
