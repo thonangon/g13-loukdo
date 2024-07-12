@@ -1,18 +1,37 @@
 <template>
     <div>
       <!-- Your existing HTML template -->
-      <div class="score" style="height: 200px;">
-        <div class="rate d-flex">
-          <h1>4.5</h1><h4>/9</h4>
+      <div class="score d-flex" style="height: 200px;">
+        <div style="width: 30%;">
+          <div class="rate d-flex">
+          <h1>{{ rangOfrating.topRating }}.0</h1>
+          </div>
+          <div class="star d-flex">
+            <p v-for="star in rangOfrating.topRating" :key="star"><i class="fas fa-star"></i></p>
+            <p v-for="star in 5-rangOfrating.topRating" :key="star"><i class="bi bi-star"></i></p>
+          </div>
+          <div class="alert alert-primary text-center" style="width: 80%;">
+            Top Rating: <i class="fas fa-star"></i> {{ rangOfrating.topRating }}
+          </div>
         </div>
-        <div class="star d-flex">
-          <img src="../../assets/images/star.png" alt="">
-          <img src="../../assets/images/star.png" alt="">
-          <img src="../../assets/images/star.png" alt="">
-          <img src="../../assets/images/star.png" alt="">
-          <img src="../../assets/images/star.png" alt="">
+        <div class="score" style="width: 40%;">
+          <div v-if="rangOfrating">
+            <div class="progress mb-3" v-for="(value, key, index) in rangOfrating.levels" :key="index">
+              <div
+                class="progress-bar"
+                role="progressbar"
+                :style="{ width: value + '%', backgroundColor: 'gold' }"
+                :aria-valuenow="value"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              >
+              {{ value }}%
+              </div>
+              <p>{{ index+1 }}<i class="fas fa-star"></i></p>
+            </div>
+          </div>
+
         </div>
-        <p>5000 score</p>
       </div>
       <div class="rateObtion d-flex justify-content-end border-top border-bottom">
         <div class="feadback d-flex">
@@ -47,17 +66,17 @@
             </div>
           </div>
         </div>
-        <div class="star d-flex">
-          <button class="btn btn-outline-none border-start dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <img src="../../assets/images/star.png" alt="">Rate
-          </button>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">5 Star</a></li>
-            <li><a class="dropdown-item" href="#">4 Star</a></li>
-            <li><a class="dropdown-item" href="#">3 Star</a></li>
-            <li><a class="dropdown-item" href="#">2 Star</a></li>
-            <li><a class="dropdown-item" href="#">1 Star</a></li>
-          </ul>
+        <div class="star d-flex align-items-center">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-star"></i> Rate
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" @click="rattingProducts(5)">5 Star</a></li>
+                <li><a class="dropdown-item" @click="rattingProducts(4)">4 Star</a></li>
+                <li><a class="dropdown-item" @click="rattingProducts(3)">3 Star</a></li>
+                <li><a class="dropdown-item" @click="rattingProducts(2)">2 Star</a></li>
+                <li><a class="dropdown-item" @click="rattingProducts(1)">1 Star</a></li>
+            </ul>
         </div>
       </div>
   
@@ -81,7 +100,7 @@
   import { useUserStore } from '@/stores/user.js';
   
   export default {
-    props: ['product_id'],
+    props: ['product_id', 'rangOfrating'],
     data() {
       return {
         message: '',
@@ -94,6 +113,25 @@
       handleFileUpload(event) {
         this.selectedFile = event.target.files[0];
       },
+
+      async rattingProducts(rating) {
+        const userToken = this.user_store.tokenUser;
+        const product_id = this.product_id;
+
+        try{
+          const headers = {
+            Authorization: `Bearer ${userToken}`,
+            'Content-Type': 'application/json'
+          };
+          console.log(product_id, userToken, rating);
+          const response = await api.rattingProduct(product_id, rating, headers);
+          alert(`You have successfully ratting a product with ${rating} stars.`)
+          console.log('Rating product successfully:', response.data);
+        }catch(error) {
+          console.error('Error rating product:', error);
+        }
+      },
+
       async submitFeedback() {
         if (this.selectedFile && this.message) {
           const userToken = this.user_store.tokenUser;
@@ -137,5 +175,38 @@
   
   <style>
   /* Your CSS styles */
-  </style>
+.star .btn-outline-secondary {
+    border-color: #ced4da;
+    background-color: #fff;
+    color: #495057;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: all 0.2s ease-in-out;
+}
+
+.star .btn-outline-secondary:hover,
+.star .btn-outline-secondary:focus {
+    background-color: #f8f9fa;
+    color: #212529;
+    border-color: #adb5bd;
+}
+
+.star .dropdown-menu {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.star .dropdown-item:hover {
+    background-color: #e9ecef;
+    color: #212529;
+}
+
+.star i.fas.fa-star {
+    color: #ffc107;
+    margin-right: 0.5rem;
+}
+/* Add this to your CSS file */
+.gold-icon {
+  color: gold;
+}
+
+</style>
   

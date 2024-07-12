@@ -106,5 +106,11 @@ export default {
     return axios.get(`${API_URL}/products/category/${cateId}`);
   },
 
+  // ______________________Rattings__________________
+  rattingProduct(productId, rating, headers) {
+    console.log(rating);
+    return axios.post(`${API_URL}/products/ratting/${productId}`, { rating: rating }, { headers: headers });
+  },
+
 };
 
