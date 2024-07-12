@@ -4,8 +4,8 @@
     <search_product @search="handleSearch"/>
     <div class="scrollable-container">
       <div class="row">
-        <div class="col-md-3" v-for="(product, index) in products" :key="index">
-          <cards_product :searchQuery="searchQuery" :product="product" />
+        <div class="col-md-3" v-for="(product, index) in filteredProducts" :key="index">
+          <cards_product :searchQuery="searchQuery" @productDeleted="removeProduct"  :product="product" />
         </div>
       </div>
     </div>
@@ -46,6 +46,9 @@ export default {
       return this.products.filter(product =>
         product.name.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
+    },
+    removeProduct() {
+      this.products = this.products.filter(product => product.id!== product.id)
     }
   },
   async created() {

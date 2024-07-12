@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import cards_product from '@/Components/Card/CardComponent.vue';
+import cards_product from '@/Components/Card/CardProductUser.vue';
 import cate_nav from '@/Components/Form/CateNav.vue';
 import axios from 'axios';
 import { useUserStore } from "@/stores/user.js";

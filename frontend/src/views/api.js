@@ -89,8 +89,18 @@ export default {
   imageUrlStore(filename) {
     return `${API_URL}/stores/image/${filename}`;
   },
+  deleteProduct(id, config) {
+    return axios.delete(`${API_URL}/products/remove/${id}`, config);
+  },
+// __________________________pro_________________
 
-   // New CRUD methods for OrderProduct__________________
+  updateProduct(pro_id, data, token) {
+    const headers = {
+      'Authorization': `Bearer ${token}`
+    };
+    return axios.post(`${API_URL}/products/update/${pro_id}`, data, { headers: headers });
+  },
+   // New CRUD methods for OrderProduct
    listOrderProducts(headers) {
     return axios.get(`${API_URL}/order/list`, { headers: headers });
   },
