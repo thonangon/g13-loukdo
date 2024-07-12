@@ -77,7 +77,7 @@ export default {
     const headers = {
       'Authorization': `Bearer ${token}`
     };
-    return axios.put(`${API_URL}/products/update/${pro_id}`, data, { headers: headers });
+    return axios.post(`${API_URL}/products/update/${pro_id}`, data, { headers: headers });
   },
    // New CRUD methods for OrderProduct
    listOrderProducts(headers) {
