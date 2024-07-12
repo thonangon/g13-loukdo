@@ -1,5 +1,6 @@
 <template>
     <div class="container mt-4 mb-4">
+        <h2 class="text-center mb-4">Welcome to Loukdo Store</h2>
         <div class="row justify-content-center">
             <div class="col-lg-6">
                 <form class="input-group">
@@ -8,6 +9,8 @@
                 </form>
             </div>
         </div>
+        <p class="text-center mb-4">Enjoy finding a million products all over the world here!</p>
+        <p class="text-center mb-4">All in ONE!</p>
     </div>
 </template>
 

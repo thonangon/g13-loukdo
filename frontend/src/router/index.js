@@ -10,18 +10,21 @@ import register from '../views/Users/ReginsterAcc.vue'
 import Viewprofile from '../views/profile/ProfileVue.vue'
 import UserPostProduct from '../views/Products/ProductPostUser.vue'  
 import ProductShow from '../views/Products/ProductShow.vue';
-<<<<<<< HEAD
+import userprodcuts from '../views/Users/ProductVue.vue'
 import addcard from '../views/CardAdd/addCard.vue';
-import userchats from '../views/Users/Chat/ChatView.vue'
+import userchats from '../views/Users/Chat/ChatView.vue';
+import booking from '../views/Order/InOrder.vue'
+import sellProduct from '../views/Order/InSell.vue'
 import payment from '../views/Order/PaymentOrder.vue'
-=======
 import userprodcuts from '../views/Users/ProductVue.vue'
 import addcard from '../views/CardAdd/addCard.vue';
 import PageStore from '../views/PageStore/StorePage.vue';
 import Createstore from '../views/PageStore/CreateStore.vue'
 import FormCreate from '../views/PageStore/FormCreate.vue'
 import editStore from '../views/PageStore/EditStore.vue'
->>>>>>> Createstore
+
+import productCategory from '../views/Products/ProductCategories.vue'
+
 
 const routes = [
     { 
@@ -69,13 +72,23 @@ const routes = [
         path: '/profile',
         name: 'profile', 
         component: Viewprofile,
-        // children: [
-        //     {
-        //         path: '/userprodcuts',
-        //         name: 'userprodcuts', 
-        //         component: userprodcuts
-        //     },
-        // ]
+        children: [
+            {
+                path: '/userprodcuts',
+                name: 'userprodcuts', 
+                component: userprodcuts
+            },
+            {
+                path: '/booking',
+                name: 'booking', 
+                component: booking
+            },
+            {
+                path: '/selling',
+                name: 'sellProduct', 
+                component: sellProduct
+            },
+        ]
     },
     
     {
@@ -85,7 +98,6 @@ const routes = [
         props: true
     },
     {
-<<<<<<< HEAD
         path: '/chats',
         name: '/chats', 
         component: userchats
@@ -94,9 +106,14 @@ const routes = [
         path: '/payment',
         name: 'payment',  
         component: payment
-    }
+    },
+    {
+        path: '/product/category/:id',
+        name: 'product/category',
+        component: productCategory,
+        props: true
+    },{
     
-=======
         path: '/storepage',
         name: 'storepage', 
         component: PageStore
@@ -117,7 +134,6 @@ const routes = [
         component: editStore,
         props: true
     },
->>>>>>> Createstore
 ]
 
 const router = createRouter({

@@ -96,7 +96,7 @@ export default {
       errorDescription: '',
       errorCategory: '',
       store_user: useUserStore(),
-      num_products: localStorage.getItem('numproduct'),
+      num_products: 0,
       userInfo: {},
     };
   },
@@ -106,6 +106,7 @@ export default {
   },
   methods: {
     async getCateList() {
+      this.num_products = this.store_user.num_products;
       try {
         const response = await api.getAllCate();
         if (response.data.data) {
@@ -143,13 +144,8 @@ export default {
         formData.append('image', this.image);
         formData.append('category_id', this.category); // Ensure this matches the selected category
 
-<<<<<<< HEAD
-        const token = localStorage.getItem('authToken');
-
-=======
         const token = localStorage.getItem('authToken'); // Assuming you store JWT token in localStorage
         
->>>>>>> Createstore
         const response = await api.createProduct(formData, {
           headers: {
             'Content-Type': 'multipart/form-data',

@@ -1,5 +1,5 @@
 <template>
-    <section class="container ">
+    <section class="container">
       
       <b-carousel class="d-flex gap-3 "
         id="categoryCarousel"

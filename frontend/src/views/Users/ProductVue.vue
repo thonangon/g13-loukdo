@@ -1,10 +1,12 @@
 <template>
   <div>
     <cate_nav/>
-    <div class="row">
+    <div class="scrollable-container">
+      <div class="row">
         <div class="col-md-3" v-for="(product, index) in products" :key="index">
-            <cards_product :product="product"/>
+          <cards_product :product="product" />
         </div>
+      </div>
     </div>
   </div>
 </template>
@@ -33,7 +35,8 @@ export default {
         if (response.data.status === 200) {
           this.products = response.data.data.product;  // Adjusted to access 'product' array
           console.log('Products:', this.products.length);
-          localStorage.setItem('numproduct', this.products.length);
+          // localStorage.setItem('numproduct', this.products.length);
+          this.store_user.get_num_products(this.products.length)
         } else {
           console.error('Error fetching products:', response.data.message);
         }

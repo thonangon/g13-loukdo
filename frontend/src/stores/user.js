@@ -5,6 +5,10 @@ export const useUserStore = defineStore('user', {
   state: () => ({
     accountUser: null,
     tokenUser: null,
+    quantity: null,
+    productDetails: null,
+    num_products: 0,
+    cateId: null,
   }),
   actions: {
     setUser(data) {
@@ -27,6 +31,17 @@ export const useUserStore = defineStore('user', {
       this.tokenUser = null;
       localStorage.removeItem('user_token');
       localStorage.removeItem('userAccount');
+    },
+    setOrderData(quantity, productDetails) {
+      this.quantity = quantity;
+      this.productDetails = productDetails;
+    },
+    get_num_products(num_products) {
+      this.num_products = num_products;
+    },
+    getCateProId(id){
+      this.cateId = id;
     }
   }
 });
+

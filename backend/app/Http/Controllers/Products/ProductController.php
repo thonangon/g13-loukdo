@@ -10,6 +10,7 @@ use App\Models\ProductUserRating;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Category;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
@@ -28,8 +29,26 @@ class ProductController extends Controller
         ]);
     }
 
+    public function productCate(string|int $id)
+    {
+        if (Category::find($id)){
+            $products = Product::where('category_id', $id)->get();
+            try{
+                return response()->json([
+                    'status' => true,
+                    'data' => $products,
+                ],200);   
+            }catch(Exception $e){
+                return response()->json(['message'=>['message', $e->getMessage()]], status:500);
+            }
+        }else{
+            return response()->json(['message'=> 'Category id not found'], status:400);
+        }
+
+    }
+
     public function store(Request $request)
-{
+    {
     try {
         // Validate incoming request
         $validator = Validator::make($request->all(), [
