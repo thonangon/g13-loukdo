@@ -16,8 +16,6 @@ import userchats from '../views/Users/Chat/ChatView.vue';
 import booking from '../views/Order/InOrder.vue'
 import sellProduct from '../views/Order/InSell.vue'
 import payment from '../views/Order/PaymentOrder.vue'
-import userprodcuts from '../views/Users/ProductVue.vue'
-import addcard from '../views/CardAdd/addCard.vue';
 import PageStore from '../views/PageStore/StorePage.vue';
 import Createstore from '../views/PageStore/CreateStore.vue'
 import FormCreate from '../views/PageStore/FormCreate.vue'

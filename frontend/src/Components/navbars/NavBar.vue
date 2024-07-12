@@ -2,7 +2,7 @@
   <div class="div bg-white sticky-xl-top">
     <div class="navbar-shadow">
       <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light d-flex flex-column">
+        <nav class="navbar navbar-expand-lg d-flex flex-column">
           <div class="container-fluid">
             <button
               class="navbar-toggler"
@@ -14,83 +14,6 @@
               aria-label="Toggle navigation"
             >
             <span class="navbar-toggler-icon"></span>
-<<<<<<< HEAD
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <div class="d-flex w-100 justify-content-between align-items-center">
-              <!-- Left side of the navbar -->
-              <div class="d-flex flex-grow-1">
-<<<<<<< HEAD
-                <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-box home"></i> Home</router-link>
-                <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-box me-2"></i>Products</router-link>
-                <router-link to="/product-post" class="me-5 text-secondary mb-0 custom-font-size nav-link" active-class="text-dark active border-bottom">More...</router-link>
-=======
-                <router-link
-                  to="/"
-                  class="me-5 mb-0 custom-font-size nav-link"
-                  active-class="active text-primary border-bottom"
-                  >Home</router-link
-                >
-                <router-link
-                  to="/product"
-                  class="me-5 mb-0 custom-font-size nav-link"
-                  active-class="active text-primary border-bottom"
-                  >Products</router-link
-                >
-                <div class="dropdown me-5 custom-font-size">
-                  <a
-                    class="text-dark custom-font-size nav-link"
-                    href="#"
-                    role="button"
-                    id="dropdownMenuLink"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                    >Categories</a
-                  >
-                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <router-link to="/register" class="dropdown-item custom-font-size"
-                      >Register</router-link
-                    >
-                    <router-link to="/profile" class="dropdown-item custom-font-size"
-                      >Profile</router-link
-                    >
-                    <li><a class="dropdown-item custom-font-size" href="#">Another action</a></li>
-                    <li>
-                      <a class="dropdown-item custom-font-size" href="#">Something else here</a>
-                    </li>
-                  </ul>
-                </div>
-                <router-link
-                  to="/product-post"
-                  class="me-5 mb-0 custom-font-size nav-link"
-                  active-class="active text-primary border-bottom"
-                  >More...</router-link
-                >
-                <router-link to="/createstore" class="me-5 mb-0 custom-font-size nav-link" active-class="active text-primary border-bottom">Store</router-link>
->>>>>>> Createstore
-              </div>
-
-              <!-- Logo -->
-              <a class="navbar-brand mx-auto logo" href="#">
-                <img class="ms-auto logo-img" src="../../assets/images/lOUKDO.png" alt="Logo" />
-              </a>
-
-              <!-- Profile -->
-              <div
-                class="d-flex justify-content-end align-items-center profile-section"
-                style="width: 40%"
-              >
-                <div class="iconenav d-flex align-items-center">
-                  <i class="bi bi-bell-fill me-3"></i>
-                  <router-link to="/card" class="position-relative">
-                    <i class="bi bi-cart-dash me-2"></i>
-                    <span
-                      class="badge bg-success position-absolute top-0 start-100 translate-middle"
-                    >
-                     {{ numcart }}
-                    </span>
-                  </router-link>
-=======
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
               <div class="d-flex w-100 justify-content-between align-items-center">
@@ -98,7 +21,6 @@
                 <div class="d-flex flex-grow-1">
                   <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)"><i class="fas fa-home"></i> Home</router-link>
                   <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(1)"><i class="fas fa-box me-2"></i>Products</router-link>
->>>>>>> 144da9f89313c86dfa35e81298f04b1f4a7b546f
                 </div>
 
                 <!-- Logo -->
