@@ -1,13 +1,12 @@
 <template>
   <div>
     <product_slide/>
-    <h2 class="text-center mb-4">Welcome to Loukdo Store</h2>
     <search_product @search="handleSearch"/>
-    <p class="text-center mb-4">Enjoy finding a million products all over the world here!</p>
-    <p class="text-center mb-4">All in ONE!</p>
-    <div class="row">
-      <div class="col-md-3" v-for="(product, index) in filteredProducts" :key="index">
-        <cards_product :product="product"/>
+    <div class="scrollable-container">
+      <div class="row">
+        <div class="col-md-3" v-for="(product, index) in products" :key="index">
+          <cards_product :searchQuery="searchQuery" :product="product" />
+        </div>
       </div>
     </div>
   </div>
@@ -71,4 +70,5 @@ export default {
 
 <style>
 /* Add any custom styles here */
+
 </style>

@@ -19,7 +19,7 @@ class ProductDetailResource extends JsonResource
     public function toArray($request)
     {
         // Load owner details
-        $owner = User::select('id', 'name', 'email', 'profile')
+        $owner = User::select('id', 'name', 'email', 'profile', 'user_qrimage')
                     ->where('id', $this->user_id)
                     ->first();
 
@@ -53,6 +53,7 @@ class ProductDetailResource extends JsonResource
                     'name' => $owner->name,
                     'email' => $owner->email,
                     'profile' => $owner->profile,
+                    'qrimage' => $owner->user_qrimage,
                 ] : null,
                 'category' => $category ? [
                     'id' => $category->id,

@@ -1,51 +1,48 @@
 <template>
-  <div class="container">
-    <h2 class="my-4">Welcome, Loukdo!</h2>
-    <h4>Current orders</h4>
-    <div class="order-card row">
-      <div class="col-md-2">
-        <!-- <img :src="order.productImageUrl" alt="Product Image"> -->
+  <div class="container mt-4">
+    <h3 class="mb-4 text-center">Payment Bank</h3>
+    <div class="row">
+      <!-- Left Side: Bank Information -->
+      <div class="col-lg-8 mb-4 d-flex flex-column align-items-center" style="width:50%;">
+        <div class="card text-center shadow-sm" style="width: 100%;">
+          <div class="card-body">
+            <img :src="qrimage_url(store_user.productDetails.data.pro_owner.qrimage)" alt="Bank Logo" class="img-fluid mb-3" style="width: 150px; height: 150px;">
+            <!-- <h5 class="card-title">BANK NAME</h5> -->
+          </div>
+          <div class="card-footer d-flex justify-content-between">
+            <button class="btn btn-secondary" style="width: 48%">
+              <router-link to="/chats" class="text-white">Contact</router-link>
+              <!-- <router-link to="/chats" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-box home"></i> Home</router-link> -->
+            </button>
+            <router-link to="" class="text-white" style="width: 48%;" @click="OrderProduct">
+              <button class="btn btn-primary" style="width: 100%;">Order</button>
+            </router-link>
+          </div>
+        </div>
       </div>
-      <div class="col-md-7">
-        <div class="order-info">
-          <div>
-            <p><strong>Order..</strong> {{ order.username }}</p>
+
+      <!-- Right Side: Order Summary -->
+      <div class="col-lg-4" style="width: 50%;">
+        <div class="card shadow-sm">
+          <div class="card-header bg-success text-white text-center">
+            Order Summary
           </div>
-        </div>
-        <div class="order-details">
-          <div class="row">
-            <div class="col-md-3">
-              <p><strong>Product Name</strong></p>
-              <p>{{ order.orderDate }}</p>
-            </div>
-            <div class="col-md-3">
-              <p><strong>Price</strong></p>
-              <p>{{ order.paymentStatus }}</p>
-            </div>
-            <div class="col-md-3">
-              <p><strong>Quatity</strong></p>
-              <p>{{ order.deliveryDate }}</p>
-            </div>
-            <div class="col-md-3">
-              <p><strong>Total Price</strong></p>
-              <p>{{ order.deliveryDate }}</p>
-            </div>
-           
-          </div>
-        </div>
-        <div class="order-details">
-          <div class="row">
-            <div class="col-md-3">
-              <button class="btn btn-danger">Cancel</button>
-            </div>
-            <div class="col-md-3">
-              <button class="btn btn-primary">Edit Order</button>
-            </div>
-            <div class="col-md-3">
-              <a href="/payment">
-                <button class="btn btn-success">Payment</button>
-              </a>
-            </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Product name:</span> <span>{{store_user.productDetails.data.name}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Price:</span> <span>${{store_user.productDetails.data.price}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Delivery:</span> <span>$2</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span>Quantity:</span> <span>{{ store_user.quantity  }}</span>
+            </li>
+          </ul>
+          <div class="card-footer text-center">
+            <strong>Total Items: <span>${{store_user.productDetails.data.price * store_user.quantity+2}}</span></strong>
           </div>
         </div>
       </div>
@@ -53,62 +50,78 @@
   </div>
 </template>
 
+
 <script>
+import { useUserStore } from "@/stores/user.js";
+import api from "@/views/api.js";
 export default {
-  name: 'OrderDashboard',
   data() {
     return {
-      order: {
-        id: 1,
-        username: 'username',
-        delivery: 'JNT > Delivery_name > contact',
-        orderDate: 'June-18-24',
-        paymentStatus: 'Initials payment done',
-        deliveryDate: 'June-18-24 2PM',
-        shoppingLink: '#',
-        totalsSum: '$000',
-        depositPaymentRecode: '$000',
-        trackingLink: '#',
-        productImageUrl: 'product-image-url.jpg'
-      }
-    };
+      store_user: useUserStore(),
+      products: [
+        { id: 1, name: 'Product 1', description: 'Description for product 1', image: 'https://via.placeholder.com/150' },
+        { id: 2, name: 'Product 2', description: 'Description for product 2', image: 'https://via.placeholder.com/150' },
+        { id: 3, name: 'Product 3', description: 'Description for product 3', image: 'https://via.placeholder.com/150' },
+        // Add more products as needed
+      ],
+    }
   },
+  computed: {
+    totalItems() {
+      return this.summary.reduce((total, item) => total + item.quantity, 0);
+    }
+  },
+
   methods: {
-    editOrder(orderId) {
-      console.log('Edit order', orderId);
+    async OrderProduct() {
+      try {
+        const product_id = this.store_user.productDetails.data.id;
+        const quantity = this.store_user.quantity;
+
+        const orderData = {
+          product_id: product_id,
+          quantity: quantity,
+        };
+
+        const headers = { Authorization: `Bearer ${this.store_user.tokenUser}` };
+        const response = await api.createOrderProduct(orderData, headers);
+
+        console.log(response.data); // Optional: handle response as needed
+
+        // Redirect to '/order' route after successful order creation
+        this.$router.push('/booking');
+      } catch (error) {
+        console.error('Error ordering product:', error);
+        // Handle error scenario, e.g., show error message to user
+      }
     },
-    viewDetails(orderId) {
-      console.log('View details for order', orderId);
+    qrimage_url(filename){
+      return api.profile(filename)
+    },
+
+    addToSummary(product) {
+      const existingProduct = this.summary.find(item => item.id === product.id);
+      if (existingProduct) {
+        existingProduct.quantity += 1;
+      } else {
+        this.summary.push({ ...product, quantity: 1 });
+      }
     }
   }
-};
+}
 </script>
-
 <style scoped>
-.order-card {
-  border: 1px solid #e1e1e1;
-  border-radius: 5px;
-  margin: 20px 0;
-  padding: 20px;
-  background-color: #fff;
+.card {
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-.order-card img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 5px;
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
-.order-info {
-  display: flex;
-  justify-content: space-between;
-}
-.order-details {
-  margin-top: 10px;
-}
-.btn-edit, .btn-details {
-  background-color: black;
-  color: white;
-}
-.btn-edit:hover, .btn-details:hover {
-  background-color: #444;
+
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
 }
 </style>

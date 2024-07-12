@@ -13,9 +13,15 @@ import ProductShow from '../views/Products/ProductShow.vue';
 import userprodcuts from '../views/Users/ProductVue.vue'
 import addcard from '../views/CardAdd/addCard.vue';
 // import PageStore from '../views/PageStore/StorePage.vue';
+import userchats from '../views/Users/Chat/ChatView.vue';
+import booking from '../views/Order/InOrder.vue'
+import sellProduct from '../views/Order/InSell.vue'
+import payment from '../views/Order/PaymentOrder.vue'
 import Createstore from '../views/PageStore/CreateStore.vue'
-// import FormCreate from '../views/PageStore/FormCreate.vue'
 import editStore from '../views/PageStore/EditStore.vue'
+
+import productCategory from '../views/Products/ProductCategories.vue'
+
 
 const routes = [
     { 
@@ -62,7 +68,24 @@ const routes = [
     {
         path: '/profile',
         name: 'profile', 
-        component: Viewprofile
+        component: Viewprofile,
+        children: [
+            {
+                path: '/userprodcuts',
+                name: 'userprodcuts', 
+                component: userprodcuts
+            },
+            {
+                path: '/booking',
+                name: 'booking', 
+                component: booking
+            },
+            {
+                path: '/selling',
+                name: 'sellProduct', 
+                component: sellProduct
+            },
+        ]
     },
     
     {
@@ -71,7 +94,22 @@ const routes = [
         component: addcard,
         props: true
     },
-    
+    {
+        path: '/chats',
+        name: '/chats', 
+        component: userchats
+    },
+    {
+        path: '/payment',
+        name: 'payment',  
+        component: payment
+    },
+    {
+        path: '/product/category/:id',
+        name: 'product/category',
+        component: productCategory,
+        props: true
+    },
     {
         path: '/createstore',
         name: 'createstore', 
