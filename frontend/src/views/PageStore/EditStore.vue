@@ -49,7 +49,7 @@
             />
           </div>
           <div class="mb-3 d-flex justify-content-between">
-            <router-link to="/storepage">
+            <router-link to="/Createstore">
               <button type="button" class="btn btn-primary btn-lg" style="width: 120px;">
                 Back
               </button>
@@ -65,11 +65,10 @@
 </template>
 
 <script>
-import api from '@/views/api';
+import api from '../../views/api';
+import { useUserStore } from '@/stores/user.js';
 
 export default {
-  name: 'editStore',
-  props: ['id'],
   data() {
     return {
       store: {
@@ -77,40 +76,59 @@ export default {
         address: '',
         description: '',
         image: null
-      }
+      },
+      userStore: useUserStore(),
     };
   },
-  async created() {
-    try {
-      const response = await api.getStore(this.id);
-      this.store = response.data; // Ensure this matches the structure of your API response
-    } catch (error) {
-      console.error('Error fetching store data:', error);
-    }
-  },
   methods: {
-    onFileChange(event) {
-      this.store.image = event.target.files[0];
+    async fetchStore() {
+      const storeId = this.$route.params.id;
+      try {
+        const response = await api.getStore(storeId);
+        this.store = response.data.data;
+      } catch (error) {
+        console.error('API error:', error);
+      }
     },
     async updateStore() {
       try {
-        const formData = new FormData();
-        formData.append('name', this.store.name);
-        formData.append('address', this.store.address);
-        formData.append('description', this.store.description);
-        if (this.store.image) {
-          formData.append('image', this.store.image);
+        const formData ={
+          name: this.store.name,
+          address: this.store.address,
+          description: this.store.description
         }
-        await api.updateStore(this.id, formData);
-        this.$router.push('/storepage');
+        console.log(formData);
+        console.log(this.userStore.tokenUser);
+  
+        const storeId = this.$route.params.id;
+        const response = await api.updateStore(storeId, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${this.userStore.tokenUser}`
+          }
+        });
+        
+        console.log('Store updated successfully:', response.data);
+        this.$router.push('/Createstore'); // Redirect to the create page
       } catch (error) {
-        console.error('Error updating store:', error);
+        // if (error.response) {
+        //   console.error('Error response:', error.response.data);
+        //   console.error('Status code:', error.response.status);
+        //   console.error('Headers:', error.response.headers);
+        // } else if (error.request) {
+        //   console.error('No response received:', error.request);
+        // } else {
+        //   console.error('Error setting up the request:', error.message);
+        // }
+        console.error('Error updating store:');
       }
-    }
+    },
+    onFileChange(event) {
+      this.store.image = event.target.files[0];
+    },
+  },
+  async created() {
+    await this.fetchStore();
   }
 };
 </script>
-
-<style>
-/* Add your styles here */
-</style>

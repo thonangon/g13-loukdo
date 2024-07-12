@@ -68,11 +68,17 @@ export default {
   getStores(){
     return axios.get(`${API_URL}/store/list`);
   },
-  updateStore(storeId, formData, config) {
-    return axios.put(`${API_URL}/store/update/${storeId}`, formData, config);
+  getStore(storeId) {
+    return axios.get(`${API_URL}/store/show/${storeId}`);
+  },
+  updateStore(storeId, formData) {
+    return axios.put(`${API_URL}/store/update/${storeId}`, formData);
   },
   deleteStore(storeId) {
     return axios.delete(`${API_URL}/store/remove/${storeId}`);
-  }
+  },
+  imageUrlStore(filename) {
+    return `${API_URL}/stores/image/${filename}`;
+  },
 };
 

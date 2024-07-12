@@ -12,9 +12,9 @@ import UserPostProduct from '../views/Products/ProductPostUser.vue'
 import ProductShow from '../views/Products/ProductShow.vue';
 import userprodcuts from '../views/Users/ProductVue.vue'
 import addcard from '../views/CardAdd/addCard.vue';
-import PageStore from '../views/PageStore/StorePage.vue';
+// import PageStore from '../views/PageStore/StorePage.vue';
 import Createstore from '../views/PageStore/CreateStore.vue'
-import FormCreate from '../views/PageStore/FormCreate.vue'
+// import FormCreate from '../views/PageStore/FormCreate.vue'
 import editStore from '../views/PageStore/EditStore.vue'
 
 const routes = [
@@ -71,21 +71,13 @@ const routes = [
         component: addcard,
         props: true
     },
-    {
-        path: '/storepage',
-        name: 'storepage', 
-        component: PageStore
-    },
+    
     {
         path: '/createstore',
         name: 'createstore', 
         component: Createstore
     },
-    {
-        path: '/formCreate',
-        name: 'formCreate', 
-        component: FormCreate,
-    },
+    
     {
         path: '/editStore/:id',
         name: 'editStore', 
