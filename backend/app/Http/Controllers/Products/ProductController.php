@@ -189,10 +189,10 @@ class ProductController extends Controller
                'description' => 'nullable|string',
                'price' => 'nullable|numeric',
                'quantity' => 'nullable|numeric',
-               'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:204800', // Adjust max file size as needed
+               'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048', // Adjust max file size as needed
                'category_id' => 'nullable|exists:categories,id',
            ]);
-   
+
            // Handle validation errors
            if ($validator->fails()) {
                return response()->json([
@@ -201,10 +201,10 @@ class ProductController extends Controller
                    'errors' => $validator->errors()
                ], 422);
            }
-   
+
            // Find the product by ID
            $product = Product::findOrFail($id);
-   
+
            // Handle image update if provided
            if ($request->hasFile('image')) {
                // Delete previous image if exists
@@ -214,16 +214,16 @@ class ProductController extends Controller
                        unlink($imagePath);
                    }
                }
-   
+
                // Upload new image
                $file = $request->file('image');
                $imageName = time() . '_' . $file->getClientOriginalName();
                $file->move(public_path('/api/products/image/'), $imageName);
-   
+
                // Update image field in product
                $product->image = $imageName;
            }
-   
+
            // Update other fields
            if ($request->has('name')) {
                $product->name = $request->name;
@@ -240,13 +240,13 @@ class ProductController extends Controller
            if ($request->has('category_id')) {
                $product->category_id = $request->category_id;
            }
-   
+
            // Save the updated product
            $product->save();
-   
+
            // Prepare the response with correct image URL if an image was uploaded
            $product->image_url = $product->image ? asset('/api/products/image/' . $product->image) : null;
-   
+
            // Return success response
            return response()->json([
                'status' => true,

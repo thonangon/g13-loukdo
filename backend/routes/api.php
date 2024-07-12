@@ -72,7 +72,7 @@ Route::get('/products/pro_details/{product_id}', [ProductController::class, 'sho
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     // Route::get('/list', [ProductController::class, 'index']);
     Route::post('/create', [ProductController::class, 'store']);
-    Route::put('/update/{id}', [ProductController::class, 'update'])->name('products.update');
+    Route::post('/update/{id}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/remove/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
     Route::get('/ratings/{productId}', [ProductController::class, 'getProductRatings']);
