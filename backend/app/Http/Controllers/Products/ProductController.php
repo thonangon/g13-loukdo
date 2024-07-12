@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\ProductCateResource;
 
 class ProductController extends Controller
 {
@@ -36,7 +37,7 @@ class ProductController extends Controller
             try{
                 return response()->json([
                     'status' => true,
-                    'data' => $products,
+                    'data' => ProductCateResource::collection($products),
                 ],200);   
             }catch(Exception $e){
                 return response()->json(['message'=>['message', $e->getMessage()]], status:500);

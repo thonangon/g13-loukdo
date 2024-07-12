@@ -84,10 +84,10 @@ Route::middleware('auth:sanctum')->prefix('products')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
-    Route::post('/rate/{productId}', [RateProductController::class, 'rate']);
+    Route::post('/ratting/{productId}', [RateProductController::class, 'rate']);
     Route::delete('/remove/{productId}', [RateProductController::class, 'removeRating']);
-    Route::get('/ratings/{productId}', [RateProductController::class, 'getRatings']);
 });
+Route::get('/products/ratings/{productId}', [RateProductController::class, 'getRatings']);
 
 
 // Comment Products Routes

@@ -148,10 +148,13 @@
         </form>
       </div>
     </div>
+    <!-- {{ productDetails }} -->
     <p class="p- mt-5 border-bottom" style="width: 100%;">Ratings and Feedback for this product!</p>
     <div class="RateAndFeedback d-flex">
       <div class="feedback" style="width: 70%;">
-        <rate_show :product_id="id" />
+        <div v-if="productDetails">
+          <rate_show :product_id="id" :rangOfrating="productDetails.data.ratting"/>
+        </div>
         <div v-if="productDetails" class="feedback">
           <div v-for="comment in productDetails.data.comments" :key="comment.id" class="">
             <comment :comment="comment" />

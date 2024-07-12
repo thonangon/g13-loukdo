@@ -118,7 +118,6 @@
         </div>
       </div>
     </div>
-
     <div>
       <div class="container mt-5">
         <h3>The Popular Categories</h3>

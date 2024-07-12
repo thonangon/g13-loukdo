@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductUserRating;
+use App\Http\Resources\RateProductResource;
 use Exception;
 
 class RateProductController extends Controller
@@ -118,7 +119,7 @@ class RateProductController extends Controller
 
             return response()->json([
                 'status' => true,
-                'data' => $ratings,
+                'data' => RateProductResource::collection($ratings),
                 'message' => 'Product ratings retrieved successfully',
             ], 200);
         } catch (Exception $error) {
