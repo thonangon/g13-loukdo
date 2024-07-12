@@ -12,22 +12,32 @@ import UserPostProduct from '../views/Products/ProductPostUser.vue'
 import ProductShow from '../views/Products/ProductShow.vue';
 import userprodcuts from '../views/Users/ProductVue.vue'
 import addcard from '../views/CardAdd/addCard.vue';
-// import PageStore from '../views/PageStore/StorePage.vue';
 import userchats from '../views/Users/Chat/ChatView.vue';
 import booking from '../views/Order/InOrder.vue'
 import sellProduct from '../views/Order/InSell.vue'
 import payment from '../views/Order/PaymentOrder.vue'
 import Createstore from '../views/PageStore/CreateStore.vue'
 import editStore from '../views/PageStore/EditStore.vue'
-
 import productCategory from '../views/Products/ProductCategories.vue'
 
+// __________________ADMIN________________
+import admin from '../Admin.vue'
 
 const routes = [
     { 
+        path: '/login',
+        name: 'login', 
+        component: LoginUser
+    },
+    {
+        path: '/register',
+        name: 'register', 
+        component: register
+    },
+    { 
         path: '/',
         name: 'Home', 
-        component: Home
+        component: Home,
     },
     { 
         path: '/product',
@@ -40,16 +50,7 @@ const routes = [
         component: produc_detail,
         props: true
     },
-    { 
-        path: '/login',
-        name: 'login', 
-        component: LoginUser
-    },
-    {
-        path: '/register',
-        name: 'register', 
-        component: register
-    },
+  
     { 
         path: '/order',
         name: 'order', 
@@ -121,6 +122,36 @@ const routes = [
         name: 'editStore', 
         component: editStore,
         props: true
+    },
+
+    // ________________________Admin_________________________
+
+    {
+        path: '/admin/dashboard',
+        name: 'admin_dashboard',
+        component: () => admin,
+        children: [
+            // {
+            //     path: '/admin/users',
+            //     name: 'admin_users',
+            //     component: () => import('../views/Admin/Users.vue')
+            // },
+            // {
+            //     path: '/admin/products',
+            //     name: 'admin_products',
+            //     component: () => import('../views/Admin/Products.vue')
+            // },
+            // {
+            //     path: '/admin/orders',
+            //     name: 'admin_orders',
+            //     component: () => import('../views/Admin/Orders.vue')
+            // },
+            // {
+            //     path: '/admin/pages',
+            //     name: 'admin_pages',
+            //     component: () => import('../views/Admin/Pages.vue')
+            // },
+        ]
     },
 ]
 
