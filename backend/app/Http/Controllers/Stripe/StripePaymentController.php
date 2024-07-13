@@ -17,10 +17,8 @@ class StripePaymentController extends Controller
 {
     public function makePayment(Request $request)
     {
-        // Set your secret key
+      
         Stripe::setApiKey(env('STRIPE_SECRET'));
-
-        // dd($request->amount);
         try {
             // Create a PaymentIntent to charge a customer
             $paymentIntent = PaymentIntent::create([
@@ -41,37 +39,24 @@ class StripePaymentController extends Controller
     }
     public function handlePaymentSuccess(Request $request)
     {
-        // Validate the incoming request
-        $validator = Validator::make($request->all(), [
-            'payment_intent_id' => 'required|string',
-            'user_id' => 'required|exists:users,id',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-        // Set your secret key
         Stripe::setApiKey(env('STRIPE_SECRET'));
-        $user= Auth::user();
         try {
-            // Retrieve the PaymentIntent
             $paymentIntent = PaymentIntent::retrieve($request->payment_intent_id);
 
-            if ($paymentIntent->status == 'requires_payment_method') {
-                // Find the user and reset their post count
-                $user = User::find($request->user_id);
-                $user->post_count = 0;
-                $user->has_paid = 1;
-                $user->save();
+            if ($paymentIntent->status == 'succeeded') {
+                $user = User::where('email', $request->email)->first();
 
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Payment successful and post count reset.',
-                ]);
+                if ($user) {
+                    // Update user's post count and has_paid flag
+                    $user->post_count = 0;
+                    $user->has_paid = true;
+                    $user->save();
+
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Payment successful. Post count reset for user.',
+                    ]);
+                }
             } else {
                 return response()->json([
                     'status' => false,
