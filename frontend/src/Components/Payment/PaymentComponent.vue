@@ -2,9 +2,9 @@
   <div class="payment-form">
     <div class="card payment-details">
       <div class="card-header">
-        <h5>Livelab Dev <span class="badge badge-warning">TEST MODE</span></h5>
-        <p class="mt-2 mb-0 font-weight-bold">Asus Vivobook 17 Laptop - Intel Core 10th</p>
-        <h2 class="mt-1">{{ formattedAmount }}</h2>
+        <h5>payment Method<span class="badge badge-warning">TEST MODE</span></h5>
+        <p class="mt-2 mb-0 font-weight-bold">Enjoy your post and reduce new product</p>
+        <h2 class="mt-3">{{ formattedAmount }}</h2>
         <div class="stripe-logo mt-5">
           <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Visa.svg/1200px-Visa.svg.png" alt="visa">
           <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="mastercard">
@@ -13,23 +13,10 @@
     </div>
     <div class="card payment-details">
       <div class="card-body">
-        <form @submit.prevent="submitPayment">
+        <form @submit.prevent="submitPayment" :disabled="submitting">
           <div class="form-group">
             <label for="email">Contact information</label>
             <input type="email" class="form-control" id="email" v-model="email" placeholder="Email" required>
-          </div>
-          <div class="form-group">
-            <label for="paymentMethod">Payment method</label>
-            <div class="payment-method">
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" id="card" name="paymentMethod" class="custom-control-input" v-model="paymentMethod" value="card">
-                <label class="custom-control-label" for="card">Card</label>
-              </div>
-              <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" id="cashAppPay" name="paymentMethod" class="custom-control-input" v-model="paymentMethod" value="cashAppPay">
-                <label class="custom-control-label" for="cashAppPay">Cash App Pay</label>
-              </div>
-            </div>
           </div>
           <div class="form-group">
             <label for="total">Amount</label>
@@ -46,7 +33,7 @@
             <input type="checkbox" class="form-check-input" id="saveInfo" v-model="saveInfo">
             <label class="form-check-label" for="saveInfo">Securely save my information for 1-click checkout</label>
           </div>
-          <button type="submit" class="btn btn-primary mt-5">Pay</button>
+          <button type="submit" class="btn btn-primary mt-5" :disabled="submitting">Pay</button>
         </form>
         <div class="powered-by">
           <p class="text-muted">Powered by <strong>Stripe</strong></p>
@@ -61,7 +48,7 @@
           <button type="button" @click="closeModal" class="close-button">&times;</button>
         </div>
         <div class="custom-modal-body">
-          <p>Your payment was processed successfully.</p>
+          <p>Your payment was processed successfully. Next payment due on {{ nextPaymentDate }}</p>
         </div>
         <div class="custom-modal-footer">
           <button type="button" @click="closeModal" class="btn btn-secondary">OK</button>
@@ -74,10 +61,16 @@
 <script>
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
-import { useUserStore } from '@/stores/user.js';
-import { defineComponent } from 'vue';
 
-export default defineComponent({
+
+export default {
+  name: 'PaymentForm',
+  props: {
+    selectedPlan: {
+      type: Object,
+      default: () => ({ price: '$0' })
+    }
+  },
   data() {
     return {
       stripe: null,
@@ -85,15 +78,18 @@ export default defineComponent({
       cardElement: null,
       email: '',
       paymentMethod: 'card',
-      amount: 0,
+      amount: parseFloat(this.selectedPlan.price.replace('$', '')) || 0,
       saveInfo: false,
       showModal: false,
+      submitting: false,
+      nextPaymentDate:null
     };
   },
   computed: {
     formattedAmount() {
-      return `$${(this.amount)}`;
-    }
+      return amount;
+    },
+    
   },
   async mounted() {
     this.stripe = await loadStripe('pk_test_51PZ1M92KMJfWGuxDbOviEzE7eldlNfD2vLtPaweyyJPTAJEmEy7APiGipQYtve6F0MNP4iJTAxK15MAS9R25DRyG00GuyPPGZh');
@@ -121,16 +117,27 @@ export default defineComponent({
         displayError.textContent = '';
       }
     });
+     //set the next month to charge again
+    if(this.selectedPlan.name === 'Premium'){
+      const currentDate = new Date();
+      const nextMonth = new Date(currentDate);
+      nextMonth.setMonth(currentDate.getMonth() + 1); 
+      this.nextPaymentDate = nextMonth.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    }
   },
   methods: {
     async submitPayment() {
+      this.submitting = true;
+
       try {
         const { data } = await axios.post('http://127.0.0.1:8000/api/stripe/payment', {
           amount: this.amount,
         });
-
-        const clientSecret = Response.data.client_secret;
-
+        const clientSecret = data.client_secret;
         const { error, paymentIntent } = await this.stripe.confirmCardPayment(clientSecret, {
           payment_method: {
             card: this.cardElement,
@@ -139,33 +146,35 @@ export default defineComponent({
             },
           },
         });
-
+        console.log('Payment successful123');
         if (error) {
           console.error(error.message);
           const displayError = document.getElementById('card-errors');
           displayError.textContent = error.message;
         } else {
-          if (paymentIntent.status === 'requires_payment_method') {
+          if (paymentIntent) {
             await axios.post('http://127.0.0.1:8000/api/stripe/handlePaymentSuccess', {
               payment_intent_id: paymentIntent.id,
+              email: this.email,
             });
-            this.showModal = true; // Show success modal
+            console.log('Payment successful');
+            this.showModal = true;
           }
         }
       } catch (error) {
-        console.error('Error creating payment intent:', error);
-        // Handle error and display message to the user
+        console.error('Error confirming payment:', error);
+        const displayError = document.getElementById('card-errors');
+        displayError.textContent = 'An error occurred while processing your payment. Please try again.';
+      } finally {
+        this.submitting = false;
       }
     },
     closeModal() {
       this.showModal = false;
-      // Optionally navigate to another route or perform additional actions
-      this.$router.push('/'); // Example: Navigate to home page after closing modal
+      this.$router.push({ name: 'product-post' });
     },
   },
-
-  
-});
+};
 </script>
 
 <style scoped>

@@ -1,194 +1,94 @@
 <template>
-    <div class="plans">
-      <div class="container py-5">
-        <div class="d-flex gap-3 align-items-center text-center">
-          
-          <!-- Display Free Plan -->
-          <div class="plan bg-white p-5 rounded-lg shadow mb-4">
-            <h1 class="h6 text-uppercase font-weight-bold mb-4">FREE</h1>
-            <h2 class="h1 font-weight-bold">$0<span class="text-small font-weight-normal ml-2">/ free</span></h2>
-            <div class="custom-separator my-4 mx-auto bg-primary"></div>
-            <ul class="list-unstyled my-5 text-small text-left">
-              <li class="mb-3">
-                <i class="fa fa-check mr-2 text-primary"></i> User can post the product at least 9 posts
-              </li>
-              <li class="mb-3">
-                <i class="fa fa-check mr-2 text-primary"></i> You need to pay to us if you want to use the basic pro and Premium product
-              </li>
-              <li class="mb-3">
-                <i class="fa fa-check mr-2 text-primary"></i> Allow the only product to be used at this time and at least 9 posts
-              </li>
-              <li class="mb-3 text-muted">
-                <i class="fa fa-times mr-2"></i>
-                <del>Nam libero tempore</del>
-              </li>
-              <li class="mb-3 text-muted">
-                <i class="fa fa-times mr-2"></i>
-                <del>Sed ut perspiciatis</del>
-              </li>
-              <li class="mb-3 text-muted">
-                <i class="fa fa-times mr-2"></i>
-                <del>Sed ut perspiciatis</del>
-              </li>
-            </ul>
+  <div class="plans">
+    <div class="container py-5">
+      <div class="d-flex gap-3 align-items-center text-center justify-content-center flex-wrap">
+        <!-- Display Free Plan -->
+        <div class="plan bg-white p-5 rounded-lg shadow mb-4">
+          <h1 class="h6 text-uppercase font-weight-bold mb-4">FREE</h1>
+          <h2 class="h1 font-weight-bold">$0<span class="text-small font-weight-normal ml-2">/ free</span></h2>
+          <div class="custom-separator my-4 mx-auto bg-primary"></div>
+          <ul class="list-unstyled my-5 text-small text-left">
+            <li class="mb-3">
+              <i class="fas fa-check-circle mr-2 text-primary"></i> User can post the product at least 9 posts
+            </li>
+            <li class="mb-3">
+              <i class="fas fa-check-circle mr-2 text-primary"></i> You need to pay to use the basic pro and Premium product
+            </li>
+            <li class="mb-3">
+              <i class="fas fa-check-circle mr-2 text-primary"></i> Allow only product to be used at this time and at least 9 posts
+            </li>
+          </ul>
+          <button class="btn btn-primary btn-block shadow rounded-pill">Buy Now</button>
+        </div>
+        <!-- Display Other Plans -->
+        <div class="plan bg-white p-5 rounded-lg shadow mb-4" v-for="plan in plans" :key="plan.name">
+          <h1 class="h6 text-uppercase font-weight-bold mb-4">{{ plan.name }}</h1>
+          <h2 class="h1 font-weight-bold">{{ plan.price }}<span class="text-small font-weight-normal ml-2">/ month</span></h2>
+          <div class="custom-separator my-4 mx-auto bg-primary"></div>
+          <ul class="list-unstyled my-5 text-small text-left">
+            <li class="mb-3" v-for="feature in plan.features" :key="feature">
+              <i class="fas fa-check-circle mr-2 text-primary"></i>{{ feature }}
+            </li>
+          </ul>
+          <router-link :to="{ name: '/charge', params: { selectedPlan: plan }}">
             <button class="btn btn-primary btn-block shadow rounded-pill">Buy Now</button>
-          </div>
-  
-          <!-- Display Basic Plan -->
-          <div class="plan bg-white p-5 rounded-lg shadow mb-4">
-            <h1 class="h6 text-uppercase font-weight-bold mb-4">Basic class</h1>
-            <h2 class="h1 font-weight-bold">$10<span class="text-small font-weight-normal ml-2">/ month</span></h2>
-            <div class="custom-separator my-4 mx-auto bg-primary"></div>
-            <ul class="list-unstyled my-5 text-small text-left font-weight-normal">
-              <li class="mb-3">
-                <i class="fa fa-check mr-2 text-primary"></i> You can post your items that you want
-              </li>
-              <li class="mb-3">
-                <i class="fa fa-check mr-2 text-primary"></i> We will charge your money if you post over 10 products
-              </li>
-              <li class="mb-3">
-                <i class="fa fa-check mr-2 text-primary"></i> Easy to use for posting the product and can continue to post after charge
-              </li>
-              <li class="mb-3">
-                <i class="fa fa-check mr-2 text-primary"></i> Nam libero tempore
-              </li>
-              <li class="mb-3">
-                <i class="fa fa-check mr-2 text-primary"></i> Sed ut perspiciatis
-              </li>
-              <li class="mb-3 text-muted">
-                <i class="fa fa-times mr-2"></i>
-                <del>Sed ut perspiciatis</del>
-              </li>
-            </ul>
-            <a href="/charge">
-              <button class="btn btn-primary btn-block shadow rounded-pill">Buy Now</button>
-            </a>
-          </div>
-  
-          <!-- Display Premium Plan -->
-          <div class="plan bg-white p-5 rounded-lg shadow mb-4">
-            <h1 class="h6 text-uppercase font-weight-bold mb-4">Premium</h1>
-            <h2 class="h1 font-weight-bold">$100<span class="text-small font-weight-normal ml-2">/ month</span></h2>
-            <div class="custom-separator my-4 mx-auto bg-primary"></div>
-            <ul class="list-unstyled my-5 text-small text-left font-weight-normal">
-              <li class="mb-3">
-                <i class="fa fa-check mr-2 text-primary"></i> You can post your items that you want
-              </li>
-              <li class="mb-3">
-                <i class="fa fa-check mr-2 text-primary"></i> You can post unlimited items that you want if you charge per month
-              </li>
-              <li class="mb-3">
-                <i class="fa fa-check mr-2 text-primary"></i> We will give you a discount every month 2.5%
-              </li>
-              <li class="mb-3">
-                <i class="fa fa-check mr-2 text-primary"></i> Nam libero tempore
-              </li>
-              <li class="mb-3">
-                <i class="fa fa-check mr-2 text-primary"></i> Sed ut perspiciatis
-              </li>
-              <li class="mb-3 text-muted">
-                <i class="fa fa-times mr-2"></i>
-                <del>Sed ut perspiciatis</del>
-              </li>
-            </ul>
-            <a href="/charge">
-              <button class="btn btn-primary btn-block shadow rounded-pill">Buy Now</button>
-            </a>
-          </div>
-  
+          </router-link>
         </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
+
+<script>
+import { loadStripe } from '@stripe/stripe-js';
+import api from '../api';
+
+export default {
+  data() {
+    return {
+        plans: [
+        { name: 'Basic', price: "$15", features: ['Unlimited product posts', 'Charge if posts exceed 10', 'Easy and continuous posting'] },
+        { name: 'Premium', price: "$50", features: ['Unlimited product posts', 'No additional charges for unlimited posts', '2.5% discount every month', 'Additional premium features'] }
+      ]
+    };
+  },
   
-  <script>
-  import { loadStripe } from '@stripe/stripe-js';
-  import api from '../api';
   
-  export default {
-    data() {
-      return {
-        stripe: null,
-        elements: null,
-        cardElement: null,
-        amount: 0,
-      };
-    },
-    async mounted() {
-      // Load Stripe
-      this.stripe = await loadStripe('pk_test_51PZ1M92KMJfWGuxDbOviEzE7eldlNfD2vLtPaweyyJPTAJEmEy7APiGipQYtve6F0MNP4iJTAxK15MAS9R25DRyG00GuyPPGZh'); // Replace with your publishable key
-  
-      // Create an instance of Elements
-      this.elements = this.stripe.elements();
-  
-      // Create a Card Element and mount it to the #card-element div
-      this.cardElement = this.elements.create('card', {
-        style: {
-          base: {
-            iconColor: '#666EE8',
-            color: '#31325F',
-            fontWeight: 400,
-            fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif',
-            fontSize: '16px',
-            '::placeholder': {
-              color: '#CFD7E0',
-            },
-          },
-        },
-      });
-      this.cardElement.mount('#card-element');
-  
-      // Handle real-time validation errors from the card Element
-      this.cardElement.on('change', (event) => {
-        const displayError = document.getElementById('card-errors');
-        if (event.error) {
-          displayError.textContent = event.error.message;
-        } else {
-          displayError.textContent = '';
-        }
-      });
-    },
-    methods: {
-      async submitPayment() {
-        try {
-          // Create a Payment Intent on the backend
-          const { data } = await this.ChargeMoney({
-            amount: this.amount * 100, // Convert amount to cents
-          });
-  
-          // Confirm the Card Payment
-          const { error, paymentIntent } = await this.stripe.confirmCardPayment(data.clientSecret, {
-            payment_method: {
-              card: this.cardElement,
-            }
-          });
-  
-          if (error) {
-            // Show error to your customer
-            console.error(error.message);
-            const displayError = document.getElementById('card-errors');
-            displayError.textContent = error.message;
-          } else {
-            if (paymentIntent.status === 'succeeded') {
-              console.log('Payment succeeded:', paymentIntent);
-              // Show a success message to your customer
-              alert('Payment succeeded!');
-            }
-          }
-        } catch (error) {
-          console.error('Error creating payment intent:', error);
-        }
-      },
-      async ChargeMoney(amount) {
-        return api.post('/stripe/payment', { amount });
-      },
-    }
-  };
-  </script>
-  
-  <style scoped>
-  .plan {
-    border-radius: 10px;
-  }
-  </style>
-  
+};
+</script>
+
+<style scoped>
+.plans {
+  background: #f8f9fa;
+  padding: 50px 0;
+}
+
+.plan {
+  width: 320px; 
+  height: 84vh;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.plan:hover {
+  transform: scale(1.05);
+}
+
+.custom-separator {
+  width: 50px;
+  height: 4px;
+  background-color: #007bff;
+  margin: 20px auto;
+}
+
+.card-element {
+  padding: 10px;
+  border: 1px solid #e6e6e6;
+  border-radius: 4px;
+}
+
+#card-errors {
+  color: red;
+  margin-top: 10px;
+}
+</style>

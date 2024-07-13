@@ -10,7 +10,7 @@
         <input type="email" class="form-control" v-model="email" required />
         <span v-if="emailError" class="text-danger">{{ emailError }}</span>
       </div>
-      <div class="mb-3">
+      <div class="mb-3"> 
         <label for="exampleInputPassword1" class="form-label fw-bold">Password</label>
         <div class="d-flex align-items-center">
           <input type="password" class="form-control flex-grow-1" v-model="password" required />

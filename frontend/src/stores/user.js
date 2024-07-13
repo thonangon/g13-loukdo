@@ -7,34 +7,51 @@ export const useUserStore = defineStore({
   state: () => ({
     accountUser: null,
     tokenUser: null,
-    numProducts: 0, // Example: Number of products user can post
+    post_count: 0, 
+    has_paid: false, 
   }),
   actions: {
     setUser(data) {
       this.accountUser = data.accountUser;
       this.tokenUser = data.tokenUser;
+      this.post_count = data.post_count || 0;
+      this.has_paid = data.has_paid || false;
       
       localStorage.setItem('user_token', data.userToken);
       localStorage.setItem('userAccount', JSON.stringify(data.accountUser));
+      localStorage.setItem('post_count', this.post_count);
+      localStorage.setItem('has_paid', this.has_paid);
     },
     loadUser() {
       const token = localStorage.getItem('user_token');
       const accountUser = localStorage.getItem('userAccount');
+      const postCount = localStorage.getItem('post_count');
+      const hasPaid = localStorage.getItem('has_paid');
       if (token && accountUser) {
         this.tokenUser = token;
         this.accountUser = JSON.parse(accountUser);
+        this.post_count = parseInt(postCount, 10) || 0;
+        this.has_paid = hasPaid === 1;
       }
     },
     logout() {
       this.accountUser = null;
       this.tokenUser = null;
-      this.numProducts = 0; // Reset number of products on logout
+      this.post_count = 0; 
+      this.has_paid = 0; 
       localStorage.removeItem('user_token');
       localStorage.removeItem('userAccount');
+      localStorage.removeItem('post_count');
+      localStorage.removeItem('has_paid');
     },
-    updateUserStatus() {
-      // Example: Update numProducts after successful payment
-      this.numProducts = Math.max(this.numProducts - 1, 0);
+    updatePostCount(count) {
+      this.post_count = count;
+      localStorage.setItem('post_count', count);
     },
+    updateHasPaid(status) {
+      this.has_paid = status;
+      localStorage.setItem('has_paid', status);
+    }
+   
   },
 });
