@@ -1,293 +1,141 @@
 <template>
-  <div class="div bg-white sticky-xl-top">
-    <div class="navbar-shadow">
-      <div class="container">
-        <nav class="navbar navbar-expand-lg d-flex flex-column">
-          <div class="container-fluid">
-            <button
-              class="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarNavDropdown"
-              aria-controls="navbarNavDropdown"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-              <div class="d-flex w-100 justify-content-between align-items-center">
-                <!-- Left side of the navbar -->
-                <div class="d-flex flex-grow-1">
-                  <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)"><i class="fas fa-home"></i> Home</router-link>
-                  <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(1)"><i class="fas fa-box me-2"></i>Products</router-link>
-                  <router-link to="/Createstore" class="me-5 text-secondary mb-0 custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)">Store</router-link>
-                </div>
-
-                <!-- Logo -->
-                <a class="navbar-brand mx-auto logo" href="#">
-                  <img class="ms-auto logo-img" src="../../assets/images/lOUKDO.png" alt="Logo" />
-                </a>
-
-                <!-- Profile -->
-                <div
-                  class="d-flex justify-content-end align-items-center profile-section"
-                  style="width: 40%"
-                >
-                  <div class="iconenav d-flex align-items-center">
-                    <i v-if="store_user.accountUser"  class="bi bi-bell-fill me-3"></i>
-                    <router-link v-if="store_user.accountUser"  to="/card" class="position-relative">
-                      <i class="bi bi-cart-dash me-2"></i>
-                      <span
-                        class="badge bg-success position-absolute top-0 start-100 translate-middle"
-                      >
-                      {{ numcart }}
-                      </span>
-                    </router-link>
-                  </div>
-                  <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size"><button class="btn btn-secondary m-1">Login</button></router-link>
-                  <router-link v-if="!store_user.accountUser" to="/register" class="nav-link mr-0 custom-font-size"><button class="btn btn-primary m-1">Register</button></router-link>
-                  <div v-else class="dropdown d-flex align-items-center profile-container">
-                    <span class="profile-name">{{ store_user.accountUser.name.toUpperCase() }}</span>
-                    <img v-if="store_user.accountUser.profile" :src="profile_url(store_user.accountUser.profile)" class="text-dark custom-font-size nav-link profile-img" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">
-                    <img v-else :src="profileImageUrl" class="text-dark custom-font-size nav-link profile-img" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
-                      <li>
-                        <router-link class="dropdown-item" to="/profile" active-class="active"><i class="fas fa-user me-2"></i>Profile</router-link>
-                      </li>
-                      <li>
-                        <button class="dropdown-item" @click="logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </nav>
+  <div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <div class="bg-dark border-right" id="sidebar-wrapper">
+      <div class="sidebar-heading text-light">Admin Dashboard</div>
+      <div class="list-group list-group-flush">
+        <router-link to="/admin/overview" class="list-group-item list-group-item-action bg-dark text-light">
+          <i class="bi bi-house me-2"></i> Overview
+        </router-link>
+        <router-link to="/admin/orders" class="list-group-item list-group-item-action bg-dark text-light">
+          <i class="bi bi-cart-dash me-2"></i> Orders
+        </router-link>
+        <router-link to="/admin/products" class="list-group-item list-group-item-action bg-dark text-light">
+          <i class="bi bi-box me-2"></i> Products
+        </router-link>
+        <router-link to="/admin/customers" class="list-group-item list-group-item-action bg-dark text-light">
+          <i class="bi bi-person-lines-fill me-2"></i> Customers
+        </router-link>
+        <router-link to="/admin/reports" class="list-group-item list-group-item-action bg-dark text-light">
+          <i class="bi bi-bar-chart me-2"></i> Reports
+        </router-link>
+        <router-link to="/admin/settings" class="list-group-item list-group-item-action bg-dark text-light">
+          <i class="bi bi-gear me-2"></i> Settings
+        </router-link>
+        <router-link to="/logout" class="list-group-item list-group-item-action bg-dark text-light">
+          <i class="bi bi-box-arrow-right me-2"></i> Logout
+        </router-link>
       </div>
     </div>
-    
-    <div class="container">
-      <nav v-if="ifProduct" class="d-flex">
-        <ul v-for="cate in listCategories" :key="cate.id" class="nav nav-tabs">
-          <li class="nav-item">
-            <router-link class="nav-link" active-class="navbar-shadow active" aria-current="page" :to="{ name: 'product/category', params: { id: cate.id} }" >{{cate.category_name}}</router-link>
-          </li>
-        </ul>
-      </nav>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+      <b-navbar toggleable="lg" type="light" variant="light" class="border-bottom bg-white shadow-sm">
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+        <b-navbar-brand href="#">Admin Dashboard</b-navbar-brand>
+        <b-collapse id="nav-collapse" is-nav>
+          <b-navbar-nav class="ml-auto d-flex align-items-center">
+            <b-nav-item class="mx-3 position-relative">
+              <i class="bi bi-bell" style="font-size: 1.5rem;"></i>
+              <span class="badge badge-danger position-absolute top-0 start-100 translate-middle">3</span>
+            </b-nav-item>
+            <b-nav-item-dropdown right>
+              <template #button-content>
+                <em>Admin</em>
+              </template>
+              <b-dropdown-item href="#">Profile</b-dropdown-item>
+              <b-dropdown-item href="#">Settings</b-dropdown-item>
+              <b-dropdown-item href="#">Logout</b-dropdown-item>
+            </b-nav-item-dropdown>
+          </b-navbar-nav>
+        </b-collapse>
+      </b-navbar>
+
+      <div class="container-fluid mt-4">
+        <router-view></router-view>
+      </div>
     </div>
+    <!-- /#page-content-wrapper -->
   </div>
 </template>
 
 <script>
-import { useUserStore } from '@/stores/user.js';
-import axios from 'axios';
-import { computed } from 'vue';
-import api from '@/views/api.js';
-
 export default {
-  data(){
-    return{
-      ifProduct: false,
-      numcart:0,
-      listCategories: null,
-    }
-  },  
-  mounted() {
-    this.loadCart();
-    this.getListCate();
-  },
-
-  setup() {
-    const store_user = useUserStore()
-    store_user.loadUser() // Ensure user data is loaded from localStorage
-
-    const logout = async () => {
-      try {
-        await axios.post(
-          'http://127.0.0.1:8000/api/logout',
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${store_user.tokenUser}`
-            }
-          }
-        )
-        store_user.logout()
-        window.location.href = '/' // Redirect to login page after logout
-      } catch (error) {
-        console.error('Logout failed:', error)
-      }
-    }
-
-    const profileImageUrl = computed(() => {
-      if (store_user.accountUser && store_user.accountUser.name) {
-        const name = store_user.accountUser.name
-        const initials = `${name[0]}${name[name.length - 1]}`.toUpperCase()
-        return `https://dummyimage.com/100x100/000/fff&text=${initials}`
-      }
-      return '../../assets/images/Male User.png'
-    })
-
-    return {
-      store_user,
-      logout,
-      profileImageUrl,
-    };
-  },
-  methods: {
-    async getListCate(){
-      try{
-        const response = await api.listCategories();
-        this.listCategories = response.data.data;
-      }catch(error){
-        console.log(error);
-      }
-    },
-    cate_id(id){
-      const store_user = useUserStore()
-      store_user.getCateProId(id);
-
-      // this.$router.push({name:productCategory, id:id})
-    },
-    isProduct(isProduct){
-      if(isProduct == 1){
-        this.ifProduct = true;
-      }else{
-        this.ifProduct = false;
-      }
-    },
-    profile_url(filename){
-      return api.profile(filename)
-    },
-    loadCart() {
-      this.cart = JSON.parse(localStorage.getItem('cart')) || 0;
-      this.numcart = this.cart.length;
-    },
-  },
-  created() {
-  this.loadCart();
-},
+  name: 'AdminLayout'
 };
 </script>
 
-<style>
-/* Add your CSS styling here */
-.profile-container {
-  position: relative;
+<style scoped>
+#wrapper {
   display: flex;
-  align-items: center;
+  align-items: stretch;
 }
 
-.profile-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: transform 0.3s;
+#sidebar-wrapper {
+  min-height: 100vh;
+  width: 250px;
+  background-color: #232f3e;
 }
 
-.profile-container:hover .profile-img {
-  transform: scale(1.1);
+#sidebar-wrapper .sidebar-heading {
+  padding: 1rem 1.25rem;
+  font-size: 1.5rem;
+  color: #fff;
 }
 
-.profile-name {
-  display: none;
+#sidebar-wrapper .list-group {
+  width: 100%;
+}
+
+#sidebar-wrapper .list-group-item {
+  background-color: #232f3e;
+  color: #fff;
+  border: none;
+}
+
+#sidebar-wrapper .list-group-item:hover {
+  background-color: #37475a;
+}
+
+#page-content-wrapper {
+  flex: 1;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+.b-navbar {
+  background-color: #fff !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.b-nav-item .badge {
+  font-size: 0.75rem;
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.position-relative {
+  position: relative;
+}
+
+.position-absolute {
   position: absolute;
-  top: 50%;
-  right: 0%;
-  transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 5px 10px;
-  border-radius: 5px;
-  white-space: nowrap;
-  pointer-events: none;
 }
 
-.profile-container:hover .profile-name {
-  display: block;
-}
-
-.custom-font-size {
-  font-size: 18px;
-  transition: color 0.3s, font-size 0.3s;
-}
-.custom-font-size:hover {
-  color: blue; /* Change text color to blue on hover */
-  /* font-size: 20px; */
-}
-.navbar-shadow {
-  box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.1);
-}
-.dropdown-item {
-  transition: color 0.3s, font-size 0.3s; /* Smooth transition for color and font-size */
-  font-size: 18px; /* Default font size */
-  color: black; /* Default text color */
-}
-.dropdown-item:hover {
-  color: blue; /* Change text color to blue on hover */
-  font-size: 20px; /* Increase font size on hover */
-}
-
-.logo-img {
-  max-height: 40px;
-  transition: max-height 0.3s;
-}
-.username {
-  font-size: 18px;
-  transition: font-size 0.3s;
-}
-.profile-img {
-  max-height: 60px;
-  transition: max-height 0.3s;
-}
-.iconenav {
-  margin-right: 10px;
-}
-
-.badge {
-  font-size: 10px; /* Adjust font size */
-  border-radius: 10px; /* Adjust border radius */
+.top-0 {
+  top: 0;
 }
 
 .start-100 {
-  left: 78% !important;
+  left: 100%;
 }
 
 .translate-middle {
-  transform: translate(-50%, -50%) !important;
+  transform: translate(-50%, -50%);
 }
-@media (max-width: 992px) {
-  .logo-img {
-    max-height: 30px;
-  }
-  .username {
-    font-size: 14px;
-  }
-  .profile-img {
-    max-height: 50px;
-  }
-  .custom-font-size {
-    font-size: 16px;
-  }
-}
-@media (max-width: 768px) {
-  .logo {
-    display: none;
-  }
-  .custom-font-size {
-    font-size: 16px;
-  }
-  .username {
-    font-size: 12px;
-  }
-  .profile-img {
-    max-height: 40px;
-  }
-  .profile-section {
-    width: auto;
-  }
+
+.me-2 {
+  margin-right: 0.5rem;
 }
 </style>

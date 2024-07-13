@@ -67,3 +67,16 @@ const { value: email, errorMessage: emailError } = useField('email')
   min-height: 100vh;
 }
 </style> -->
+<template>
+  <h1>dashboard</h1>
+</template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style>
+
+</style>

@@ -21,121 +21,130 @@ import editStore from '../views/PageStore/EditStore.vue'
 import productCategory from '../views/Products/ProductCategories.vue'
 
 // __________________ADMIN________________
-import admin from '../Admin.vue'
+// import admin from '../Admin.vue'
+import Loukdo from '../LoukDo.vue'
 
 const routes = [
-    { 
-        path: '/login',
-        name: 'login', 
-        component: LoginUser
-    },
     {
-        path: '/register',
-        name: 'register', 
-        component: register
-    },
-    { 
         path: '/',
         name: 'Home', 
-        component: Home,
-    },
-    { 
-        path: '/product',
-        name: 'home_pro', 
-        component: product
-    },
-    { 
-        path: '/product/:id',
-        name: 'produc_detail', 
-        component: produc_detail,
-        props: true
-    },
-  
-    { 
-        path: '/order',
-        name: 'order', 
-        component: CustomerOrder
-    },
-    { 
-        path: '/foget',
-        name: 'foget', 
-        component: ChangePassword
-    },
-    { 
-        path: '/product-post',
-        name:'product-post', 
-        component: UserPostProduct
-    },
-    {
-        path: '/profile',
-        name: 'profile', 
-        component: Viewprofile,
+        component: Loukdo,
         children: [
-            {
-                path: '/userprodcuts',
-                name: 'userprodcuts', 
-                component: userprodcuts
+            
+            { 
+                path: '/login',
+                name: 'login', 
+                component: LoginUser
             },
             {
-                path: '/booking',
-                name: 'booking', 
-                component: booking
+                path: '/register',
+                name: 'register', 
+                component: register
+            },
+            { 
+                path: '/',
+                name: 'Home', 
+                component: Home,
+            },
+            { 
+                path: '/product',
+                name: 'home_pro', 
+                component: product
+            },
+            { 
+                path: '/product/:id',
+                name: 'produc_detail', 
+                component: produc_detail,
+                props: true
+            },
+          
+            { 
+                path: '/order',
+                name: 'order', 
+                component: CustomerOrder
+            },
+            { 
+                path: '/foget',
+                name: 'foget', 
+                component: ChangePassword
+            },
+            { 
+                path: '/product-post',
+                name:'product-post', 
+                component: UserPostProduct
             },
             {
-                path: '/selling',
-                name: 'sellProduct', 
-                component: sellProduct
+                path: '/profile',
+                name: 'profile', 
+                component: Viewprofile,
+                children: [
+                    {
+                        path: '/userprodcuts',
+                        name: 'userprodcuts', 
+                        component: userprodcuts
+                    },
+                    {
+                        path: '/booking',
+                        name: 'booking', 
+                        component: booking
+                    },
+                    {
+                        path: '/selling',
+                        name: 'sellProduct', 
+                        component: sellProduct
+                    },
+                ]
+            },
+            
+            {
+                path: '/card',
+                name: 'card', 
+                component: addcard,
+                props: true
+            },
+            {
+                path: '/chats',
+                name: '/chats', 
+                component: userchats
+            },
+            {
+                path: '/payment',
+                name: 'payment',  
+                component: payment
+            },
+            {
+                path: '/product/category/:id',
+                name: 'product/category',
+                component: productCategory,
+                props: true
+            },
+            {
+                path: '/createstore',
+                name: 'createstore', 
+                component: Createstore
+            },
+            
+            {
+                path: '/editStore/:id',
+                name: 'editStore', 
+                component: editStore,
+                props: true
             },
         ]
-    },
-    
-    {
-        path: '/card',
-        name: 'card', 
-        component: addcard,
-        props: true
-    },
-    {
-        path: '/chats',
-        name: '/chats', 
-        component: userchats
-    },
-    {
-        path: '/payment',
-        name: 'payment',  
-        component: payment
-    },
-    {
-        path: '/product/category/:id',
-        name: 'product/category',
-        component: productCategory,
-        props: true
-    },
-    {
-        path: '/createstore',
-        name: 'createstore', 
-        component: Createstore
-    },
-    
-    {
-        path: '/editStore/:id',
-        name: 'editStore', 
-        component: editStore,
-        props: true
     },
 
     // ________________________Admin_________________________
 
-    {
-        path: '/admin/dashboard',
-        name: 'admin_dashboard',
-        component: () => admin,
-        children: [
-            // {
-            //     path: '/admin/users',
-            //     name: 'admin_users',
-            //     component: () => import('../views/Admin/Users.vue')
-            // },
+    // {
+        // path: '/admin',
+        // name: 'admin_dashboard',
+        // component: () => admin,
+        // children: [
+        //     {
+        //         path: '/dashboard',
+        //         name: 'admin_users',
+        //         component: () => import('../views/Admin/Auth/LoginView.vue')
+        //     },
             // {
             //     path: '/admin/products',
             //     name: 'admin_products',
@@ -151,8 +160,8 @@ const routes = [
             //     name: 'admin_pages',
             //     component: () => import('../views/Admin/Pages.vue')
             // },
-        ]
-    },
+        // ]
+    // },
 ]
 
 const router = createRouter({
