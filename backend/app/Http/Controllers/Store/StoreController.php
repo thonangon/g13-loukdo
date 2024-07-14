@@ -54,13 +54,14 @@ class StoreController extends Controller
 
         // Get the validated data
         $validatedData = $validator->validated();
-
+        $user = Auth::user();
         // Create new store instance
         $store = new Store([
             'name' => $validatedData['name'],
             'address' => $validatedData['address'],
             'description' => $validatedData['description'],
             'image' => $imageName,
+            'user_id' => $user->id,
         ]);
         $store->save();
         $store->image_url = $imageName ? asset('/api/stores/image/' . $imageName) : null;

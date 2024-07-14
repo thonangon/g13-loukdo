@@ -11,7 +11,7 @@ class Store extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name', 'address', 'description', 'image',
+        'name', 'address', 'description', 'image','user_id',
     ];
 
     /**
