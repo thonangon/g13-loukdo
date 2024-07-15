@@ -37,6 +37,7 @@ export default {
   name: "Login",
   data() {
     return {
+      admin:1,
       email: '',
       password: '',
       store_user: useUserStore(),
@@ -97,7 +98,14 @@ export default {
           localStorage.setItem('user_token', response.data.token);
           localStorage.setItem('userAccount', JSON.stringify(response.data.data));
 
-          this.$router.push('/');
+          console.log(response.data.data.id);
+          if(response.data.data.id == this.admin){
+            this.$router.push('/dashboard');
+            return;
+          }else{
+            this.$router.push('/');
+            return;
+          }
         } else {
           this.emailError = response.data.message;
         }

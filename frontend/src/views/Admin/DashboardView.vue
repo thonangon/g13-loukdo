@@ -1,14 +1,38 @@
-<script setup lang="ts">
-import AdminLayout from '@/Components/Layouts/AdminLayout.vue'
-</script>
 <template>
-  <AdminLayout
-    ><div class="flex flex-col bg-white justify-center rounded-lg h-[calc(100vh-150px)]">
-      <div class="text-center">
-        <h1 class="mb-4 text-4xl font-bold md:text-6xl">Welcome to Dashboard</h1>
-        <p class="mb-8 text-lg md:text-2xl">Your journey to excellence starts here.</p>
-        <p>Join Us Today and Get Started</p>
+  <div class="d-flex">
+    <!-- Sidebar -->
+    <div class="">
+      <div class="my-4 d-flex justify-content-between">
+        <div class="p-3 product card">
+          <h5 class="card-title">Product</h5>
+          <p class="card-text">Product content goes here. You can add more details about products.</p>
+        </div>
+        <div class="p-3 mx-2 users card">
+          <h5 class="card-title">Users</h5>
+          <p class="card-text">Users content goes here. You can add user information or user-related data.</p>
+        </div>
+        <div class="p-3 categories card">
+          <h5 class="card-title">Categories</h5>
+          <p class="card-text">Categories content goes here. Add details about different categories.</p>
+        </div>
       </div>
     </div>
-  </AdminLayout>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+     
+    </div>
+    <!-- /#page-content-wrapper -->
+  </div>
 </template>
+
+<script>
+export default {
+  name: 'AdminLayout'
+};
+</script>
+
+<style scoped>
+
+</style>
