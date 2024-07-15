@@ -100,7 +100,7 @@ export default {
 
           console.log(response.data.data.id);
           if(response.data.data.id == this.admin){
-            this.$router.push('/admin/dashboard');
+            this.$router.push('/dashboard');
             return;
           }else{
             this.$router.push('/');

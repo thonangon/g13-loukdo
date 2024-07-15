@@ -21,7 +21,7 @@ import editStore from '../views/PageStore/EditStore.vue'
 import productCategory from '../views/Products/ProductCategories.vue'
 
 // __________________ADMIN________________
-// import admin from '../Admin.vue'
+import admin from '../Admin.vue'
 import Loukdo from '../LoukDo.vue'
 
 const routes = [
@@ -135,21 +135,31 @@ const routes = [
 
     // ________________________Admin_________________________
 
-    // {
-        // path: '/admin',
-        // name: 'admin_dashboard',
-        // component: () => admin,
-        // children: [
-        //     {
-        //         path: '/dashboard',
-        //         name: 'admin_users',
-        //         component: () => import('../views/Admin/Auth/LoginView.vue')
-        //     },
-            // {
-            //     path: '/admin/products',
-            //     name: 'admin_products',
-            //     component: () => import('../views/Admin/Products.vue')
-            // },
+    {
+        path: '/admin',
+        name: 'admin_dashboard',
+        component: () => admin,
+        children: [
+            {
+                path: '/dashboard',
+                name: 'admin_users',
+                component: () => import('../views/Admin/DashboardView.vue')
+            },
+            {
+                path: '/products',
+                name: 'admin_products',
+                component: () => import('../views/Admin/Product/ProductList.vue'),
+            },
+            {
+                path: '/creategory',
+                name: 'admin_category',
+                component: () => import('../views/Admin/Product/Categories.vue')
+            },
+            {
+                path: '/users',
+                name: 'users',
+                component: () => import('../views/Admin/Auth/User.vue')
+            },
             // {
             //     path: '/admin/orders',
             //     name: 'admin_orders',
@@ -160,8 +170,8 @@ const routes = [
             //     name: 'admin_pages',
             //     component: () => import('../views/Admin/Pages.vue')
             // },
-        // ]
-    // },
+        ]
+    },
 ]
 
 const router = createRouter({

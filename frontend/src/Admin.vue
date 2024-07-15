@@ -2,27 +2,45 @@
   <div class="d-flex" id="wrapper">
     <!-- Sidebar -->
     <div class="bg-dark border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading text-light">Admin Dashboard</div>
+      <div class="sidebar-heading text-light py-4">Admin Dashboard</div>
       <div class="list-group list-group-flush">
-        <router-link to="/admin/overview" class="list-group-item list-group-item-action bg-dark text-light">
+        <router-link to="/dashboard" class="list-group-item list-group-item-action bg-dark text-light" active-class="active">
           <i class="bi bi-house me-2"></i> Overview
         </router-link>
-        <router-link to="/admin/orders" class="list-group-item list-group-item-action bg-dark text-light">
+        <router-link to="/admin/orders" class="list-group-item list-group-item-action bg-dark text-light" active-class="active">
           <i class="bi bi-cart-dash me-2"></i> Orders
         </router-link>
-        <router-link to="/admin/products" class="list-group-item list-group-item-action bg-dark text-light">
-          <i class="bi bi-box me-2"></i> Products
-        </router-link>
-        <router-link to="/admin/customers" class="list-group-item list-group-item-action bg-dark text-light">
+        <div class="btn-group border-none">
+          <router-link to="/products" class="list-group-item list-group-item-action bg-dark text-light border-start-0 border-end-0 border-top-0 rounded-0" active-class="active">
+            <i class="bi bi-box me-2"></i> Products
+          </router-link>
+          <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split rounded-0" active-class="active" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="visually-hidden">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu bg-dark rounded-0">
+            <!-- <li><a class="dropdown-item" href="/creategory">Categories</a></li> -->
+            <router-link to="/creategory" class="dropdown-item list-group-item list-group-item-action bg-dark text-light" active-class="active">
+              <i class="bi bi-box me-2"></i> Categories
+            </router-link>
+            <router-link to="/" class="dropdown-item list-group-item list-group-item-action bg-dark text-light" active-class="active">
+              <i class="bi bi-box me-2"></i> Categories
+            </router-link>
+            <router-link to="/" class="dropdown-item list-group-item list-group-item-action bg-dark text-light" active-class="active">
+              <i class="bi bi-box me-2"></i> Categories
+            </router-link>
+    
+          </ul>
+        </div>
+        <router-link to="/users" class="list-group-item list-group-item-action bg-dark text-light" active-class="active">
           <i class="bi bi-person-lines-fill me-2"></i> Customers
         </router-link>
-        <router-link to="/admin/reports" class="list-group-item list-group-item-action bg-dark text-light">
+        <router-link to="/admin/reports" class="list-group-item list-group-item-action bg-dark text-light" active-class="active">
           <i class="bi bi-bar-chart me-2"></i> Reports
         </router-link>
-        <router-link to="/admin/settings" class="list-group-item list-group-item-action bg-dark text-light">
+        <router-link to="/admin/settings" class="list-group-item list-group-item-action bg-dark text-light" active-class="active">
           <i class="bi bi-gear me-2"></i> Settings
         </router-link>
-        <router-link to="/logout" class="list-group-item list-group-item-action bg-dark text-light">
+        <router-link to="/logout" class="list-group-item list-group-item-action bg-dark text-light" active-class="active">
           <i class="bi bi-box-arrow-right me-2"></i> Logout
         </router-link>
       </div>
@@ -31,28 +49,35 @@
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
-      <b-navbar toggleable="lg" type="light" variant="light" class="border-bottom bg-white shadow-sm">
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-        <b-navbar-brand href="#">Admin Dashboard</b-navbar-brand>
-        <b-collapse id="nav-collapse" is-nav>
-          <b-navbar-nav class="ml-auto d-flex align-items-center">
-            <b-nav-item class="mx-3 position-relative">
-              <i class="bi bi-bell" style="font-size: 1.5rem;"></i>
-              <span class="badge badge-danger position-absolute top-0 start-100 translate-middle">3</span>
-            </b-nav-item>
-            <b-nav-item-dropdown right>
-              <template #button-content>
+      <nav class="navbar navbar-expand-lg navbar-custom border-bottom shadow-sm">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-collapse" aria-controls="nav-collapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#">Admin Dashboard</a>
+        <div class="collapse navbar-collapse" id="nav-collapse">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item mx-3">
+              <a class="nav-link notification-icon" href="#">
+                <i class="bi bi-bell"></i>
+                <span class="badge notification-badge">3</span>
+              </a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <em>Admin</em>
-              </template>
-              <b-dropdown-item href="#">Profile</b-dropdown-item>
-              <b-dropdown-item href="#">Settings</b-dropdown-item>
-              <b-dropdown-item href="#">Logout</b-dropdown-item>
-            </b-nav-item-dropdown>
-          </b-navbar-nav>
-        </b-collapse>
-      </b-navbar>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#">Profile</a>
+                <a class="dropdown-item" href="#">Settings</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Logout</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
 
-      <div class="container-fluid mt-4">
+      <div class="container-fluid">
         <router-view></router-view>
       </div>
     </div>
@@ -66,76 +91,99 @@ export default {
 };
 </script>
 
-<style scoped>
-#wrapper {
-  display: flex;
-  align-items: stretch;
-}
-
-#sidebar-wrapper {
-  min-height: 100vh;
-  width: 250px;
-  background-color: #232f3e;
-}
-
-#sidebar-wrapper .sidebar-heading {
-  padding: 1rem 1.25rem;
-  font-size: 1.5rem;
-  color: #fff;
-}
-
-#sidebar-wrapper .list-group {
-  width: 100%;
-}
-
-#sidebar-wrapper .list-group-item {
-  background-color: #232f3e;
-  color: #fff;
-  border: none;
-}
-
-#sidebar-wrapper .list-group-item:hover {
-  background-color: #37475a;
-}
-
-#page-content-wrapper {
-  flex: 1;
-  padding: 20px;
+<style>
+/* Global Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #f8f9fa;
 }
 
-.b-navbar {
-  background-color: #fff !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+#wrapper {
+  display: flex;
+  width: 100%;
+  height: 100vh;
 }
 
-.b-nav-item .badge {
-  font-size: 0.75rem;
-  background-color: #dc3545;
-  color: #fff;
+/* Sidebar Styles */
+#sidebar-wrapper {
+  width: 250px;
 }
 
-.position-relative {
+.sidebar-heading {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.list-group-item {
+  font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.list-group-item-action:hover {
+  background-color: #495057 !important;
+}
+
+/* Active Class with Background Blur Effect */
+.list-group-item.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #495057;
+  filter: blur(8px);
+  z-index: -1;
+}
+
+.list-group-item.active {
+  background-color: transparent !important;
+  position: relative;
+  z-index: 0;
+}
+
+/* Navbar Styles */
+.navbar-custom {
+  background-color: #343a40 !important;
+  color: #ffffff;
+}
+
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link,
+.navbar-custom .dropdown-item {
+  color: #ffffff;
+}
+
+.navbar-custom .nav-link:hover,
+.navbar-custom .dropdown-item:hover {
+  color: #ffc107;
+}
+
+.notification-icon {
+  font-size: 1.5rem;
   position: relative;
 }
 
-.position-absolute {
+.notification-badge {
+  background-color: #dc3545;
+  border-radius: 50%;
   position: absolute;
+  top: -5px;
+  right: -10px;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  color: white;
 }
 
-.top-0 {
-  top: 0;
+/* Content Styles */
+#page-content-wrapper {
+  flex: 1;
+  overflow-y: auto;
 }
 
-.start-100 {
-  left: 100%;
-}
-
-.translate-middle {
-  transform: translate(-50%, -50%);
-}
-
-.me-2 {
-  margin-right: 0.5rem;
+.container-fluid {
+  padding: 20px;
 }
 </style>
