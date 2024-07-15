@@ -18,6 +18,9 @@ export default {
   imageUrlProduct(filename) {
     return `${API_URL}/products/image/${filename}`;
   },
+  imageUrlStore(filename) {
+    return `${API_URL}/stores/image/${filename}`;
+  },
   
   imageComment(filename) {
     return `${URL_PORT}/images/product/${filename}`;
@@ -60,15 +63,43 @@ export default {
     });
   },
 
+
   chatrooms(headers) {
     return axios.get(`${API_URL}/message/chat/rooms`, {
       headers: headers
     });
   },
   getAllCate(){
-    return axios.get(`${API_URL}/categories/list`);
+    return axios.get(`${API_URL}/categories/list`);},
+  createStore(formData, config){
+    return axios.post(`${API_URL}/store/create`, formData, config)
   },
+  getStores(){
+    return axios.get(`${API_URL}/store/list`);
+  },
+  getStore(storeId) {
+    return axios.get(`${API_URL}/store/show/${storeId}`);
+  },
+  updateStore(storeId, formData) {
+    return axios.put(`${API_URL}/store/update/${storeId}`, formData);
+  },
+  deleteStore(storeId) {
+    return axios.delete(`${API_URL}/store/remove/${storeId}`);
+  },
+  imageUrlStore(filename) {
+    return `${API_URL}/stores/image/${filename}`;
+  },
+  deleteProduct(id, config) {
+    return axios.delete(`${API_URL}/products/remove/${id}`, config);
+  },
+// __________________________pro_________________
 
+  updateProduct(pro_id, data, token) {
+    const headers = {
+      'Authorization': `Bearer ${token}`
+    };
+    return axios.post(`${API_URL}/products/update/${pro_id}`, data, { headers: headers });
+  },
    // New CRUD methods for OrderProduct
    listOrderProducts(headers) {
     return axios.get(`${API_URL}/order/list`, { headers: headers });
@@ -95,6 +126,22 @@ export default {
       'Authorization': `Bearer ${token}`
     };
     return axios.put(`${API_URL}/order/update/status/${orderId}`, { status: status }, { headers: headers });
-  }
+  },
+
+  // ____________________CATEGORY________________
+  listCategories(){
+    return axios.get(`${API_URL}/categories/list`);
+  },
+
+  productCategory(cateId) {
+    return axios.get(`${API_URL}/products/category/${cateId}`);
+  },
+
+  // ______________________Rattings__________________
+  rattingProduct(productId, rating, headers) {
+    console.log(rating);
+    return axios.post(`${API_URL}/products/ratting/${productId}`, { rating: rating }, { headers: headers });
+  },
+
 };
 

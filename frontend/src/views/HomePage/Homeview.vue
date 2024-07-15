@@ -1,14 +1,14 @@
 <template>
-  <div class="container">
+  <div class="">
     <div id="slid-show" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <div class="container">
+          <div class="">
             <div class="row align-items-center">
               <div class="col-md-6">
                 <div class="carousel-caption text-center">
                   <h1>Welcome For All Owner Business And Individual For Selling</h1>
-                  <p><a class="btn btn-primary btn-lg mt-5" href="#" role="button">Shop Now</a></p>
+                  <p><a class="btn btn-primary btn-lg mt-5" href="/product" role="button">Shop Now</a></p>
                 </div>
               </div>
               <div class="col-md-6 position-relative">
@@ -19,14 +19,14 @@
           </div>
         </div>
         <div class="carousel-item">
-          <div class="container">
+          <div class="">
             <div class="row align-items-center">
               <div class="col-md-6">
                 <div class="carousel-caption text-center">
                   <h1>New Arrivals!</h1>
                   <p class="content">Post for selling everywhere and everytime</p>
                   <p>
-                    <a class="btn btn-primary btn-lg mt-5" href="#" role="button">Explore Now</a>
+                    <a class="btn btn-primary btn-lg mt-5" href="/product" role="button">Explore Now</a>
                   </p>
                 </div>
               </div>
@@ -49,7 +49,7 @@
                     discarded.
                   </p>
                   <p>
-                    <a class="btn btn-primary btn-lg mt-5" href="#" role="button">Explore Now</a>
+                    <a class="btn btn-primary btn-lg mt-5" href="/product" role="button">Explore Now</a>
                   </p>
                 </div>
               </div>
@@ -109,14 +109,15 @@
     </div>
     
     <div class="mt-5">
-      <h3 class="border-bottom mb-5">Recently Add New Products</h3>
-      <div class="row">
-        <div class="col-md-3" v-for="(product, index) in products" :key="index">
-            <cards_product :searchQuery="searchQuery" :product="product"/>
+      <h3 class="container  border-bottom mb-5">Recently Add New Products</h3>
+      <div class="scrollable-container">
+        <div class="row">
+          <div class="col-md-3 mt-3" v-for="(product, index) in products" :key="index">
+            <cards_product :searchQuery="searchQuery" :product="product" />
+          </div>
         </div>
       </div>
     </div>
-
     <div>
       <div class="container mt-5">
         <h3>The Popular Categories</h3>
@@ -124,7 +125,7 @@
       </div>
     </div>
 
-    <div class="container mt-5">
+    <div class="mt-5">
       <div class="row align-items-center">
         <div class="col-md-6">
           <div class="text-center">
@@ -141,7 +142,7 @@
             <p><a class="btn btn-primary btn-lg mt-5" href="#" role="button">Explore Now</a></p>
           </div>
         </div>
-        <div class="col-md-6 position-relative">
+        <div class="container col-md-6 position-relative">
           <img src="../../assets/images/reuse.jpg" class="img-fluid" alt="Shoes" />
         </div>
       </div>
@@ -249,4 +250,28 @@ body {
   background-color: #138496;
   border-color: #117a8b;
 }
+
+
+.scrollable-container {
+  height: calc(1.8 * (250px + 0.5rem));
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);
+
+  overflow-x: hidden;
+}
+
+.scrollable-container::-webkit-scrollbar {
+  width: 2px;
+} 
+
+.scrollable-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+} 
 </style>

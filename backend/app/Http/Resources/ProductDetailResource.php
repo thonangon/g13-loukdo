@@ -2,11 +2,13 @@
 
 namespace App\Http\Resources;
 
+use App\Models\ProductUserRating;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Models\User;
 use App\Models\CommentProduct;
 use App\Models\replyComment;
 use App\Models\Category;
+
 
 class ProductDetailResource extends JsonResource
 {
@@ -19,7 +21,7 @@ class ProductDetailResource extends JsonResource
     public function toArray($request)
     {
         // Load owner details
-        $owner = User::select('id', 'name', 'email', 'profile')
+        $owner = User::select('id', 'name', 'email', 'profile', 'user_qrimage')
                     ->where('id', $this->user_id)
                     ->first();
 
@@ -38,6 +40,30 @@ class ProductDetailResource extends JsonResource
         $reply = replyComment::select('id', 'comment_id', 'user_id','text')
         ->where('comment_id', $this->id)
         ->get();
+        $rating = ProductUserRating::select('id','product_id', 'rating')->where('product_id', $this->id)->count();
+
+        $ratings = ProductUserRating::select('rating', \DB::raw('count(*) as count'))
+            ->where('product_id', $this->id)
+            ->groupBy('rating')
+            ->get();
+
+            // Convert the results to a collection with rating as key and count as value
+            $ratingsCount = $ratings->pluck('count', 'rating');
+
+            // Calculate the total number of ratings
+            $totalRatings = $ratingsCount->sum();
+
+            // Calculate percentages for each rating level
+            $oneStarPercent = $totalRatings > 0 ? ($ratingsCount->get(1, 0) / $totalRatings) * 100 : 0;
+            $twoStarsPercent = $totalRatings > 0 ? ($ratingsCount->get(2, 0) / $totalRatings) * 100 : 0;
+            $threeStarsPercent = $totalRatings > 0 ? ($ratingsCount->get(3, 0) / $totalRatings) * 100 : 0;
+            $fourStarsPercent = $totalRatings > 0 ? ($ratingsCount->get(4, 0) / $totalRatings) * 100 : 0;
+            $fiveStarsPercent = $totalRatings > 0 ? ($ratingsCount->get(5, 0) / $totalRatings) * 100 : 0;
+
+            // Determine the top star rating by finding the rating with the highest count
+            $topStars = $ratingsCount->isEmpty() ? null : $ratingsCount->sortDesc()->keys()->first();
+
+
 
 
         return [
@@ -53,11 +79,23 @@ class ProductDetailResource extends JsonResource
                     'name' => $owner->name,
                     'email' => $owner->email,
                     'profile' => $owner->profile,
+                    'qrimage' => $owner->user_qrimage,
                 ] : null,
                 'category' => $category ? [
                     'id' => $category->id,
                     'category_name' => $category->category_name,
                 ] : null,
+                'ratting' => [
+                    'raters' => $rating,
+                    'levels'=>[
+                        '1-Star' => $oneStarPercent,
+                        '2-Stars' => $twoStarsPercent,
+                        '3-Stars' => $threeStarsPercent,
+                        '4-Stars' => $fourStarsPercent,
+                        '5-Stars' => $fiveStarsPercent,
+                    ],
+                    'topRating' => $topStars,
+                ],
                 'comments' => $comments->map(function ($comment) {
                     return [
                         'id' => $comment->id,

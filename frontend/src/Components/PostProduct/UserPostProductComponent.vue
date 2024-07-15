@@ -144,8 +144,8 @@ export default {
         formData.append('image', this.image);
         formData.append('category_id', this.category); // Ensure this matches the selected category
 
-        const token = localStorage.getItem('authToken');
-
+        const token = localStorage.getItem('authToken'); // Assuming you store JWT token in localStorage
+        
         const response = await api.createProduct(formData, {
           headers: {
             'Content-Type': 'multipart/form-data',

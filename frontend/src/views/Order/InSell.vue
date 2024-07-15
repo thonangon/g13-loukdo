@@ -49,20 +49,15 @@
   
         <div class="col-lg-4" style="width: 25%;">
             <div class="d-flex flex-column-reverse" style="height: calc(2 * (250px + 1rem)); overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);">
-                <div v-for="product in products" :key="product.id" class="mb-3">
-                <div class="card h-100 w-80 shadow-sm">
-                    <img :src="product.image" class="card-img-top" alt="Product Image">
-                    <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text">{{ product.description }}</p>
-                    <div class="mt-auto">
-                        <router-link :to="'/product/' + product.id" class="btn btn-primary w-100">View Product</router-link>
-                    </div>
-                    </div>
+              <div class="scrollable-container">
+                <div class="">
+                  <div class="" v-for="(product, index) in products" :key="index">
+                    <cards_product :searchQuery="searchQuery" :product="product" />
+                  </div>
                 </div>
-                </div>
+              </div>
             </div>
-            </div>
+        </div>
       </div>
     </div>
   </template>
@@ -70,8 +65,12 @@
   <script>
   import { useUserStore } from '@/stores/user.js';
   import api from "@/views/api.js";
+  import cards_product from '@/Components/Card/CardComponent.vue'
   
   export default {
+    components:{
+      cards_product
+    },
     data() {
       return {
         store_user: useUserStore(),
@@ -83,6 +82,19 @@
         ],
         currentSeller: null,
         pastOrder: []
+      }
+    },
+
+    async created() {
+      try {
+        const response = await api.listProduct()
+        if (response.data.status) {
+          this.products = response.data.data
+        } else {
+          console.error('Error fetching products: ', response.data.message)
+        }
+      } catch (error) {
+        console.error('API error: ', error)
       }
     },
     

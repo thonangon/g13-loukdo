@@ -10,10 +10,12 @@ use App\Models\ProductUserRating;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Category;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\ProductCateResource;
 
 class ProductController extends Controller
 {
@@ -28,17 +30,36 @@ class ProductController extends Controller
         ]);
     }
 
+    public function productCate(string|int $id)
+    {
+        if (Category::find($id)){
+            $products = Product::where('category_id', $id)->get();
+            try{
+                return response()->json([
+                    'status' => true,
+                    'data' => ProductCateResource::collection($products),
+                ],200);   
+            }catch(Exception $e){
+                return response()->json(['message'=>['message', $e->getMessage()]], status:500);
+            }
+        }else{
+            return response()->json(['message'=> 'Category id not found'], status:400);
+        }
+
+    }
+
     public function store(Request $request)
-{
-    try {
-        // Validate incoming request
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:204800', // Adjust max file size as needed
-            'category_id' => 'required|exists:categories,id',
-        ]);
+    {
+        try {
+            // Validate incoming request
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'price' => 'required|numeric',
+                'quantity' => 'required|numeric',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:204800', // Adjust max file size as needed
+                'category_id' => 'required|exists:categories,id',
+            ]);
 
             // Handle validation errors
             if ($validator->fails()) {
@@ -67,6 +88,7 @@ class ProductController extends Controller
                 'name' => $request->name,
                 'description' => $request->description,
                 'price' => $request->price,
+                'quantity' => $request->quantity,
                 'image' => $imageName, // Store the file name
                 'category_id' => $request->category_id,
                 'user_id' => $user->id, // Associate the product with the authenticated user
@@ -178,16 +200,17 @@ class ProductController extends Controller
        }
    }
 
-   public function update(Request $request, Product $product)
+   public function update(Request $request, $id)
    {
        try {
            // Validate incoming request
            $validator = Validator::make($request->all(), [
-               'name' => 'required|string|max:255',
+               'name' => 'nullable|string|max:255',
                'description' => 'nullable|string',
-               'price' => 'required|numeric',
-               'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:204800', // Adjust max file size as needed
-               'category_id' => 'required|exists:categories,id',
+               'price' => 'nullable|numeric',
+               'quantity' => 'nullable|numeric',
+               'image' => 'nullable|mimes:jpeg,png,jpg,gif|max:2048', // Adjust max file size as needed
+               'category_id' => 'nullable|exists:categories,id',
            ]);
 
            // Handle validation errors
@@ -199,35 +222,50 @@ class ProductController extends Controller
                ], 422);
            }
 
+           // Find the product by ID
+           $product = Product::findOrFail($id);
+
            // Handle image update if provided
            if ($request->hasFile('image')) {
                // Delete previous image if exists
                if ($product->image) {
-                   Storage::delete('public/products/' . $product->image);
+                   $imagePath = public_path('/api/products/image/' . $product->image);
+                   if (file_exists($imagePath)) {
+                       unlink($imagePath);
+                   }
                }
 
                // Upload new image
                $file = $request->file('image');
-               $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-               $extension = $file->getClientOriginalExtension();
-               $fileNameToStore = $fileName . '_' . time() . '.' . $extension;
-               $file->storeAs('public/products', $fileNameToStore); // Store in storage/app/public/products
+               $imageName = time() . '_' . $file->getClientOriginalName();
+               $file->move(public_path('/api/products/image/'), $imageName);
 
                // Update image field in product
-               $product->image = $fileNameToStore;
+               $product->image = $imageName;
            }
 
            // Update other fields
-           $product->name = $request->name;
-           $product->description = $request->description;
-           $product->price = $request->price;
-           $product->category_id = $request->category_id;
+           if ($request->has('name')) {
+               $product->name = $request->name;
+           }
+           if ($request->has('description')) {
+               $product->description = $request->description;
+           }
+           if ($request->has('price')) {
+               $product->price = $request->price;
+           }
+           if ($request->has('quantity')) {
+               $product->quantity = $request->quantity;
+           }
+           if ($request->has('category_id')) {
+               $product->category_id = $request->category_id;
+           }
 
            // Save the updated product
            $product->save();
 
            // Prepare the response with correct image URL if an image was uploaded
-           $product->image_url = $product->image ? asset('storage/products/' . $product->image) : null;
+           $product->image_url = $product->image ? asset('/api/products/image/' . $product->image) : null;
 
            // Return success response
            return response()->json([
@@ -244,7 +282,7 @@ class ProductController extends Controller
            ], 400);
        }
    }
-
+   
     public function destroy($id)
     {
         try {

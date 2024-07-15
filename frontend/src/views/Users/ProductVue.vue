@@ -1,16 +1,18 @@
 <template>
   <div>
     <cate_nav/>
-    <div class="row">
+    <div class="scrollable-container">
+      <div class="row">
         <div class="col-md-3" v-for="(product, index) in products" :key="index">
-            <cards_product :product="product"/>
+          <cards_product :product="product" />
         </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import cards_product from '@/Components/Card/CardComponent.vue';
+import cards_product from '@/Components/Card/CardProductUser.vue';
 import cate_nav from '@/Components/Form/CateNav.vue';
 import axios from 'axios';
 import { useUserStore } from "@/stores/user.js";

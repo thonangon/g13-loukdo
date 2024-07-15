@@ -1,70 +1,80 @@
 <template>
-  <div class="navbar-shadow sticky-xl-top">
-    <div class="container">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
+  <div class="div bg-white sticky-xl-top">
+    <div class="navbar-shadow">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg d-flex flex-column">
+          <div class="container-fluid">
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNavDropdown"
+              aria-controls="navbarNavDropdown"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
             <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <div class="d-flex w-100 justify-content-between align-items-center">
-              <!-- Left side of the navbar -->
-              <div class="d-flex flex-grow-1">
-                <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-home"></i> Home</router-link>
-                <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-box me-2"></i>Products</router-link>
-                <router-link to="/product-post" class="me-5 text-secondary mb-0 custom-font-size nav-link" active-class="text-dark active border-bottom">More...</router-link>
-              </div>
-
-              <!-- Logo -->
-              <a class="navbar-brand mx-auto logo" href="#">
-                <img class="ms-auto logo-img" src="../../assets/images/lOUKDO.png" alt="Logo" />
-              </a>
-
-              <!-- Profile -->
-              <div
-                class="d-flex justify-content-end align-items-center profile-section"
-                style="width: 40%"
-              >
-                <div class="iconenav d-flex align-items-center">
-                  <i class="bi bi-bell-fill me-3"></i>
-                  <router-link to="/card" class="position-relative">
-                    <i class="bi bi-cart-dash me-2"></i>
-                    <span
-                      class="badge bg-success position-absolute top-0 start-100 translate-middle"
-                    >
-                     {{ numcart }}
-                    </span>
-                  </router-link>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+              <div class="d-flex w-100 justify-content-between align-items-center">
+                <!-- Left side of the navbar -->
+                <div class="d-flex flex-grow-1">
+                  <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)"><i class="fas fa-home"></i> Home</router-link>
+                  <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(1)"><i class="fas fa-box me-2"></i>Products</router-link>
+                  <router-link to="/Createstore" class="me-5 text-secondary mb-0 custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)">Store</router-link>
                 </div>
-                <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size">Login</router-link>
-                <div v-else class="dropdown d-flex align-items-center profile-container">
-                  <span class="profile-name">{{ store_user.accountUser.name.toUpperCase() }}</span>
-                  <img v-if="store_user.accountUser.profile" :src="profile_url(store_user.accountUser.profile)" class="text-dark custom-font-size nav-link profile-img" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">
-                  <img v-else :src="profileImageUrl" class="text-dark custom-font-size nav-link profile-img" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
-                    <li>
-                      <router-link class="dropdown-item" to="/profile" active-class="active"><i class="fas fa-user me-2"></i>Profile</router-link>
-                    </li>
-                    <li>
-                      <router-link to="/product" class="dropdown-item text-secondary" active-class="active border-bottom"><i class="fas fa-box me-2"></i>Products</router-link>
-                    </li>
-                    <li>
-                      <button class="dropdown-item" @click="logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
-                    </li>
-                  </ul>
+
+                <!-- Logo -->
+                <a class="navbar-brand mx-auto logo" href="#">
+                  <img class="ms-auto logo-img" src="../../assets/images/lOUKDO.png" alt="Logo" />
+                </a>
+
+                <!-- Profile -->
+                <div
+                  class="d-flex justify-content-end align-items-center profile-section"
+                  style="width: 40%"
+                >
+                  <div class="iconenav d-flex align-items-center">
+                    <i v-if="store_user.accountUser"  class="bi bi-bell-fill me-3"></i>
+                    <router-link v-if="store_user.accountUser"  to="/card" class="position-relative">
+                      <i class="bi bi-cart-dash me-2"></i>
+                      <span
+                        class="badge bg-success position-absolute top-0 start-100 translate-middle"
+                      >
+                      {{ numcart }}
+                      </span>
+                    </router-link>
+                  </div>
+                  <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size"><button class="btn btn-secondary m-1">Login</button></router-link>
+                  <router-link v-if="!store_user.accountUser" to="/register" class="nav-link mr-0 custom-font-size"><button class="btn btn-primary m-1">Register</button></router-link>
+                  <div v-else class="dropdown d-flex align-items-center profile-container">
+                    <span class="profile-name">{{ store_user.accountUser.name.toUpperCase() }}</span>
+                    <img v-if="store_user.accountUser.profile" :src="profile_url(store_user.accountUser.profile)" class="text-dark custom-font-size nav-link profile-img" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">
+                    <img v-else :src="profileImageUrl" class="text-dark custom-font-size nav-link profile-img" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                      <li>
+                        <router-link class="dropdown-item" to="/profile" active-class="active"><i class="fas fa-user me-2"></i>Profile</router-link>
+                      </li>
+                      <li>
+                        <button class="dropdown-item" @click="logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </nav>
+      </div>
+    </div>
+    
+    <div class="container">
+      <nav v-if="ifProduct" class="d-flex">
+        <ul v-for="cate in listCategories" :key="cate.id" class="nav nav-tabs">
+          <li class="nav-item">
+            <router-link class="nav-link" active-class="navbar-shadow active" aria-current="page" :to="{ name: 'product/category', params: { id: cate.id} }" >{{cate.category_name}}</router-link>
+          </li>
+        </ul>
       </nav>
     </div>
   </div>
@@ -79,12 +89,14 @@ import api from '@/views/api.js';
 export default {
   data(){
     return{
-      // cart:[],
-      numcart:0
+      ifProduct: false,
+      numcart:0,
+      listCategories: null,
     }
   },  
   mounted() {
     this.loadCart();
+    this.getListCate();
   },
 
   setup() {
@@ -125,6 +137,27 @@ export default {
     };
   },
   methods: {
+    async getListCate(){
+      try{
+        const response = await api.listCategories();
+        this.listCategories = response.data.data;
+      }catch(error){
+        console.log(error);
+      }
+    },
+    cate_id(id){
+      const store_user = useUserStore()
+      store_user.getCateProId(id);
+
+      // this.$router.push({name:productCategory, id:id})
+    },
+    isProduct(isProduct){
+      if(isProduct == 1){
+        this.ifProduct = true;
+      }else{
+        this.ifProduct = false;
+      }
+    },
     profile_url(filename){
       return api.profile(filename)
     },
