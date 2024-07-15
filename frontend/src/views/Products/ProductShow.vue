@@ -5,7 +5,7 @@
     <div class="scrollable-container">
       <div class="row">
         <div class="col-md-3" v-for="(product, index) in filteredProducts" :key="index">
-          <cards_product :searchQuery="searchQuery" @productDeleted="removeProduct"  :product="product" />
+          <cards_product :searchQuery="searchQuery" :product="product" />
         </div>
       </div>
     </div>

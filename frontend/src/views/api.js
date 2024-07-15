@@ -7,6 +7,10 @@ export default {
   myaccount(headers){
     return axios.get(`${API_URL}/myaccount`, {headers: headers});
   },
+
+  listUsers(){
+    return axios.get(`${API_URL}/user/list`);
+  },
   
   listProduct() {
     return axios.get(`${API_URL}/products/list`);
@@ -137,10 +141,25 @@ export default {
     return axios.get(`${API_URL}/products/category/${cateId}`);
   },
 
+  createCategory(data) {
+    return axios.post(`${API_URL}/create/category`, data);
+  },
+
+  deleteCategory(cateId) {
+    return axios.delete(`${API_URL}/delete/category/${cateId}`);
+  },
+
   // ______________________Rattings__________________
   rattingProduct(productId, rating, headers) {
     console.log(rating);
     return axios.post(`${API_URL}/products/ratting/${productId}`, { rating: rating }, { headers: headers });
+  },
+
+
+  // __________________Admin_______________________
+
+  adminDeleteProduct(id) {
+    return axios.delete(`${API_URL}/product/remove/${id}`);
   },
 
 };

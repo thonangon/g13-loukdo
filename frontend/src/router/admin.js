@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
-import userprodcuts from '../views/Users/ProductVue.vue'
+import dashboad from ''
 
 const routes = [
    
