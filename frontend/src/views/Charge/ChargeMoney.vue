@@ -30,7 +30,7 @@
               <i class="fas fa-check-circle mr-2 text-primary"></i>{{ feature }}
             </li>
           </ul>
-          <router-link :to="{ name: '/charge', params: { selectedPlan: plan }}">
+          <router-link :to="{ name: '/charge', params: { selectedPlan: plan.name }}">
             <button class="btn btn-primary btn-block shadow rounded-pill">Buy Now</button>
           </router-link>
         </div>

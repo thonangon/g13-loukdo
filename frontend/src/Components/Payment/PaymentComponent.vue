@@ -48,7 +48,7 @@
           <button type="button" @click="closeModal" class="close-button">&times;</button>
         </div>
         <div class="custom-modal-body">
-          <p>Your payment was processed successfully. Next payment due on {{ nextPaymentDate }}</p>
+          <p>Your payment was processed successfully.</p>
         </div>
         <div class="custom-modal-footer">
           <button type="button" @click="closeModal" class="btn btn-secondary">OK</button>
@@ -68,7 +68,7 @@ export default {
   props: {
     selectedPlan: {
       type: Object,
-      default: () => ({ price: '$0' })
+      default: () => ({ price: '$0',name:'' })
     }
   },
   data() {
@@ -82,12 +82,12 @@ export default {
       saveInfo: false,
       showModal: false,
       submitting: false,
-      nextPaymentDate:null
+      nextPaymentDate:''
     };
   },
   computed: {
     formattedAmount() {
-      return amount;
+      return `$${this.amount}`;
     },
     
   },
@@ -117,17 +117,6 @@ export default {
         displayError.textContent = '';
       }
     });
-     //set the next month to charge again
-    if(this.selectedPlan.name === 'Premium'){
-      const currentDate = new Date();
-      const nextMonth = new Date(currentDate);
-      nextMonth.setMonth(currentDate.getMonth() + 1); 
-      this.nextPaymentDate = nextMonth.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-    }
   },
   methods: {
     async submitPayment() {
@@ -158,8 +147,19 @@ export default {
               email: this.email,
             });
             console.log('Payment successful');
+            if (this.selectedPlan.name === 'Premium') {
+              const currentDate = new Date();
+              const nextMonth = new Date(currentDate);
+              nextMonth.setMonth(currentDate.getMonth() + 1);
+              this.nextPaymentDate = nextMonth.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              });
+            }
             this.showModal = true;
           }
+          
         }
       } catch (error) {
         console.error('Error confirming payment:', error);

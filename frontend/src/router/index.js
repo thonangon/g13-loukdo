@@ -88,9 +88,10 @@ const routes = [
         component: plans
     },
     {
-        path: '/charge',
+        path: '/charge/:selectedPlan',
         name: '/charge', 
-        component: ChargeMoney
+        component: ChargeMoney,
+        props: true
     }
 ]
 
