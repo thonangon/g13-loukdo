@@ -160,6 +160,11 @@ const routes = [
                 name: 'users',
                 component: () => import('../views/Admin/Auth/User.vue')
             },
+            {
+                path: '/usercreatestore',
+                name: 'usercreatestore',
+                component: () => import('../views/Admin/Auth/UserCreateStore.vue')
+              },
             // {
             //     path: '/admin/orders',
             //     name: 'admin_orders',
