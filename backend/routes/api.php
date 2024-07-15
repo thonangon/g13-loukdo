@@ -15,14 +15,11 @@ use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 use App\Http\Controllers\addToCartController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Order\PaymentController;
-use App\Http\Controllers\Stripe\StripeController;
 use App\Http\Controllers\Plans\PlansController;
-use App\Http\Controllers\Plans\PlansController\PlanController;
 use App\Http\Controllers\Plans\SubscriptionController;
 use App\Http\Controllers\Order\OrderProductController;
-
-;
 use App\Http\Controllers\Store\StoreController;
+use App\Http\Controllers\Stripe\StripePaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,17 +46,14 @@ Route::get('/user/list', [AuthController::class, 'listUser']);
 // crud on categories
 Route::get('/categories/list', [CategoryController::class, 'index']);
 Route::post('/create/category', [CategoryController::class, 'store']);
-//forgot password
+// forgot password
 Route::post('user/forgot-password', [AuthController::class, 'forgotPassword']);
 Route::post('user/reset-password', [AuthController::class, 'resetPassword']);
-
 
 // Other routes that don't require authentication
 
 Route::put('/update/category/{id}', [CategoryController::class, 'update']);
 Route::delete('/delete/category/{id}', [CategoryController::class, 'destroy']);
-
-
 
 // Product Routes
 Route::prefix('products')->group(function () {
@@ -80,7 +74,6 @@ Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     Route::get('/ratings/{productId}', [ProductController::class, 'getProductRatings']);
     
     Route::get('/image/{id}', [ProductController::class, 'getImage']);
-    
 });
 Route::delete('/product/remove/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
@@ -109,7 +102,7 @@ Route::prefix('reply')->group(function () {
     Route::delete('/remove/{id}', [ReplyCommentController::class, 'destroy']);
 });
 
-// User creat stores
+// User create stores
 Route::prefix('store')->group(function () {
     Route::get('/list', [StoreController::class, 'index']);
     Route::post('/create', [StoreController::class, 'store'])->middleware('auth:sanctum');
@@ -135,18 +128,17 @@ Route::get('/orders', [OrderController::class, 'index']);
 Route::post('/orderProducts', [OrderController::class, 'store']);
 Route::put('/orderProducts/{id}', [OrderController::class, 'update']);
 Route::delete('/orderProducts/delete/{id}', [OrderController::class, 'delete']);
-//Payment
 
+// Payment
 Route::middleware('auth:sanctum')->prefix('payment')->group(function () {
     Route::post('/create', [PaymentController::class, 'createPayment']);
-   
 });
+
 Route::get('/user/{id}', [UserProfileController::class, 'show']);
 Route::post('/user/update', [UserProfileController::class, 'update'])->middleware('auth:sanctum');
 Route::get('/userproduct', [UserProfileController::class, 'userproduct']);
 
 // Crud on Add to Cart
-
 Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
     Route::get('/list', [addToCartController::class, 'index']);
     Route::post('/add', [addToCartController::class, 'store'])->middleware('auth:sanctum');
@@ -163,10 +155,7 @@ Route::middleware('auth:sanctum')->prefix('order')->group(function () {
     Route::delete('/remove/{id}', [OrderProductController::class, 'destroy']);
 });
 
-// charge the money
-Route::post('/stripe/payment', [StripeController::class, 'makePayment']);
-
-// custmer charge for product
+// Customer charge for product
 Route::get('/plans', [PlansController::class, 'index']);
 Route::post('/plans/store', [PlansController::class, 'store']);
 Route::get('/plans/{id}', [PlansController::class, 'show']);
@@ -175,8 +164,14 @@ Route::delete('/plans/{id}', [PlansController::class, 'destroy']);
 
 Route::post('/subscriptions', [SubscriptionController::class, 'subscribe']);
 Route::get('/users/{userId}/subscriptions', [SubscriptionController::class, 'userSubscriptions']);
-Route::post('/payment/success', [StripeController::class, 'handlePaymentSuccess']);
-Route::post('/stripe/success', [StripeController::class, 'paymentSuccess']);
-//user post product information
+
+// User post product information
 Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
+
+Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
+Route::post('/stripe/handlePaymentSuccess', [StripePaymentController::class, 'handlePaymentSuccess']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
+});
 

@@ -12,7 +12,8 @@ import UserPostProduct from '../views/Products/ProductPostUser.vue'
 import ProductShow from '../views/Products/ProductShow.vue';
 import userprodcuts from '../views/Users/ProductVue.vue'
 import addcard from '../views/CardAdd/addCard.vue';
-import userchats from '../views/Users/Chat/ChatView.vue';
+// import PageStore from '../views/PageStore/StorePage.vue';
+// import userchats from '../views/Users/Chat/ChatView.vue';
 import booking from '../views/Order/InOrder.vue'
 import sellProduct from '../views/Order/InSell.vue'
 import payment from '../views/Order/PaymentOrder.vue'
@@ -20,6 +21,9 @@ import Createstore from '../views/PageStore/CreateStore.vue'
 import editStore from '../views/PageStore/EditStore.vue'
 import productCategory from '../views/Products/ProductCategories.vue'
 
+import userchats from '../views/Users/Chat/ChatView.vue'
+import plans from '../views/Charge/ChargeMoney.vue'
+import ChargeMoney from '../views/Order/PaymentOrder.vue';
 // __________________ADMIN________________
 import admin from '../Admin.vue'
 import Loukdo from '../LoukDo.vue'
@@ -177,6 +181,17 @@ const routes = [
             // },
         ]
     },
+    {
+        path: '/plans',
+        name: '/plans', 
+        component: plans
+    },
+    {
+        path: '/charge/:selectedPlan',
+        name: '/charge', 
+        component: ChargeMoney,
+        props: true
+    }
 ]
 
 const router = createRouter({
