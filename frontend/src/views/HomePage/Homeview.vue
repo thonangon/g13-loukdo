@@ -154,6 +154,8 @@
 import cards_product from '@/Components/Card/CardComponent.vue'
 import Categories from '@/Components/Card/CategoriesSlide.vue'
 import api from '@/views/api';
+import NavBar from '@/Components/navbars/NavBar.vue';
+import Footer from '@/Components/footer/FooTer.vue';
 
 export default {
   name: 'HomeView',

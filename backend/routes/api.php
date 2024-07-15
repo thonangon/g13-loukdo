@@ -70,11 +70,12 @@ Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     Route::post('/create', [ProductController::class, 'store']);
     Route::post('/update/{id}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/remove/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
-
+    
     Route::get('/ratings/{productId}', [ProductController::class, 'getProductRatings']);
-
+    
     Route::get('/image/{id}', [ProductController::class, 'getImage']);
 });
+Route::delete('/product/remove/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     Route::post('/ratting/{productId}', [RateProductController::class, 'rate']);
