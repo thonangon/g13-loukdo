@@ -14,7 +14,7 @@ export default {
   createProduct(formData, config) {
     return axios.post(`${API_URL}/products/create`, formData, config);
   },
-
+  
   imageUrlProduct(filename) {
     return `${API_URL}/products/image/${filename}`;
   },
@@ -143,5 +143,8 @@ export default {
     return axios.post(`${API_URL}/products/ratting/${productId}`, { rating: rating }, { headers: headers });
   },
 
+  ChargeMoney(amount) {
+    return axios.post(`${API_URL}/stripe/payment`, { amount });
+  },
 };
 

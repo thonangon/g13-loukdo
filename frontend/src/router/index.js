@@ -13,7 +13,6 @@ import ProductShow from '../views/Products/ProductShow.vue';
 import userprodcuts from '../views/Users/ProductVue.vue'
 import addcard from '../views/CardAdd/addCard.vue';
 // import PageStore from '../views/PageStore/StorePage.vue';
-import userchats from '../views/Users/Chat/ChatView.vue';
 import booking from '../views/Order/InOrder.vue'
 import sellProduct from '../views/Order/InSell.vue'
 import payment from '../views/Order/PaymentOrder.vue'
@@ -22,6 +21,9 @@ import editStore from '../views/PageStore/EditStore.vue'
 
 import productCategory from '../views/Products/ProductCategories.vue'
 
+import userchats from '../views/Users/Chat/ChatView.vue'
+import plans from '../views/Charge/ChargeMoney.vue'
+import ChargeMoney from '../views/Order/PaymentOrder.vue';
 
 const routes = [
     { 
@@ -122,6 +124,17 @@ const routes = [
         component: editStore,
         props: true
     },
+    {
+        path: '/plans',
+        name: '/plans', 
+        component: plans
+    },
+    {
+        path: '/charge/:selectedPlan',
+        name: '/charge', 
+        component: ChargeMoney,
+        props: true
+    }
 ]
 
 const router = createRouter({
