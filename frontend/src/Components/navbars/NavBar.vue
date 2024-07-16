@@ -23,7 +23,6 @@
                   <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(1)"><i class="fas fa-box me-2"></i>Products</router-link>
                   <router-link to="/Createstore" class="me-5 text-secondary mb-0 custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)">Store</router-link>
                 </div>
-
                 <!-- Logo -->
                 <a class="navbar-brand mx-auto logo" href="#">
                   <img class="ms-auto logo-img" src="../../assets/images/lOUKDO.png" alt="Logo" />

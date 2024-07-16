@@ -65,8 +65,7 @@ export const useUserStore = defineStore({
     updateHasPaid(status) {
       this.has_paid = status;
       localStorage.setItem('has_paid', status);
-    }
-   
+    },
   },
 });
 
