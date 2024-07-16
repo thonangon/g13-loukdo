@@ -112,7 +112,7 @@
       <h3 class="container  border-bottom mb-5">Recently Add New Products</h3>
       <div class="scrollable-container">
         <div class="row">
-          <div class="col-md-3 mt-3" v-for="(product, index) in products" :key="index">
+          <div class="col-md-3 mt-3" v-for="(product, index) in filteredProducts" :key="index">
             <cards_product :searchQuery="searchQuery" :product="product" />
           </div>
         </div>
