@@ -162,7 +162,7 @@ Route::middleware('auth:sanctum')->prefix('order')->group(function () {
     Route::put('/update/status/{id}', [OrderProductController::class, 'updateStatus']);
     Route::delete('/remove/{id}', [OrderProductController::class, 'destroy']);
 });
-
+Route::get('/orders/list', [OrderProductController::class, 'orderAndSellerUser']);
 // charge the money
 Route::post('/stripe/payment', [StripeController::class, 'makePayment']);
 

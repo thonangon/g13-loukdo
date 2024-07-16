@@ -8,6 +8,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserOrderResource;
 use App\Http\Resources\UserSellerResource;
+use App\Http\Resources\orderAndsellerResource;
 
 class OrderProductController extends Controller
 {
@@ -22,6 +23,16 @@ class OrderProductController extends Controller
         return response()->json([
             'success' => true,
             'orderProducts' => UserOrderResource::collection($orderProducts),
+        ]);
+    }
+    public function orderAndSellerUser()
+    {
+        $orderProducts = OrderProduct::all();
+        // Get all order products
+    
+        return response()->json([
+            'success' => true,
+            'orderProducts' => orderAndsellerResource::collection($orderProducts),
         ]);
     }
     public function userSeller()
