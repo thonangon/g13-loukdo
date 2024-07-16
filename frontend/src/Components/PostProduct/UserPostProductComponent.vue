@@ -80,7 +80,7 @@
           />
           <button type="submit" class="btn btn-dark ms-3" :disabled="loading">
             <span
-              v-if="loading"
+              v-if="DD"
               class="spinner-border spinner-border-sm"
               role="status"
               aria-hidden="true"
@@ -145,7 +145,7 @@ export default {
       quantity: null,
       description: '',
       image: null,
-      loading: false,
+      DD: false,
       errorName: '',
       errorPrice: '',
       errorQuantity: '',

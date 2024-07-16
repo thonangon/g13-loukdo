@@ -165,5 +165,9 @@ export default {
     return axios.delete(`${API_URL}/product/remove/${id}`);
   },
 
+  orderAndseller(){
+    return axios.get(`${API_URL}/orders/list`);
+  }
+
 };
 
