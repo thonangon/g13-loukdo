@@ -143,7 +143,7 @@ const routes = [
             {
                 path: '/dashboard',
                 name: 'admin_users',
-                component: () => import('../views/Admin/DashboardView.vue')
+                component: () => import('../views/Admin/DashboardView.vue'),
             },
             {
                 path: '/products',
@@ -160,11 +160,11 @@ const routes = [
                 name: 'users',
                 component: () => import('../views/Admin/Auth/User.vue')
             },
-            // {
-            //     path: '/admin/orders',
-            //     name: 'admin_orders',
-            //     component: () => import('../views/Admin/Orders.vue')
-            // },
+            {
+                path: '/admin/orders',
+                name: 'admin_orders',
+                component: () => import('../views/Admin/Auth/OrderAndSeller.vue')
+            },
             // {
             //     path: '/admin/pages',
             //     name: 'admin_pages',

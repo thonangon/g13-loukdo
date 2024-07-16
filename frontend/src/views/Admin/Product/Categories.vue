@@ -49,10 +49,12 @@
                      <cards_product :product="product"/>
                 </div>
             </div>
-            <div v-else-if="hoveredProducts === null">
-                <p>No products found for selected category.</p>
+            <div v-else-if="hoveredProducts === null" class="d-flex justify-content-between flex-wrap scrollable-products">
+                <div v-for="product in products" :key="product.id" style="width: 50%;">
+                     <cards_product :product="product"/>
+                </div>
             </div>
-            </div>
+          </div>
         </div>
 
         <div class="modal fade" id="category" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -94,11 +96,13 @@
         hoveredProducts: null, // Products shown on hover
         selectedCategoryProducts: null, // Products for selected category
         newCate: null, //
+        products:[]
       };
     },
     mounted() {
       this.fetchProductCategories();
-      this.createCate()
+      this.createCate();
+      this.fetchProducts();
     },
     methods: {
       async fetchProductCategories() {
@@ -108,6 +112,18 @@
             this.categories = response.data.data;
           } else {
             console.error("Error fetching categories: ", response);
+          }
+        } catch (error) {
+          console.error("API error: ", error);
+        }
+      },
+      async fetchProducts() {
+        try {
+          const response = await api.listProduct();
+          if (response.data.status) {
+            this.products = response.data.data;
+          } else {
+            console.error("Error fetching products: ", response.data.message);
           }
         } catch (error) {
           console.error("API error: ", error);
