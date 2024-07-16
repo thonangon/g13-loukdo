@@ -137,5 +137,8 @@ export default {
     return axios.get(`${API_URL}/products/category/${cateId}`);
   },
 
+  getReplyComment(headers){
+    return axios.get(`${API_URL}/reply/list`, {headers:headers});
+  },
 };
 
