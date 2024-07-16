@@ -156,6 +156,11 @@ Route::middleware('auth:sanctum')->prefix('order')->group(function () {
 });
 
 // Customer charge for product
+Route::get('/orders/list', [OrderProductController::class, 'orderAndSellerUser']);
+// charge the money
+Route::post('/stripe/payment', [StripeController::class, 'makePayment']);
+
+// custmer charge for product
 Route::get('/plans', [PlansController::class, 'index']);
 Route::post('/plans/store', [PlansController::class, 'store']);
 Route::get('/plans/{id}', [PlansController::class, 'show']);

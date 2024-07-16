@@ -165,5 +165,12 @@ export default {
     return axios.delete(`${API_URL}/product/remove/${id}`);
   },
 
+  orderAndseller(){
+    return axios.get(`${API_URL}/orders/list`);
+  },
+  
+  getReplyComment(headers){
+    return axios.get(`${API_URL}/reply/list`, {headers:headers});
+  },
 };
 

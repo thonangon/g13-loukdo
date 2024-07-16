@@ -53,7 +53,7 @@
                     <img v-else :src="profileImageUrl" class="text-dark custom-font-size nav-link profile-img" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
                       <li>
-                        <router-link v-if="store_user.accountUser.id == 1" class="dropdown-item" to="/admin" active-class="active"><i class="fas fa-user me-2"></i>Profile</router-link>
+                        <router-link v-if="store_user.accountUser.id == 1" class="dropdown-item" to="/dashboard" active-class="active"><i class="fas fa-user me-2"></i>Profile</router-link>
                         <router-link v-else class="dropdown-item" to="/profile" active-class="active"><i class="fas fa-user me-2"></i>Profile</router-link>
                       </li>
                       <li>
