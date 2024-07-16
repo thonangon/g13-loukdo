@@ -78,13 +78,11 @@
             ref="imageInput"
             required
           />
-          <button type="submit" class="btn btn-dark ms-3" :disabled="loading">
-            <span
-              v-if="DD"
-              class="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-            ></span>Post
+          <button v-if="num_products >= 1 || userInfo.user_qrimage !== null" type="submit" class="btn btn-dark ms-3" :disabled="loading">
+            <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Post
+          </button>
+          <button v-else type="button" class="btn btn-dark ms-3" data-bs-toggle="modal" data-bs-target="#isProduct">
+            <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Post
           </button>
         </div>
       </div>
@@ -202,7 +200,6 @@ export default {
           this.$router.push('/plans');
           return;
         }
-
         const formData = new FormData();
         formData.append('name', this.name);
         formData.append('price', this.price);
@@ -239,23 +236,54 @@ export default {
     handleFileUpload(event) {
       this.image = event.target.files[0];
     },
-    updateCanPost() {
-      this.canPost = this.post_count < 10;
-      console.log('Can post:', this.canPost, 'Post count:', this.post_count);
-      if (!this.canPost) {
-        console.log('Redirecting to /plans');
-        this.$router.push('/plans');
+    resetForm() {
+      this.name = '';
+      this.price = null;
+      this.quantity = null;
+      this.description = '';
+      this.image = null;
+    },
+    onFileChange(e) {
+      this.userqr_image = e.target.files[0];
+    },
+    async uploadQRimage() {
+      if (!this.userqr_image) {
+        console.error('No file selected.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('user_qrimage', this.userqr_image);
+
+      console.log(formData);
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/api/user/update', formData, {
+          headers: {
+            Authorization: `Bearer ${this.store_user.tokenUser}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        window.location.href = '/product-post';
+        if (response.data.status) {
+          // Successfully uploaded QR image
+          const modal = document.getElementById('isProduct');
+          const modalInstance = bootstrap.Modal.getInstance(modal);
+          modalInstance.hide();
+          this.createProduct(); // Proceed with creating the product
+        } else {
+          console.error('Error uploading QR image:', response.data.message);
+        }
+      } catch (error) {
+        console.error('Error uploading QR image:', error);
       }
     },
-  },
-  watch: {
-    post_count(newPostCount) {
-      this.updateCanPost();
+    updateCanPost() {
+      this.canPost = this.post_count < 10;
     },
   },
 };
 </script>
 
-<style>
-/* Your styles */
+<style scoped>
+/* Add your custom styles here */
 </style>
