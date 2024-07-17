@@ -2,7 +2,7 @@
   <div class="payment-form">
     <div class="card payment-details">
       <div class="card-header">
-        <h5>payment Method<span class="badge badge-warning">TEST MODE</span></h5>
+        <h5>Payment Method<span class="badge badge-warning">TEST MODE</span></h5>
         <p class="mt-2 mb-0 font-weight-bold">Enjoy your post and reduce new product</p>
         <h2 class="mt-3">{{ formattedAmount }}</h2>
         <div class="stripe-logo mt-5">
@@ -49,6 +49,7 @@
         </div>
         <div class="custom-modal-body">
           <p>Your payment was processed successfully.</p>
+          <p v-if="selectedPlan.title === 'Pro'">Your next payment will be due on {{ nextPaymentDate }}</p>
         </div>
         <div class="custom-modal-footer">
           <button type="button" @click="closeModal" class="btn btn-secondary">OK</button>
@@ -62,15 +63,8 @@
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
 
-
 export default {
   name: 'PaymentForm',
-  props: {
-    selectedPlan: {
-      type: Object,
-      default: () => ({ price: '$0',name:'' })
-    }
-  },
   data() {
     return {
       stripe: null,
@@ -78,18 +72,18 @@ export default {
       cardElement: null,
       email: '',
       paymentMethod: 'card',
-      amount: parseFloat(this.selectedPlan.price.replace('$', '')) || 0,
+      amount: '',
       saveInfo: false,
       showModal: false,
       submitting: false,
-      nextPaymentDate:''
+      nextPaymentDate: '',
+      selectedPlan: {}
     };
   },
   computed: {
     formattedAmount() {
       return `$${this.amount}`;
-    },
-    
+    }
   },
   async mounted() {
     this.stripe = await loadStripe('pk_test_51PZ1M92KMJfWGuxDbOviEzE7eldlNfD2vLtPaweyyJPTAJEmEy7APiGipQYtve6F0MNP4iJTAxK15MAS9R25DRyG00GuyPPGZh');
@@ -103,10 +97,10 @@ export default {
           fontFamily: 'Helvetica Neue, Helvetica, Arial, sans-serif',
           fontSize: '16px',
           '::placeholder': {
-            color: '#CFD7E0',
-          },
-        },
-      },
+            color: '#CFD7E0'
+          }
+        }
+      }
     });
     this.cardElement.mount('#card-element');
     this.cardElement.on('change', (event) => {
@@ -121,21 +115,19 @@ export default {
   methods: {
     async submitPayment() {
       this.submitting = true;
-
       try {
         const { data } = await axios.post('http://127.0.0.1:8000/api/stripe/payment', {
-          amount: this.amount,
+          amount: this.amount
         });
         const clientSecret = data.client_secret;
         const { error, paymentIntent } = await this.stripe.confirmCardPayment(clientSecret, {
           payment_method: {
             card: this.cardElement,
             billing_details: {
-              email: this.email,
-            },
-          },
+              email: this.email
+            }
+          }
         });
-        console.log('Payment successful123');
         if (error) {
           console.error(error.message);
           const displayError = document.getElementById('card-errors');
@@ -144,36 +136,27 @@ export default {
           if (paymentIntent) {
             await axios.post('http://127.0.0.1:8000/api/stripe/handlePaymentSuccess', {
               payment_intent_id: paymentIntent.id,
-              email: this.email,
+              email: this.email
             });
-            console.log('Payment successful');
-            if (this.selectedPlan.name === 'Premium') {
+            if (this.selectedPlan.title === 'Pro') {
               const currentDate = new Date();
-              const nextMonth = new Date(currentDate);
-              nextMonth.setMonth(currentDate.getMonth() + 1);
-              this.nextPaymentDate = nextMonth.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              });
+              const nextPaymentDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
+              this.nextPaymentDate = nextPaymentDate.toISOString().split('T')[0];
             }
             this.showModal = true;
           }
-          
         }
       } catch (error) {
-        console.error('Error confirming payment:', error);
-        const displayError = document.getElementById('card-errors');
-        displayError.textContent = 'An error occurred while processing your payment. Please try again.';
+        console.error(error);
       } finally {
         this.submitting = false;
       }
     },
     closeModal() {
       this.showModal = false;
-      this.$router.push({ name: 'product-post' });
-    },
-  },
+      this.$router.push('/product-post');
+    }
+  }
 };
 </script>
 
