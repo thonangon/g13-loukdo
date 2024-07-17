@@ -45,7 +45,7 @@ class StripePaymentController extends Controller
     try {
         $paymentIntent = PaymentIntent::retrieve($request->payment_intent_id);
 
-        if ($paymentIntent->status == 'requires_payment_method') {
+        if ($paymentIntent->status === 'succeeded') {
             $user = User::where('email', $request->email)->first();
 
             if ($user) {
@@ -61,7 +61,7 @@ class StripePaymentController extends Controller
                 return response()->json([
                     'status' => true,
                     'message' => 'Payment successful. Post count reset for user.',
-                    'next_charge_date' => $nextChargeDate->toDateString(), // Convert Carbon instance to string
+                    'next_charge_date' => $nextChargeDate->toDateString(),
                 ]);
             }
         } else {

@@ -81,28 +81,25 @@ class ProductController extends Controller
         }
 
         $postLimit = 10;
-
-        // Check if the user has paid and reset post_count if necessary
         if ($user->post_count >= $postLimit) {
             if ($user->has_paid) {
-                // Reset post_count and has_paid status
+               
                 $user->post_count = 0;
-                $user->has_paid = false; // Reset has_paid status after resetting post_count
+                $user->has_paid = false; 
                 $user->save();
             } 
             if ($user->has_paid) {
 
-                $user->next_charge_date = now()->addMonth(); // Example: Charge in one month
+                $user->next_charge_date = now()->addMonth(); 
                 $user->save();
             }
                 return response()->json([
                     'status' => false,
                     'message' => 'You have reached the maximum number of posts allowed. Please make a payment to continue posting.',
-                    'next_charge_date' => $user->next_charge_date,
-                ], 403);
-            
+                    
+                ], 403); 
         }
-        
+
         // Debug: Log user information
         Log::info('Authenticated user:', $user->toArray());
 
