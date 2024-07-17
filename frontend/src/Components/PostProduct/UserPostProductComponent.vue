@@ -122,7 +122,7 @@ export default {
           // Handle specific error messages if needed
         }
       } catch (error) {
-        if (error.response && error.response.status === 403) {
+        if (error.response && error.response.status === 422) {
           console.error('403 Forbidden:', error.response.data.message);
           this.$router.push('/plans'); // Redirect to payment page on 403 error
         } else {

@@ -1,38 +1,37 @@
 <template>
-  <div class="plans">
-    <div class="container py-5">
-      <div class="d-flex gap-3 align-items-center text-center justify-content-center flex-wrap">
-        <!-- Display Free Plan -->
-        <div class="plan bg-white p-5 rounded-lg shadow mb-4">
-          <h1 class="h6 text-uppercase font-weight-bold mb-4">FREE</h1>
-          <h2 class="h1 font-weight-bold">$0<span class="text-small font-weight-normal ml-2">/ free</span></h2>
-          <div class="custom-separator my-4 mx-auto bg-primary"></div>
-          <ul class="list-unstyled my-5 text-small text-left">
-            <li class="mb-3">
-              <i class="fas fa-check-circle mr-2 text-primary"></i> User can post the product at least 9 posts
-            </li>
-            <li class="mb-3">
-              <i class="fas fa-check-circle mr-2 text-primary"></i> You need to pay to use the basic pro and Premium product
-            </li>
-            <li class="mb-3">
-              <i class="fas fa-check-circle mr-2 text-primary"></i> Allow only product to be used at this time and at least 9 posts
-            </li>
-          </ul>
-          <button class="btn btn-primary btn-block shadow rounded-pill">Buy Now</button>
-        </div>
-        <!-- Display Other Plans -->
-        <div class="plan bg-white p-5 rounded-lg shadow mb-4" v-for="plan in plans" :key="plan.name">
-          <h1 class="h6 text-uppercase font-weight-bold mb-4">{{ plan.name }}</h1>
-          <h2 class="h1 font-weight-bold">{{ plan.price }}<span class="text-small font-weight-normal ml-2">/ month</span></h2>
-          <div class="custom-separator my-4 mx-auto bg-primary"></div>
-          <ul class="list-unstyled my-5 text-small text-left">
-            <li class="mb-3" v-for="feature in plan.features" :key="feature">
-              <i class="fas fa-check-circle mr-2 text-primary"></i>{{ feature }}
-            </li>
-          </ul>
-          <router-link :to="{ name: '/charge', params: { selectedPlan: plan.name }}">
-            <button class="btn btn-primary btn-block shadow rounded-pill">Buy Now</button>
-          </router-link>
+  <div class="container my-5">
+    <div class="row text-center">
+      <div class="col-12 mb-5">
+        <h2>Choose your plan</h2>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div 
+        class="col-md-4 mb-4" 
+        v-for="(plan, index) in plans" 
+        :key="index"
+      >
+        <div 
+          class="card plan-card h-100" 
+          :class="{ 'recommended': plan.recommended }"
+        >
+          <div v-if="plan.recommended" class="card-header text-center">
+            Recommended
+          </div>
+          <div class="card-body text-center">
+            <h5 class="card-title" :class="{ 'text-success': plan.recommended }">{{ plan.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ plan.price }}</h6>
+            <p class="card-text">{{ plan.description }}</p>
+            <router-link to="/charge">
+              <button 
+                class="btn w-100" 
+                :class="plan.recommended ? 'btn-success' : 'btn-outline-primary'"
+              >
+                Get this plan
+              </button>
+            </router-link>
+
+          </div>
         </div>
       </div>
     </div>
@@ -44,51 +43,108 @@ import { loadStripe } from '@stripe/stripe-js';
 import api from '../api';
 
 export default {
+  name: 'PricingPlans',
   data() {
     return {
-        plans: [
-        { name: 'Basic', price: "$15", features: ['Unlimited product posts', 'Charge if posts exceed 10', 'Easy and continuous posting'] },
-        { name: 'Premium', price: "$50", features: ['Unlimited product posts', 'No additional charges for unlimited posts', '2.5% discount every month', 'Additional premium features'] }
+      plans: [
+        {
+          title: 'Free',
+          price: '$0 per month',
+          description: 'Freer for you to post the post of 10 produt first',
+          recommended: false
+        },
+        {
+          title: 'Standard',
+          price: '$9.99 /10 posts',
+          description: 'Unlimited product posts, Charge if posts exceed 10, Easy and continuous posting',
+          recommended: true
+        },
+        {
+          title: 'Pro',
+          price: '$19.99 per month',
+          description: 'Unlimited product posts, No additional charges for unlimited posts, 2.5% discount every month, Additional premium features',
+          recommended: false
+        }
       ]
     };
-  },
-  
-  
+  }
 };
 </script>
 
 <style scoped>
-.plans {
-  background: #f8f9fa;
-  padding: 50px 0;
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+.plan-card {
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 1rem;
 }
 
-.plan {
-  width: 320px; 
-  height: 84vh;
-  border-radius: 10px;
-  transition: transform 0.3s ease;
+.plan-card:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.plan:hover {
-  transform: scale(1.05);
+.recommended {
+  border: 2px solid #28a745;
+  position: relative;
 }
 
-.custom-separator {
-  width: 50px;
-  height: 4px;
-  background-color: #007bff;
-  margin: 20px auto;
+.recommended .card-header {
+  background-color: #28a745;
+  color: white;
+  font-size: 1rem;
+  border-radius: 15px 15px 0 0;
+  position: absolute;
+  top: -1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 1rem;
 }
 
-.card-element {
-  padding: 10px;
-  border: 1px solid #e6e6e6;
-  border-radius: 4px;
+.card-title {
+  font-size: 1.5rem;
+  margin-top: 2.5rem; /* Adjusted to make space for the header */
 }
 
-#card-errors {
-  color: red;
-  margin-top: 10px;
+.card-subtitle {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #666;
+}
+
+.card-text {
+  margin-bottom: 1.5rem;
+  color: #666;
+}
+
+.btn {
+  border-radius: 25px;
+  padding: 0.75rem 1rem;
+}
+
+.btn-outline-primary {
+  border-color: #007bff;
+  color: #007bff;
+  border: 2px solid #28a745;
+  position: relative;
+  color: #28a745;
+}
+
+.btn-outline-primary:hover {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #218838;
 }
 </style>

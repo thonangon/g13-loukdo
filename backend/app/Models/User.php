@@ -11,6 +11,7 @@ use Spatie\Permission\Traits\HasRoles;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 
+
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -28,7 +29,8 @@ class User extends Authenticatable
         'email',
         'password',
         'post_count',
-        'has_paid'
+        'has_paid',
+        'next_charge_date'
     ];
 
     /**
