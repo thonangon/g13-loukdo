@@ -39,6 +39,7 @@
         <span style="color:red"> {{ errorDescription }}</span>
       </div>
       <div class="mb-3">
+        <!-- updata________________________ -->
         <label for="product-image" class="form-label fw-bold">Photo</label>
         <div class="d-flex align-items-center">
           <input type="file" class="form-control flex-grow-1" id="product-image" @change="handleFileUpload" ref="imageInput" required />

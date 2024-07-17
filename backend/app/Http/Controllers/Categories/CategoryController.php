@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Categories;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-// use App\Models\Products\Category;
 use App\Models\Category;
 use Exception;
 use App\Http\Resources\CategoryResource;
-
 
 class CategoryController extends Controller
 {
@@ -17,24 +15,22 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category = Category::all();
-        $category = CategoryResource::collection($category);
-        return response()->json(['data' => $category, 'message' => 'You can get the categories list'], status:200);
-
+        $categories = Category::all();
+        $categories = CategoryResource::collection($categories);
+        return response()->json(['data' => $categories, 'message' => 'You can get the categories list'], 200);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-
-
     public function store(Request $request)
     {
         $category_name = $request->category_name;
+        $category_image = $request->category_image;
 
         $category = new Category();
         $category->category_name = $category_name;
-
+        $category->category_image = $category_image;
 
         try {
             $category->save();
@@ -44,13 +40,12 @@ class CategoryController extends Controller
         }
     }
 
-
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
+        // Implementation for show method if needed
     }
 
     /**
@@ -58,19 +53,19 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $id =$request->id;
-        $category_name= $request->category_name;
+        $category_name = $request->category_name;
+        $category_image = $request->category_image;
 
-        $category = Category::where('id',$id)->first();
-
+        $category = Category::where('id', $id)->first();
         $category->category_name = $category_name;
+        $category->category_image = $category_image;
+
         try {
             $category->save();
-            return response()->json(['data' => $category, 'message' => 'You can update the category'], status:200);
-        }catch(Exception $error){
-            return response()->json(['data' => $error, 'message' => 'You can not update the category'], status:400);
+            return response()->json(['data' => $category, 'message' => 'You can update the category'], 200);
+        } catch (Exception $error) {
+            return response()->json(['data' => $error, 'message' => 'You cannot update the category'], 400);
         }
-
     }
 
     /**
@@ -78,12 +73,12 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $category = Category::where('id',$id)->first();
-        $category->delete();
-        try{
-            return response()->json(['data' => $category, 'message' => 'You can delete the category'], status:200);
-        }catch(Exception $error){
-            return response()->json(['data' => $error, 'message' => 'You can not delete the category'], status:400);
+        $category = Category::where('id', $id)->first();
+        try {
+            $category->delete();
+            return response()->json(['data' => $category, 'message' => 'You can delete the category'], 200);
+        } catch (Exception $error) {
+            return response()->json(['data' => $error, 'message' => 'You cannot delete the category'], 400);
         }
     }
 }

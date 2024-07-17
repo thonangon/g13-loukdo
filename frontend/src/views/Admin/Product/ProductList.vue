@@ -20,7 +20,7 @@
               <td>${{ product.price }}</td>
               <td>{{ product.creator }}</td>
               <td class="d-flex gap-2">
-                  <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" :data-bs-target="'#' + product.id" data-bs-whatever="@mdo">Edit</button>
+                  <!-- <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" :data-bs-target="'#' + product.id" data-bs-whatever="@mdo">Edit</button> -->
                   <button class="btn btn-danger mb-2" @click="deleteProduct(product.id)">Delete</button>
               </td>
               </tr>
