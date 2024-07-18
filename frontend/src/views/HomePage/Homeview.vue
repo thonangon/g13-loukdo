@@ -8,7 +8,7 @@
               <div class="col-md-6">
                 <div class="carousel-caption text-center">
                   <h1>Welcome For All Owner Business And Individual For Selling</h1>
-                  <p><a class="btn btn-primary btn-lg mt-5" href="/product" role="button">Shop Now</a></p>
+                  <p><a class="btn btn-primary btn-lg mt-5" href="/Createstore" role="button">Store</a></p>
                 </div>
               </div>
               <div class="col-md-6 position-relative">

@@ -13,6 +13,7 @@ export const useUserStore = defineStore({
     cateId: null,
     post_count: 0, 
     has_paid: false, 
+    notification: null,
   }),
   actions: {
     setUser(data) {
@@ -66,6 +67,9 @@ export const useUserStore = defineStore({
       this.has_paid = status;
       localStorage.setItem('has_paid', status);
     },
+    setNotification(notification) {
+      this.notification = notification;
+    }
   },
 });
 

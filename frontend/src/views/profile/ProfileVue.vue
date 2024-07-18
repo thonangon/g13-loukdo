@@ -5,7 +5,7 @@
         <div class="card h-100">
           <!-- Cover Photo and Profile Section -->
           <div class="cover rounded-top text-white d-flex flex-column align-items-center">
-            <img :src="userStore.accountUser.cover_path" class="cover-photo img-fluid" />
+            <p class="cover-photo"></p>
             <div class="profile mt-5 d-flex flex-column align-items-center">
               <div class="position-relative">
                 <img :src="profile_url(myAccount.profile)" class="img-fluid img-thumbnail mt-5" />
@@ -44,7 +44,8 @@
                 <!-- <div class="mx-2 nav-item">Add to chart</div> -->
                 <router-link to="/booking" class="mx-2 nav-item" active-class="text-dark active btn">Inbox</router-link>
                 <router-link to="/selling" class="mx-2 nav-item" active-class="text-dark active btn">Selling</router-link>
-                <router-link to="/chats" class="mx-2 nav-item" active-class="text-dark active btn">Chats</router-link>
+                <router-link to="/card" class="mx-2 nav-item" active-class="text-dark active btn">Favorites</router-link>
+                <router-link to="/chats" class="mx-2 nav-item" active-class="text-dark active btn">Messagers</router-link>
                 <div class="d-flex flex-grow-1">
               </div>
 
@@ -170,7 +171,7 @@ body,
 }
 
 .cover {
-  height: 300px;
+  height: 295px;
   position: relative;
   background: linear-gradient(135deg, #79c7ff, #ffccff);
 }
