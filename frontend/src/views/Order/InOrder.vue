@@ -3,12 +3,16 @@
     <div class="row d-flex justify-content-between">
       <h3>Current orders</h3>
       <div class="col-lg-8 mb-4" style="width: 75%;">
-        <div v-for="order in currentOrder" :key="order.id" class="card mb-4 shadow-sm">
-          <div v-if="order.status !== 2">
-            <div class="card-header d-flex justify-content-between">
-                <div class="product d-flex gap-3">
-                    <img :src="productImage(order.products[0].image)" alt="" style="width: 100px; height: 100px;">
-                    <div class="product_title">
+        <template v-if="groupedOrders">
+          <div v-for="(group, ownerName) in groupedOrders" :key="ownerName">
+            <div class="rounde mb-4" style="width: 100%;">
+              <strong class="">Delivery: $2</strong>
+              <div v-for="(order) in group" :key="order.id" class="card mb-2 shadow-sm">
+                <div v-if="order.status !== 2">
+                  <div class="card-header d-flex justify-content-between">
+                    <div class="product d-flex gap-3">
+                      <img :src="productImage(order.products[0].image)" alt="" style="width: 100px; height: 100px;">
+                      <div class="product_title">
                         <div class="d-flex align-items-center">
                           <img v-if="order.products[0].owner.image" :src="profile_url(order.products[0].owner.image)" alt="User Image" class="text-dark profile-img">
                           <img v-else :src="ownerprofileName(order.products[0].owner.name)" alt="User Image" class="text-dark profile-img">
@@ -16,24 +20,26 @@
                         </div>
                         <p class="mb-0 p-1">{{ order.products[0].name }}</p>
                         <p class="mb-0 p-1">Quantity: <strong>{{ order.quantity }}</strong></p>
+                      </div>
                     </div>
+                    <div class="d-flex align-items-center" style="height: 100px;">
+                      <button v-if="order.status == 1" class="btn btn-dark" @click="status">Delivery</button>
+                      <button v-if="order.status == 0" class="btn btn-dark" @click="cancelOrderProduct(order.id)">Cancel</button>
+                    </div>
+                  </div>
+                  <div class="card-header d-flex justify-content-between">
+                    <div class="d-flex flex-column align-items-start"><span>Order by</span> <strong>{{ store_user.accountUser.name }}</strong></div>
+                    <div class="d-flex flex-column align-items-start"><span>Order date:</span> <strong>{{ order.created_at }}</strong></div>
+                    <div class="d-flex flex-column align-items-start"><span>Payment status</span><strong>${{ order.products[0].price * order.quantity }}</strong></div>
+                  </div>
                 </div>
-                <div class="d-flex align-items-center" style="height: 100px;">
-                    <button v-if="order.status == 1" class="btn btn-dark" @click="status">Delivery</button>
-                    <button v-if="order.status == 0" class="btn btn-dark" @click="cancelOrderProduct(order.id)">Cancel</button>
-                </div>
-            </div>
-            <div class="card-header d-flex justify-content-between">
-                <div class="d-flex flex-column align-items-start"><span>Order by</span> <strong>{{ store_user.accountUser.name }}</strong></div>
-                <div class="d-flex flex-column align-items-start"><span>Order date:</span> <strong>{{ order.created_at }}</strong></div>
-                <div class="d-flex flex-column align-items-start"><span>Payment status</span><strong>${{ order.products[0].price * order.quantity }}</strong></div>
-                <div class="d-flex flex-column align-items-start"><span>Delivery</span><strong>$2</strong></div>
+              </div>
             </div>
           </div>
-        </div>
-
+        </template>
+        
         <h3>Past orders</h3>
-        <div v-for="order in currentOrder" :key="order.id" class="card mb-4 shadow-sm">
+        <div v-for="order in pastOrder" :key="order.id" class="card mb-4 shadow-sm">
           <div v-if="order.status == 2">
             <div class="card-header d-flex justify-content-between">
               <div class="product d-flex gap-3">
@@ -65,8 +71,8 @@
       <div class="col-lg-4" style="width: 25%;">
         <div class="d-flex flex-column-reverse" style="height: calc(2 * (250px + 1rem)); overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);">
           <div class="scrollable-container">
-            <div class="">
-              <div class="" v-for="(product, index) in products" :key="index">
+            <div>
+              <div v-for="(product, index) in products" :key="index">
                 <cards_product :searchQuery="searchQuery" :product="product" />
               </div>
             </div>
@@ -80,69 +86,75 @@
 <script>
 import { useUserStore } from '@/stores/user.js';
 import api from "@/views/api.js";
-import cards_product from '@/Components/Card/CardComponent.vue'
+import cards_product from '@/Components/Card/CardComponent.vue';
 
 export default {
-  components:{
+  components: {
     cards_product
   },
   data() {
     return {
       store_user: useUserStore(),
       products: [],
-      currentOrder: null,
+      currentOrder: [],
       pastOrder: []
-    }
+    };
   },
   async created() {
     try {
-      const response = await api.listProduct()
+      const response = await api.listProduct();
       if (response.data.status) {
-        this.products = response.data.data
+        this.products = response.data.data;
       } else {
-        console.error('Error fetching products: ', response.data.message)
+        console.error('Error fetching products: ', response.data.message);
       }
     } catch (error) {
-      console.error('API error: ', error)
+      console.error('API error: ', error);
     }
   },
-  
-  mounted(){
+  mounted() {
     this.fetchCurrentOrder();
-    // this.fetchPastOrder();
+  },
+  computed: {
+    groupedOrders() {
+      return this.currentOrder.reduce((acc, order) => {
+        const ownerName = order.products[0].owner.name;
+        if (!acc[ownerName]) {
+          acc[ownerName] = [];
+        }
+        acc[ownerName].push(order);
+        return acc;
+      }, {});
+    }
   },
   methods: {
-    async fetchCurrentOrder(){
+    async fetchCurrentOrder() {
       try {
         const headers = { Authorization: `Bearer ${this.store_user.tokenUser}` };
         const response = await api.listOrderProducts(headers);
-
-        this.currentOrder = response.data.orderProducts; // Assuming response has currentOrders key
+        this.currentOrder = response.data.orderProducts || [];
         console.log(this.currentOrder);
       } catch (error) {
         console.error('Error fetching current orders:', error);
       }
     },
-
     async cancelOrderProduct(orderId) {
       try {
-        console.log(this.store_user.tokenUser)
         const headers = { Authorization: `Bearer ${this.store_user.tokenUser}` };
         const confirmed = confirm('Are you sure you want to cancel this order?');
         if (confirmed) {
           await api.deleteOrderProduct(orderId, headers);
-          window.location.href = '/booking';
+          this.fetchCurrentOrder();
         }
       } catch (error) {
         console.error('Error deleting order product:', error);
       }
     },
-    status(){
+    status() {
       alert('Your order has been successfully in delivery, please wait for the order. Thanks!');
     },
-
-    productImage(filename){
-      return api.imageUrlProduct(filename)
+    productImage(filename) {
+      return api.imageUrlProduct(filename);
     },
     ownerprofileName(username) {
       if (username) {
@@ -155,12 +167,10 @@ export default {
       return api.profile(filename);
     },
     toggleDetails(order) {
-      order.showDetails = !order.showDetails;
-    },
-    
-  },
-  
-}
+      this.$set(order, 'showDetails', !order.showDetails);
+    }
+  }
+};
 </script>
 
 <style scoped>
@@ -174,27 +184,31 @@ export default {
   margin-right: 5px;
 }
 
-  /* Modern scrollbar styles */
-  .d-flex {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);
-  }
+/* Modern scrollbar styles */
+.d-flex {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);
+}
 
-  .d-flex::-webkit-scrollbar {
-    width: 6px;
-  }
+.d-flex::-webkit-scrollbar {
+  width: 6px;
+}
 
-  .d-flex::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1);
-  }
+.d-flex::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
 
-  .d-flex::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    border: 3px solid rgba(0, 0, 0, 0);
-  }
+.d-flex::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  border: 3px solid rgba(0, 0, 0, 0);
+}
 
-  .d-flex::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.5);
-  }
+.d-flex::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.rounde{
+  /* background-color: #495057; */
+  /* filter: blur(8px); */
+}
 </style>

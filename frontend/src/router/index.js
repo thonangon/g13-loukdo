@@ -93,15 +93,15 @@ const routes = [
                         name: 'sellProduct', 
                         component: sellProduct
                     },
+                    {
+                        path: '/card',
+                        name: 'card', 
+                        component: addcard,
+                        props: true
+                    },
                 ]
             },
             
-            {
-                path: '/card',
-                name: 'card', 
-                component: addcard,
-                props: true
-            },
             {
                 path: '/chats',
                 name: '/chats', 
