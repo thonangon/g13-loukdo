@@ -207,8 +207,5 @@ export default {
 .d-flex::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.5);
 }
-.rounde{
-  /* background-color: #495057; */
-  /* filter: blur(8px); */
-}
+
 </style>
