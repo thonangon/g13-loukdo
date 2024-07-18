@@ -22,6 +22,14 @@
                   <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)"><i class="fas fa-home"></i> Home</router-link>
                   <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(1)"><i class="fas fa-box me-2"></i>Products</router-link>
                   <router-link to="/Createstore" class="me-5 text-secondary mb-0 custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)">Store</router-link>
+                  <div v-if="Islogin" class="dropdown me-5 custom-font-size">
+                    <a class="text-dark custom-font-size nav-link" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">More...</a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      <router-link to="/userprodcuts" class="dropdown-item custom-font-size">My Product</router-link>
+                      <router-link to="/booking" class="dropdown-item custom-font-size">Inbox</router-link>
+                      <router-link to="/selling" class="dropdown-item custom-font-size">Selling</router-link>
+                    </ul>
+                  </div>
                 </div>
                 <!-- Logo -->
                 <a class="navbar-brand mx-auto logo" href="#">
@@ -83,7 +91,7 @@
 <script>
 import { useUserStore } from '@/stores/user.js';
 import axios from 'axios';
-import { computed } from 'vue';
+import { computed, ref,} from 'vue';
 import api from '@/views/api.js';
 
 export default {
@@ -92,17 +100,20 @@ export default {
       ifProduct: false,
       numcart:0,
       listCategories: null,
+      Islogin: ref(false)
     }
   },  
   mounted() {
     this.loadCart();
     this.getListCate();
+    const user = useUserStore();
+    this.Islogin = user.tokenUser != null ? true : false;
+    console.log(user.tokenUser)
   },
 
   setup() {
     const store_user = useUserStore()
     store_user.loadUser() // Ensure user data is loaded from localStorage
-
     const logout = async () => {
       try {
         await axios.post(

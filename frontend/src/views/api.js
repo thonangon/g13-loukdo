@@ -167,7 +167,10 @@ export default {
 
   orderAndseller(){
     return axios.get(`${API_URL}/orders/list`);
-  }
-
+  },
+  
+  getReplyComment(headers){
+    return axios.get(`${API_URL}/reply/list`, {headers:headers});
+  },
 };
 

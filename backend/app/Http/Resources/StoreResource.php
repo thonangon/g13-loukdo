@@ -21,6 +21,7 @@ class StoreResource extends JsonResource
             'address' => $this->address,
             'description' => $this->description,
             'image' => $this->image,
+            'user' => $this->user,
             'image_url' => $this->image ? asset('/api/stores/image/' . $this->image) : null,
         ];
     }
