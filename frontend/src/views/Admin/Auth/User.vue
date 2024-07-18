@@ -9,21 +9,18 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(user, list) in users" :key="user.id" class="text-center">
-                <th  v-if="user.id !==1" scope="row">{{ list }}</th>
-                <td  v-if="user.id !==1">{{user.name}}</td>
-                <td  v-if="user.id !==1">{{ user.email }}</td>
-                <td  v-if="user.id !==1" class="">
-                    <button class="btn btn-danger mb-2">Block</button>
-                </td>
-            </tr>
+            <userList v-for="(user, list) in users" :key="user.id" :user="user" :list="list" class="text-center"/>
         </tbody>
     </table>
 </template>
 
 <script>
 import api from "@/views/api"
+import userList from "@/Components/AdminCom/users/ListUser.vue"
 export default {
+    components:{
+        userList,
+    },
     data(){
         return {
             users: []

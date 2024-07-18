@@ -5,7 +5,7 @@
 </template>
   
   <script>
-  import Payment from "@/Components/Payment/paymetComponent.vue"
+  import Payment from "@/Components/Payment/PaymentComponent.vue"
   export default {
       components:{
           Payment

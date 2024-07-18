@@ -62,11 +62,9 @@
     </div>
   </div>
 </template>
-
 <script>
 import api from '../../views/api';
 import { useUserStore } from "@/stores/user.js";
-
 export default {
   name: 'CardComponent',
   props: ['searchQuery', 'product'],

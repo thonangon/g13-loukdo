@@ -66,7 +66,6 @@ class ReplyCommentController extends Controller
         $text = $request->text;
 
         $reply = replyComment::where('id', $id)->first();
-
         $reply->user_id = $user_id;
         $reply->comment_id = $comment_id;
         $reply->text = $text;

@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -141,4 +142,5 @@ class UserController extends Controller
         return redirect()->back()->withSuccess('Role deleted !!!');
     }
     
+
 }
