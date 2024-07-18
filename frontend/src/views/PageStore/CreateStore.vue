@@ -1,7 +1,7 @@
 <template>
-  <div class="container h-100">
+  <div class="container h-auto">
     <!-- Search Bar -->
-    <div class="d-flex justify-content-center h-100">
+    <div class="d-flex justify-content-center">
       <div class="search">
         <input class="search_input" type="text" v-model="searchQuery" placeholder="Search here..." @input="performSearch" />
         <a href="#" class="search_icon"><i class="fa fa-search"></i></a>
@@ -53,8 +53,8 @@
 
     <!-- Store Collection -->
     <h3 class="text-center mt-4" style="color: teal">Shop Collections</h3>
-    <div v-if="stores.length > 0">
-      <div v-for="store in filteredStores" :key="store.id" class="card mb-4">
+    <div v-if="stores.length > 0" class="stores-container">
+      <div v-for="store in filteredStores" :key="store.id" class="card mt-4 ">
         <div class="card-body d-flex m-4">
           <div class="d-flex justify-content-center align-items-center">
             <img :src="imageStore(store.image)" alt="Store Image" style="width: 200px; height: 200px" />
@@ -191,6 +191,7 @@ export default {
 
 <style>
 .search {
+  margin:10px;
   height: 50px;
   background-color: #fff;
   border-radius: 40px;
@@ -226,4 +227,46 @@ export default {
 a:link {
   text-decoration: none;
 }
+/* Media queries for responsiveness */
+@media (max-width: 992px) {
+ 
+  .search .search_input {
+    width: 300px;
+  }
+  .card-body{
+    flex-direction:row;
+  }
+  
+
+  .store-image {
+    width: 150px;
+    height: 150px;
+  }
+}@media (max-width: 768px) {
+ 
+  .search .search_input {
+    width: 200px;
+  }
+  .button {
+    width: 100px;
+  }
+  .card-body {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    /* background-color: pink; */
+  }
+  .card {
+    width: 80%;
+    height: 470px;
+    margin: 0 auto;
+  }
+  .store-image {
+    width: 80px;
+    height: 80px;
+  }
+  .btn-primary {
+    width: 100px;
+  }}
 </style>
+
