@@ -17,9 +17,14 @@ class ReplyCommentResource extends JsonResource
         // return parent::toArray($request);
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
+            // 'user_id' => $this->user_id,
             'comment_id' => $this->comment_id,
             'text' => $this->text,  
+            'user_id'=> [
+                'user' => $this->user->id,
+                'name' => $this->user->name,
+                'email' => $this->user->email,
+            ]
         ];
         
     }
