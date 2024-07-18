@@ -4,43 +4,60 @@
     <div class="bg-dark border-right" id="sidebar-wrapper">
       <div class="sidebar-heading text-light py-4">Admin Dashboard</div>
       <div class="list-group list-group-flush">
-        <router-link to="/dashboard" class="list-group-item list-group-item-action bg-dark text-light" active-class="active">
+        <router-link to="/dashboard" class="list-group-item list-group-item-action bg-dark text-light"
+          active-class="active">
           <i class="bi bi-house me-2"></i> Overview
         </router-link>
-        <router-link to="/admin/orders" class="list-group-item list-group-item-action bg-dark text-light" active-class="active">
+        <router-link to="/admin/orders" class="list-group-item list-group-item-action bg-dark text-light"
+          active-class="active">
           <i class="bi bi-cart-dash me-2"></i> Orders
         </router-link>
         <div class="btn-group border-none">
-          <router-link to="/products" class="list-group-item list-group-item-action bg-dark text-light border-start-0 border-end-0 border-top-0 rounded-0" active-class="active">
+          <router-link to="/products"
+            class="list-group-item list-group-item-action bg-dark text-light border-start-0 border-end-0 border-top-0 rounded-0"
+            active-class="active">
             <i class="bi bi-box me-2"></i> Products
           </router-link>
-          <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split rounded-0" active-class="active" data-bs-toggle="dropdown" aria-expanded="false">
+          <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split rounded-0"
+            active-class="active" data-bs-toggle="dropdown" aria-expanded="false">
             <span class="visually-hidden">Toggle Dropdown</span>
           </button>
           <ul class="dropdown-menu bg-dark rounded-0">
             <!-- <li><a class="dropdown-item" href="/creategory">Categories</a></li> -->
-            <router-link to="/creategory" class="dropdown-item list-group-item list-group-item-action bg-dark text-light" active-class="active">
+            <router-link to="/creategory"
+              class="dropdown-item list-group-item list-group-item-action bg-dark text-light" active-class="active">
               <i class="bi bi-box me-2"></i> Categories
             </router-link>
-            <router-link to="/" class="dropdown-item list-group-item list-group-item-action bg-dark text-light" active-class="active">
+            <router-link to="/" class="dropdown-item list-group-item list-group-item-action bg-dark text-light"
+              active-class="active">
               <i class="bi bi-box me-2"></i> Categories
             </router-link>
-            <router-link to="/" class="dropdown-item list-group-item list-group-item-action bg-dark text-light" active-class="active">
+            <router-link to="/" class="dropdown-item list-group-item list-group-item-action bg-dark text-light"
+              active-class="active">
               <i class="bi bi-box me-2"></i> Categories
             </router-link>
-    
+
           </ul>
         </div>
-        <router-link to="/users" class="list-group-item list-group-item-action bg-dark text-light" active-class="active">
+        <router-link to="/users" class="list-group-item list-group-item-action bg-dark text-light"
+          active-class="active">
           <i class="bi bi-person-lines-fill me-2"></i> Customers
         </router-link>
-        <router-link to="/admin/reports" class="list-group-item list-group-item-action bg-dark text-light" active-class="active">
+        <router-link to="/usercreatestore" class="list-group-item list-group-item-action bg-dark text-light"
+          active-class="active">
+          <i class="bi bi-shop me-2"></i> Store
+        </router-link>
+
+        <router-link to="/admin/reports" class="list-group-item list-group-item-action bg-dark text-light"
+          active-class="active">
           <i class="bi bi-bar-chart me-2"></i> Reports
         </router-link>
-        <router-link to="/admin/settings" class="list-group-item list-group-item-action bg-dark text-light" active-class="active">
+        <router-link to="/admin/settings" class="list-group-item list-group-item-action bg-dark text-light"
+          active-class="active">
           <i class="bi bi-gear me-2"></i> Settings
         </router-link>
-        <router-link to="/logout" class="list-group-item list-group-item-action bg-dark text-light" active-class="active">
+        <router-link to="/logout" class="list-group-item list-group-item-action bg-dark text-light"
+          active-class="active">
           <i class="bi bi-box-arrow-right me-2"></i> Logout
         </router-link>
       </div>
@@ -50,7 +67,8 @@
     <!-- Page Content -->
     <div id="page-content-wrapper">
       <nav class="navbar navbar-expand-lg navbar-custom border-bottom shadow-sm">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-collapse" aria-controls="nav-collapse" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-collapse"
+          aria-controls="nav-collapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <a class="navbar-brand" href="#">Admin Dashboard</a>
@@ -63,7 +81,8 @@
               </a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
                 <em>Admin</em>
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">

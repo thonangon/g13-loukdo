@@ -120,7 +120,7 @@
 
           try {
             const response = await api.updateOrderStatus(orderId, status, token);
-            window.location.href ='/selling'
+            this.fetchCurrentOrder();
             console.log('Order status updated successfully', response);
           } catch (error) {
             console.error('Error updating order status', error);

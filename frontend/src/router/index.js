@@ -20,7 +20,6 @@ import payment from '../views/Order/PaymentOrder.vue'
 import Createstore from '../views/PageStore/CreateStore.vue'
 import editStore from '../views/PageStore/EditStore.vue'
 import productCategory from '../views/Products/ProductCategories.vue'
-
 import userchats from '../views/Users/Chat/ChatView.vue'
 import plans from '../views/Charge/ChargeMoney.vue'
 import ChargeMoney from '../views/Order/PaymentOrder.vue';
@@ -97,15 +96,15 @@ const routes = [
                         name: 'sellProduct', 
                         component: sellProduct
                     },
+                    {
+                        path: '/card',
+                        name: 'card', 
+                        component: addcard,
+                        props: true
+                    },
                 ]
             },
             
-            {
-                path: '/card',
-                name: 'card', 
-                component: addcard,
-                props: true
-            },
             {
                 path: '/chats',
                 name: '/chats', 
@@ -118,6 +117,7 @@ const routes = [
             },
             {
                 path: '/product/category/:id',
+
                 name: 'product/category',
                 component: productCategory,
                 props: true
@@ -134,6 +134,7 @@ const routes = [
                 component: editStore,
                 props: true
             },
+           
         ]
     },
 
@@ -164,6 +165,12 @@ const routes = [
                 name: 'users',
                 component: () => import('../views/Admin/Auth/User.vue')
             },
+            {
+
+                path: '/usercreatestore',
+                name: 'usercreatestore',
+                component: () => import('../views/Admin/Auth/UserCreateStore.vue')
+              },
             {
                 path: '/admin/orders',
                 name: 'admin_orders',
