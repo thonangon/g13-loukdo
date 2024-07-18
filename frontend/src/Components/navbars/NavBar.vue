@@ -13,7 +13,7 @@
               aria-expanded="false"
               aria-label="Toggle navigation"
             >
-            <span class="navbar-toggler-icon"></span>
+              <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
               <div class="d-flex w-100 justify-content-between align-items-center">
@@ -21,8 +21,8 @@
                 <div class="d-flex flex-grow-1">
                   <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)"><i class="fas fa-home"></i> Home</router-link>
                   <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(1)"><i class="fas fa-box me-2"></i>Products</router-link>
-                  <router-link to="/Createstore" class="me-5 text-secondary mb-0 custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)">Store</router-link>
-                  <div v-if="Islogin" class="dropdown me-5 custom-font-size">
+                  <!-- <router-link to="/Createstore" class="me-5 text-secondary mb-0 custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)">Store</router-link> -->
+                  <div v-if="store_user.accountUser" class="dropdown me-5 custom-font-size">
                     <a class="text-dark custom-font-size nav-link" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">More...</a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                       <router-link to="/userprodcuts" class="dropdown-item custom-font-size">My Product</router-link>
@@ -31,26 +31,28 @@
                     </ul>
                   </div>
                 </div>
-
                 <!-- Logo -->
                 <a class="navbar-brand mx-auto logo" href="#">
                   <img class="ms-auto logo-img" src="../../assets/images/lOUKDO.png" alt="Logo" />
                 </a>
 
                 <!-- Profile -->
-                <div
-                  class="d-flex justify-content-end align-items-center profile-section"
-                  style="width: 40%"
-                >
+                <div class="d-flex justify-content-end align-items-center profile-section" style="width: 40%">
                   <div class="iconenav d-flex align-items-center">
-                    <i v-if="store_user.accountUser"  class="bi bi-bell-fill me-3"></i>
-                    <router-link v-if="store_user.accountUser"  to="/card" class="position-relative">
+                    <div v-if="store_user.accountUser" class="position-relative me-3" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">
+                      <i class="bi bi-bell-fill me-2"></i>
+                      <span v-if="notiNum > 0" class="badge bg-danger position-absolute top-0 start-100 translate-middle">{{ notiNum }}</span>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end custom-dropdown">
+                      <li v-if="currentSeller">
+                        <router-link v-for="(sell, list) in currentSeller" :key="list" class="custom-dropdown-item border-bottom" to="/selling">
+                          <p v-if="sell.status==0" @click="isClick"><i class="fas fa-user me-2"></i>{{sell.buyer.name}} order {{ sell.products[0].name }}</p>
+                        </router-link>
+                      </li>
+                    </ul>
+                    <router-link v-if="store_user.accountUser" to="/card" class="position-relative">
                       <i class="bi bi-cart-dash me-2"></i>
-                      <span
-                        class="badge bg-success position-absolute top-0 start-100 translate-middle"
-                      >
-                      {{ numcart }}
-                      </span>
+                      <span class="badge bg-success position-absolute top-0 start-100 translate-middle">{{ numcart }}</span>
                     </router-link>
                   </div>
                   <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size"><button class="btn btn-secondary m-1">Login</button></router-link>
@@ -76,12 +78,12 @@
         </nav>
       </div>
     </div>
-    
+
     <div class="container">
       <nav v-if="ifProduct" class="d-flex">
         <ul v-for="cate in listCategories" :key="cate.id" class="nav nav-tabs">
           <li class="nav-item">
-            <router-link class="nav-link" active-class="navbar-shadow active" aria-current="page" :to="{ name: 'product/category', params: { id: cate.id} }" >{{cate.category_name}}</router-link>
+            <router-link class="nav-link" active-class="navbar-shadow active" aria-current="page" :to="{ name: 'product/category', params: { id: cate.id} }">{{cate.category_name}}</router-link>
           </li>
         </ul>
       </nav>
@@ -92,29 +94,72 @@
 <script>
 import { useUserStore } from '@/stores/user.js';
 import axios from 'axios';
-import { computed, ref,} from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import api from '@/views/api.js';
 
 export default {
-  data(){
-    return{
-      ifProduct: false,
-      numcart:0,
-      listCategories: null,
-      Islogin: ref(false)
-    }
-  },  
-  mounted() {
-    this.loadCart();
-    this.getListCate();
-    const user = useUserStore();
-    this.Islogin = user.tokenUser != null ? true : false;
-    console.log(user.tokenUser)
-  },
-
   setup() {
-    const store_user = useUserStore()
-    store_user.loadUser() // Ensure user data is loaded from localStorage
+    const store_user = useUserStore();
+    store_user.loadUser(); // Ensure user data is loaded from localStorage
+
+    const ifProduct = ref(false);
+    const numcart = ref(0);
+    const listCategories = ref([]);
+    const currentSeller = ref([]);
+    const notiNum = ref(0);
+
+    const loadCart = () => {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      numcart.value = cart.length;
+    };
+
+    const getListCate = async () => {
+      try {
+        const response = await api.listCategories();
+        listCategories.value = response.data.data;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const cate_id = (id) => {
+      store_user.getCateProId(id);
+      // this.$router.push({name:productCategory, id:id})
+    };
+
+    const isProduct = (isProduct) => {
+      ifProduct.value = isProduct === 1;
+    };
+
+    const fetchCurrentOrder = async () => {
+      try {
+        const headers = { Authorization: `Bearer ${store_user.tokenUser}` };
+        const response = await api.listSellerProducts(headers);
+
+        currentSeller.value = response.data.orderProducts; // Assuming response has orderProducts key
+        notiNum.value = 0;
+        for (const order of currentSeller.value) {
+          if (order.status === 0) {
+            notiNum.value += 1;
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching current orders:', error);
+      }
+    };
+
+    const isClick = () => {
+      if (notiNum.value !== 0) {
+        notiNum.value -= 1;
+      } else {
+        notiNum.value = 0;
+      }
+    };
+
+    const profile_url = (filename) => {
+      return api.profile(filename);
+    };
+
     const logout = async () => {
       try {
         await axios.post(
@@ -122,65 +167,50 @@ export default {
           {},
           {
             headers: {
-              Authorization: `Bearer ${store_user.tokenUser}`
+              Authorization: `Bearer ${store_user.tokenUser}`,
             }
           }
-        )
-        store_user.logout()
-        window.location.href = '/' // Redirect to login page after logout
+        );
+        store_user.logout();
+        window.location.href = '/'; // Redirect to login page after logout
       } catch (error) {
-        console.error('Logout failed:', error)
+        console.error('Logout failed:', error);
       }
-    }
+    };
 
     const profileImageUrl = computed(() => {
       if (store_user.accountUser && store_user.accountUser.name) {
-        const name = store_user.accountUser.name
-        const initials = `${name[0]}${name[name.length - 1]}`.toUpperCase()
-        return `https://dummyimage.com/100x100/000/fff&text=${initials}`
+        const name = store_user.accountUser.name;
+        const initials = `${name[0]}${name[name.length - 1]}`.toUpperCase();
+        return `https://dummyimage.com/100x100/000/fff&text=${initials}`;
       }
-      return '../../assets/images/Male User.png'
-    })
+      return '../../assets/images/Male User.png';
+    });
+
+    onMounted(() => {
+      loadCart();
+      getListCate();
+      fetchCurrentOrder();
+    });
 
     return {
       store_user,
       logout,
       profileImageUrl,
+      ifProduct,
+      numcart,
+      listCategories,
+      currentSeller,
+      notiNum,
+      loadCart,
+      getListCate,
+      cate_id,
+      isProduct,
+      fetchCurrentOrder,
+      isClick,
+      profile_url,
     };
   },
-  methods: {
-    async getListCate(){
-      try{
-        const response = await api.listCategories();
-        this.listCategories = response.data.data;
-      }catch(error){
-        console.log(error);
-      }
-    },
-    cate_id(id){
-      const store_user = useUserStore()
-      store_user.getCateProId(id);
-
-      // this.$router.push({name:productCategory, id:id})
-    },
-    isProduct(isProduct){
-      if(isProduct == 1){
-        this.ifProduct = true;
-      }else{
-        this.ifProduct = false;
-      }
-    },
-    profile_url(filename){
-      return api.profile(filename)
-    },
-    loadCart() {
-      this.cart = JSON.parse(localStorage.getItem('cart')) || 0;
-      this.numcart = this.cart.length;
-    },
-  },
-  created() {
-  this.loadCart();
-},
 };
 </script>
 
@@ -270,6 +300,33 @@ export default {
 
 .translate-middle {
   transform: translate(-50%, -50%) !important;
+}
+.custom-dropdown {
+  width: 300px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  transition: background-color 0.3s ease;
+}
+
+.custom-dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.custom-dropdown-item i {
+  margin-right: 10px;
+  color: #6c757d;
+}
+
+.custom-dropdown-item span {
+  flex-grow: 1;
+  font-size: 0.9rem;
+  color: #495057;
 }
 @media (max-width: 992px) {
   .logo-img {

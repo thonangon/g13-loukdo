@@ -25,7 +25,7 @@
                 aria-valuemin="0"
                 aria-valuemax="100"
               >
-              {{ value }}%
+              {{ parseInt(value) }}%
               </div>
               <p>{{ index+1 }}<i class="fas fa-star"></i></p>
             </div>
@@ -126,6 +126,7 @@
           console.log(product_id, userToken, rating);
           const response = await api.rattingProduct(product_id, rating, headers);
           alert(`You have successfully ratting a product with ${rating} stars.`)
+          window.location.reload();
           console.log('Rating product successfully:', response.data);
         }catch(error) {
           console.error('Error rating product:', error);
