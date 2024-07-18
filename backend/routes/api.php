@@ -52,8 +52,14 @@ Route::post('user/reset-password', [AuthController::class, 'resetPassword']);
 
 // Other routes that don't require authentication
 
+Route::post('/update/category/{id}', [CategoryController::class, 'update']);
+Route::delete('/delete/category/{id}', [CategoryController::class, 'destroy']);
+
+Route::get('/categories/list', [CategoryController::class, 'index']);
+Route::post('/create/category', [CategoryController::class, 'store']);
 Route::put('/update/category/{id}', [CategoryController::class, 'update']);
 Route::delete('/delete/category/{id}', [CategoryController::class, 'destroy']);
+
 
 // Product Routes
 Route::prefix('products')->group(function () {
@@ -70,9 +76,9 @@ Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     Route::post('/create', [ProductController::class, 'store']);
     Route::post('/update/{id}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/remove/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
-    
+
     Route::get('/ratings/{productId}', [ProductController::class, 'getProductRatings']);
-    
+
     Route::get('/image/{id}', [ProductController::class, 'getImage']);
 });
 Route::delete('/product/remove/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
@@ -158,7 +164,6 @@ Route::middleware('auth:sanctum')->prefix('order')->group(function () {
 // Customer charge for product
 Route::get('/orders/list', [OrderProductController::class, 'orderAndSellerUser']);
 // charge the money
-Route::post('/stripe/payment', [StripeController::class, 'makePayment']);
 
 // custmer charge for product
 Route::get('/plans', [PlansController::class, 'index']);
