@@ -21,7 +21,6 @@
                 <div class="d-flex flex-grow-1">
                   <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)"><i class="fas fa-home"></i> Home</router-link>
                   <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(1)"><i class="fas fa-box me-2"></i>Products</router-link>
-                  <!-- <router-link to="/Createstore" class="me-5 text-secondary mb-0 custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)">Store</router-link> -->
                   <div v-if="store_user.accountUser" class="dropdown me-5 custom-font-size">
                     <a class="text-dark custom-font-size nav-link" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">More...</a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -80,7 +79,7 @@
     </div>
 
     <div class="container">
-      <nav v-if="ifProduct" class="d-flex">
+      <nav v-if="router-link" class="d-flex">
         <ul v-for="cate in listCategories" :key="cate.id" class="nav nav-tabs">
           <li class="nav-item">
             <router-link class="nav-link" active-class="navbar-shadow active" aria-current="page" :to="{ name: 'product/category', params: { id: cate.id} }">{{cate.category_name}}</router-link>
@@ -96,6 +95,7 @@ import { useUserStore } from '@/stores/user.js';
 import axios from 'axios';
 import { computed, ref, onMounted } from 'vue';
 import api from '@/views/api.js';
+import router from '@/router';
 
 export default {
   setup() {

@@ -16,14 +16,17 @@
                           <img :src="profileimage(room.sender.profile) || '../../../assets/images/Male User.png'" class="profile-img rounded-circle mr-3" alt="Avatar">
                           <div class="chat-info">
                               <h6 class="mb-0 font-weight-bold text-primary">{{ room.sender.name }}</h6>
-                              <p class="mb-0 text-muted">{{ room.newmessage.message }}</p>
+                              <p v-if="room.newmessage.message" class="mb-0 text-muted">{{ room.newmessage.message }}</p>
+                              <p v-else class="mb-0 text-muted">No message...</p>
                           </div>
+                          {{ store_user.user_id }}
                       </div>
                       <div v-else class="chat-item d-flex align-items-center p-3 shadow-sm rounded bg-white">
                           <img :src="profileimage(room.receiver.profile) || '../../../assets/images/Male User.png'" class="profile-img rounded-circle mr-3" alt="Avatar">
                           <div class="chat-info">
                               <h6 class="mb-0 font-weight-bold text-primary">{{ room.receiver.name }}</h6>
-                              <p class="mb-0 text-muted">{{ room.newmessage.message }}</p>
+                              <p v-if="room.newmessage.message" class="mb-0 text-muted">{{ room.newmessage.message }}</p>
+                              <p v-else class="mb-0 text-muted">No message..</p>
                           </div>
                       </div>
                     </div>
@@ -49,6 +52,7 @@
               </div>
               <div class="message-left">
                 <p>Message 2</p>
+                <p>{{ store_user }}</p>
               </div>
             </div>
           </div>

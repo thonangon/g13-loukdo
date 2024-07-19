@@ -69,7 +69,7 @@ export const useUserStore = defineStore({
     },
     setNotification(notification) {
       this.notification = notification;
-    }
+    },
   },
 });
 
