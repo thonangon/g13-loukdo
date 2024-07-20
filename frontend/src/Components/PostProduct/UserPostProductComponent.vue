@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="createProduct">
-    <div class="container bg-light p-4 rounded shadow w-50">
+    <div class="container p-4 rounded shadow bg-light w-50">
       <div class="mb-3 text-center">
         <h3>Create your products</h3>
         <span>Start posting your product to make money here!</span>

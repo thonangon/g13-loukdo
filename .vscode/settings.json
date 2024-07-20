@@ -1,0 +1,5 @@
+{
+    "eslint.enable": false,
+    "files.autoSave": "afterDelay",
+    "tailwind-fold.autoFold": false
+}

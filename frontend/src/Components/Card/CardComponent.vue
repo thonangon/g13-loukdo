@@ -1,13 +1,13 @@
 <template>
   <section class="container">
-    <div class="card mb-3 shadow-sm bg-light">
-      <router-link :to="{ name: 'produc_detail', params: { id: product.id } }" style="text-decoration: none;">
-        <img :src="imageProduct(product.image)" class="card-img" alt="clothe" style="height: 270px;" />
+    <div class="mb-3 shadow-sm card bg-light">
+      <router-link :to="{ name: 'produc_detail', params: { id: product.id } }" style="text-decoration: none; background-color:#FFFBF9; " class=" d-flex justify-content-center">
+        <img :src="imageProduct(product.image)" class="p-2 card-img" alt="clothe" style="height: 225px; width:225px;" />
       </router-link>
       <div class="card-body">
         <h5 class="card-title">{{ product.name }}</h5>
         <h5 class="card-price text-success">${{ product.price }}</h5>
-        <div class="d-flex align-items-center justify-content-between mt-3">
+        <div class="mt-3 d-flex align-items-center justify-content-between">
           <div v-if="product.ratting" class="star-rating" style="font-size: 1.5em; color: #f39c12">
             <div class="star d-flex">
               <p v-for="star in product.ratting.topRating" :key="star"><i class="fas fa-star" style="font-size: 17px;"></i></p>
@@ -25,7 +25,7 @@
       <div class="modal-content">
         <div class="col-lg-4" style="width: 100%;">
           <div class="">
-            <div class="card-header bg-success text-white text-center p-3">
+            <div class="p-3 text-center text-white card-header bg-success">
               Order Summary
             </div>
             <ul class="list-group list-group-flush">
@@ -49,7 +49,7 @@
                 </span>
               </li>
             </ul>
-            <div class="card-footer text-center">
+            <div class="text-center card-footer">
               <strong>Total Items: <span>${{ totalPrice }}</span></strong>
             </div>
           </div>
@@ -62,6 +62,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import api from '../../views/api';
 import { useUserStore } from "@/stores/user.js";

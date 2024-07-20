@@ -1,17 +1,17 @@
 <template>
   <div>
     <!-- Sidebar -->
-    <div class="">
+    <div class="d-flex">
       <div class="my-4 d-flex justify-content-between">
-        <div class="p-3 product card">
-          <h5 class="card-title">Product</h5>
-          <p class="card-text">Product content goes here. You can add more details about products.</p>
-        </div>
-        <div class="p-3 mx-2 users card">
+        <div class="p-3 mx-2 users card" @click="showSection('users')">
           <h5 class="card-title">Users</h5>
           <p class="card-text"><strong>{{ users.length }}</strong> /users active</p>
         </div>
-        <div class="p-3 categories card">
+        <div class="p-3 mx-2 product card" @click="showSection('products')">
+          <h5 class="card-title">Products</h5>
+          <p class="card-text"><strong>{{ products.length }}</strong> /products in stock.</p>
+        </div>
+        <div class="p-3 mx-2 categories card" @click="showSection('categories')">
           <h5 class="card-title">Categories</h5>
           <p class="card-text"><strong>{{ categories.length }}</strong> /different categories.</p>
         </div>
@@ -20,7 +20,7 @@
 
     <!-- Page Content -->
     <div class="mx-2">
-      <table v-if="currentSection === 'users'" class="table table-dark table-striped">
+      <table v-if="currentSection === 'users'" class="table table-white table-striped">
         <thead>
           <tr class="text-center">
             <th scope="col">Id</th>

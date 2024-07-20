@@ -2,9 +2,9 @@
     <div class="container mt-4">
       <div class="row">
         <h3>Selling!</h3>
-        <div class="col-lg-8 mb-4" style="width: 75%;">
-          <!-- <div v-for="sell in currentSeller" :key="sell.id" class="card mb-4 shadow-sm"> -->
-            <table class="table table-dark table-striped">
+        <div class="mb-4 col-lg-8" style="width: 75%;">
+          <!-- <div v-for="sell in currentSeller" :key="sell.id" class="mb-4 shadow-sm card"> -->
+            <table class="table table-white table-striped">
                 <thead>
                     <tr>
                     <th scope="col">Products</th>
@@ -26,8 +26,8 @@
                 </tbody>
               </table>
             <h3>Sold out!</h3>
-            <!-- <div v-for="sell in currentSeller" :key="sell.id" class="card mb-4 shadow-sm"> -->
-            <table class="table table-dark table-striped">
+            <!-- <div v-for="sell in currentSeller" :key="sell.id" class="mb-4 shadow-sm card"> -->
+            <table class="table table-white table-striped">
                 <thead>
                     <tr>
                     <th scope="col">Products</th>
