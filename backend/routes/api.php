@@ -55,11 +55,6 @@ Route::post('user/reset-password', [AuthController::class, 'resetPassword']);
 Route::post('/update/category/{id}', [CategoryController::class, 'update']);
 Route::delete('/delete/category/{id}', [CategoryController::class, 'destroy']);
 
-Route::get('/categories/list', [CategoryController::class, 'index']);
-Route::post('/create/category', [CategoryController::class, 'store']);
-Route::put('/update/category/{id}', [CategoryController::class, 'update']);
-Route::delete('/delete/category/{id}', [CategoryController::class, 'destroy']);
-
 
 // Product Routes
 Route::prefix('products')->group(function () {

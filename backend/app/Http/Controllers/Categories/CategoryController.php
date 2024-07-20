@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
@@ -91,17 +92,24 @@ class CategoryController extends Controller
 }
 
 
-    public function destroy($id)
-    {
-        $category = Category::findOrFail($id);
-        if ($category->image) {
-            unlink(public_path('api/categories/image' . $category->image));
+public function destroy($id)
+{
+    $category = Category::findOrFail($id);
+    if ($category->image) {
+        $imagePath = public_path('api/categories/image/' . $category->image);
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
+        } else {
+            Log::warning("File not found: " . $imagePath);
         }
-        $category->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Category deleted successfully',
-        ], 200);
     }
+    $category->delete();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Category deleted successfully',
+    ], 200);
+}
+
+
 }
