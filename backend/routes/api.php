@@ -154,3 +154,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
     Route::post('/products', [ProductController::class, 'store']);
 });
+Route::middleware('auth:sanctum')->group(function () {
+
+    Route::get('/plans', [PlansController::class, 'index']);
+    Route::get('/plans/{id}', [PlansController::class, 'show']);
+    Route::post('/create/plans', [PlansController::class, 'store']);
+    Route::put('/plans/{id}', [PlansController::class, 'update']);
+    Route::delete('/plans/{id}', [PlansController::class, 'destroy']);
+});

@@ -10,7 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
-
+use Stripe\Plan;
 
 class User extends Authenticatable
 {
@@ -82,9 +82,9 @@ class User extends Authenticatable
             return $this->hasMany(ReplyComment::class);
         }
         public function plan()
-    {
-        return $this->hasOne(Plans::class);
-    }
+        {
+            return $this->belongsTo(Plans::class);
+        }
     public function products()
     {
         return $this->hasMany(Product::class);

@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
+            $table->unsignedBigInteger('plan_id')->nullable();
             $table->boolean('has_paid')->default(false);
             $table->timestamp('next_charge_date')->nullable();
+            $table->foreign('plan_id')->references('id')->on('plans')->onDelete('set null');
         });
     }
 

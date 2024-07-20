@@ -11,24 +11,19 @@ class Plans extends Model
 {
     use HasFactory,SoftDeletes;
     protected $fillable = [
-        'user_id',
-        'plan',
-        'starts_at',
-        'ends_at',
+        'title',
+        'price',
+        'description',
+        'recommended',
     ];
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(User::class);
     }
 
     public function subscription(): HasOne
     {
         return $this->hasOne(Subscription::class);
     }
-    public static function store($request, $id = null)
-    {
-        $data = $request->only('name','slug','price','description',);
-        $data= self::updateOrCreate(['id'=>$id],$data);
-        return $data;
-    }
+    
 }
