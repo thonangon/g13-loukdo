@@ -8,7 +8,7 @@
               <div class="col-md-6">
                 <div class="carousel-caption text-center">
                   <h1>Welcome For All Owner Business And Individual For Selling</h1>
-                  <p><a class="btn btn-primary btn-lg mt-5" href="/Createstore" role="button">Store</a></p>
+                  <p><a class="btn btn-primary btn-lg mt-5" href="/DetailStore" role="button">Store</a></p>
                 </div>
               </div>
               <div class="col-md-6 position-relative">
@@ -26,7 +26,7 @@
                   <h1>New Arrivals!</h1>
                   <p class="content">Post for selling everywhere and everytime</p>
                   <p>
-                    <a class="btn btn-primary btn-lg mt-5" href="/product" role="button">Explore Now</a>
+                    <a class="btn btn-primary btn-lg mt-5" href="/DetailStore" role="button">Explore Now</a>
                   </p>
                 </div>
               </div>
@@ -49,7 +49,7 @@
                     discarded.
                   </p>
                   <p>
-                    <a class="btn btn-primary btn-lg mt-5" href="/product" role="button">Explore Now</a>
+                    <a class="btn btn-primary btn-lg mt-5" href="/DetailStore" role="button">Explore Now</a>
                   </p>
                 </div>
               </div>
@@ -139,7 +139,7 @@
               Save money 
               Encourages users to know about products, where products are reused and recycled rather than discarded.
             </p>
-            <p><a class="btn btn-primary btn-lg mt-5" href="#" role="button">Explore Now</a></p>
+            <p><a class="btn btn-primary btn-lg mt-5" href="/DetailStore" role="button">Explore Now</a></p>
           </div>
         </div>
         <div class="container col-md-6 position-relative">
@@ -200,7 +200,37 @@ body {
   font-family: Arial, sans-serif;
   background-color: #f8f9fa;
 }
-
+.search {
+    height: 50px;
+    background-color: #fff;
+    border-radius: 40px;
+    padding: 10px;
+    border: 1px solid #000;
+  }
+  .search_input {
+    color: black;
+    border: 0;
+    outline: none;
+    background: none;
+    border: white;
+    width: 500px;
+    caret-color: black;
+  }
+  .search:hover > .search_icon {
+    color: #fff;
+  }
+  .search_icon {
+    margin-top: -4px;
+    height: 35px;
+    width: 40px;
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: white;
+    background-color: black;
+  }
 .carousel-item {
   text-align: center;
   padding: 50px 0;

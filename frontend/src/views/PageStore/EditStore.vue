@@ -30,14 +30,13 @@
           </div>
           <div class="mb-3">
             <label for="Description" class="form-label">Description</label>
-            <input
-              type="text"
+            <textarea
               class="form-control"
               id="Description"
               v-model="store.description"
               placeholder="Enter description"
               required
-            />
+            ></textarea>
           </div>
           <div class="mb-3">
             <label for="image" class="form-label">Image</label>
@@ -49,12 +48,12 @@
             />
           </div>
           <div class="mb-3 d-flex justify-content-between">
-            <router-link to="/Createstore">
-              <button type="button" class="btn btn-primary btn-lg" style="width: 120px;">
+            <router-link to="/userStore">
+              <button type="button" class="btn btn-primary" style="width: 120px;">
                 Back
               </button>
             </router-link>
-            <button type="submit" class="btn btn-dark btn-lg" style="width: 120px;">
+            <button type="submit" class="btn btn-dark" style="width: 120px;">
               Save
             </button>
           </div>
@@ -67,7 +66,6 @@
 <script>
 import api from '../../views/api';
 import { useUserStore } from '@/stores/user.js';
-
 export default {
   data() {
     return {
@@ -92,14 +90,14 @@ export default {
     },
     async updateStore() {
       try {
-        const formData ={
-          name: this.store.name,
-          address: this.store.address,
-          description: this.store.description
+        const formData = new FormData();
+        formData.append('name', this.store.name);
+        formData.append('address', this.store.address);
+        formData.append('description', this.store.description);
+        if (this.store.image) {
+          formData.append('image', this.store.image);
         }
-        console.log(formData);
-        console.log(this.userStore.tokenUser);
-  
+
         const storeId = this.$route.params.id;
         const response = await api.updateStore(storeId, formData, {
           headers: {
@@ -107,20 +105,11 @@ export default {
             Authorization: `Bearer ${this.userStore.tokenUser}`
           }
         });
-        
+
         console.log('Store updated successfully:', response.data);
-        this.$router.push('/Createstore'); // Redirect to the create page
+        this.$router.push('/userStore'); // Redirect to the user's store page
       } catch (error) {
-        // if (error.response) {
-        //   console.error('Error response:', error.response.data);
-        //   console.error('Status code:', error.response.status);
-        //   console.error('Headers:', error.response.headers);
-        // } else if (error.request) {
-        //   console.error('No response received:', error.request);
-        // } else {
-        //   console.error('Error setting up the request:', error.message);
-        // }
-        console.error('Error updating store:');
+        console.error('Error updating store:', error);
       }
     },
     onFileChange(event) {

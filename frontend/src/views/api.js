@@ -84,8 +84,8 @@ export default {
   getStore(storeId) {
     return axios.get(`${API_URL}/store/show/${storeId}`);
   },
-  updateStore(storeId, formData) {
-    return axios.put(`${API_URL}/store/update/${storeId}`, formData);
+  updateStore(storeId, formData,config) {
+    return axios.put(`${API_URL}/store/update/${storeId}`, formData,config);
   },
   deleteStore(storeId) {
     return axios.delete(`${API_URL}/store/remove/${storeId}`);

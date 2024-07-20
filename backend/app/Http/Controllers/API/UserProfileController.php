@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StoreResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -33,6 +34,15 @@ class UserProfileController extends Controller
         $user = User::findOrFail($user_id);
         try{
             return response()->json(['data'=> userproductresource::make($user),'message'=> 'get all users product', 'status'=>200]);
+        }catch(\Exception $e){
+            return response()->json(['message'=> $e->getMessage()], status:500);
+        }
+    }
+    public function userStore(Request $request){
+        $user_id = $request->id;
+        $user = User::findOrFail($user_id);
+        try{
+            return response()->json(['data'=> StoreResource::make($user),'message'=> 'get all  store of user', 'status'=>200]);
         }catch(\Exception $e){
             return response()->json(['message'=> $e->getMessage()], status:500);
         }
