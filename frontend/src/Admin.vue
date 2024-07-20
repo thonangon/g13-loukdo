@@ -1,63 +1,63 @@
 <template>
   <div class="d-flex" id="wrapper">
     <!-- Sidebar -->
-    <div class="bg-dark border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading text-light py-4">Admin Dashboard</div>
+    <div class=" border-right" style="background-color: #222E3C;" id="sidebar-wrapper">
+      <div class="py-4 sidebar-heading text-light">Admin Dashboard</div>
       <div class="list-group list-group-flush">
-        <router-link to="/dashboard" class="list-group-item list-group-item-action bg-dark text-light"
-          active-class="active">
+        <router-link to="/dashboard" class="list-group-item list-group-item-action text-light"
+          active-class="active" style="background-color: #222E3C;">
           <i class="bi bi-house me-2"></i> Overview
         </router-link>
-        <router-link to="/admin/orders" class="list-group-item list-group-item-action bg-dark text-light"
-          active-class="active">
+        <router-link to="/admin/orders" class="list-group-item list-group-item-action text-light"
+          active-class="active" style="background-color: #222E3C;">
           <i class="bi bi-cart-dash me-2"></i> Orders
         </router-link>
-        <div class="btn-group border-none">
+        <div class="border-none btn-group">
           <router-link to="/products"
-            class="list-group-item list-group-item-action bg-dark text-light border-start-0 border-end-0 border-top-0 rounded-0"
-            active-class="active">
+            class="list-group-item list-group-item-action text-light border-start-0 border-end-0 border-top-0 rounded-0"
+            active-class="active" style="background-color: #222E3C;">
             <i class="bi bi-box me-2"></i> Products
           </router-link>
-          <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split rounded-0"
-            active-class="active" data-bs-toggle="dropdown" aria-expanded="false">
-            <span class="visually-hidden">Toggle Dropdown</span>
+          <button type="button" class="m-2 border border-white opacity-25 btn-white dropdown-toggle dropdown-toggle-split rounded-0 d-flex justify-content-center align-items-center"
+            active-class="active" data-bs-toggle="dropdown" aria-expanded="false" style="width:25px; height:25px; align-self:center;">
+            <span class="visually-hidden" style="background-color: #FFFF;">Toggle Dropdown</span>
           </button>
-          <ul class="dropdown-menu bg-dark rounded-0">
-            <!-- <li><a class="dropdown-item" href="/creategory">Categories</a></li> -->
+          <ul class="opacity-75 dropdown-menu rounded-0 bg-0">
+            <!-- <li><a class="dropdown-item" href="/category">Categories</a></li> -->
             <router-link to="/creategory"
-              class="dropdown-item list-group-item list-group-item-action bg-dark text-light" active-class="active">
+              class="dropdown-item list-group-item list-group-item-action text-light" active-class="active" style="background-color: #222E3C;">
               <i class="bi bi-box me-2"></i> Categories
             </router-link>
-            <router-link to="/" class="dropdown-item list-group-item list-group-item-action bg-dark text-light"
-              active-class="active">
+            <router-link to="/" class="dropdown-item list-group-item list-group-item-action text-light"
+              active-class="active" style="background-color: #222E3C;">
               <i class="bi bi-box me-2"></i> Categories
             </router-link>
-            <router-link to="/" class="dropdown-item list-group-item list-group-item-action bg-dark text-light"
-              active-class="active">
+            <router-link to="/" class="dropdown-item list-group-item list-group-item-action text-light"
+              active-class="active" style="background-color: #222E3C;">
               <i class="bi bi-box me-2"></i> Categories
             </router-link>
 
           </ul>
         </div>
-        <router-link to="/users" class="list-group-item list-group-item-action bg-dark text-light"
-          active-class="active">
+        <router-link to="/users" class="list-group-item list-group-item-action text-light"
+          active-class="active" style="background-color: #222E3C;">
           <i class="bi bi-person-lines-fill me-2"></i> Customers
         </router-link>
-        <router-link to="/usercreatestore" class="list-group-item list-group-item-action bg-dark text-light"
-          active-class="active">
+        <router-link to="/usercreatestore" class="list-group-item list-group-item-action text-light"
+          active-class="active" style="background-color: #222E3C;">
           <i class="bi bi-shop me-2"></i> Store
         </router-link>
 
-        <router-link to="/admin/reports" class="list-group-item list-group-item-action bg-dark text-light"
-          active-class="active">
+        <router-link to="/admin/reports" class="list-group-item list-group-item-action text-light"
+          active-class="active" style="background-color: #222E3C;">
           <i class="bi bi-bar-chart me-2"></i> Reports
         </router-link>
-        <router-link to="/admin/settings" class="list-group-item list-group-item-action bg-dark text-light"
-          active-class="active">
+        <router-link to="/admin/settings" class="list-group-item list-group-item-action text-light"
+          active-class="active" style="background-color: #222E3C;">
           <i class="bi bi-gear me-2"></i> Settings
         </router-link>
-        <router-link to="/logout" class="list-group-item list-group-item-action bg-dark text-light"
-          active-class="active">
+        <router-link to="/logout" class="list-group-item list-group-item-action text-light"
+          active-class="active" style="background-color: #222E3C;">
           <i class="bi bi-box-arrow-right me-2"></i> Logout
         </router-link>
       </div>
@@ -66,15 +66,15 @@
 
     <!-- Page Content -->
     <div id="page-content-wrapper">
-      <nav class="navbar navbar-expand-lg navbar-custom border-bottom shadow-sm">
+      <nav class="shadow-sm navbar navbar-expand-lg navbar-custom border-bottom">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-collapse"
           aria-controls="nav-collapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <a class="navbar-brand" href="#">Admin Dashboard</a>
         <div class="collapse navbar-collapse" id="nav-collapse">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item mx-3">
+          <ul class="ml-auto navbar-nav">
+            <li class="mx-3 nav-item">
               <a class="nav-link notification-icon" href="#">
                 <i class="bi bi-bell"></i>
                 <span class="badge notification-badge">3</span>
@@ -141,7 +141,7 @@ body {
 }
 
 .list-group-item-action:hover {
-  background-color: #495057 !important;
+  background-color: #233244 !important;
 }
 
 /* Active Class with Background Blur Effect */
@@ -165,14 +165,14 @@ body {
 
 /* Navbar Styles */
 .navbar-custom {
-  background-color: #343a40 !important;
-  color: #ffffff;
+  background-color: #ffffff !important;
+  /* color: #ffffff; */
 }
 
 .navbar-custom .navbar-brand,
 .navbar-custom .nav-link,
 .navbar-custom .dropdown-item {
-  color: #ffffff;
+  /* color: #ffffff; */
 }
 
 .navbar-custom .nav-link:hover,
@@ -200,6 +200,7 @@ body {
 #page-content-wrapper {
   flex: 1;
   overflow-y: auto;
+  background: #F5F7FB;
 }
 
 .container-fluid {

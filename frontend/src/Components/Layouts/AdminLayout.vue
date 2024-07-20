@@ -1,10 +1,12 @@
 <!-- src/App.vue -->
 <template>
+  <div>
   <HeaderMenu />
-  <div class="md:px-50 pt-10 h-full">
-    <div class="rounded-lg h-full">
+  <div class="h-full pt-10 md:px-50">
+    <div class="h-full rounded-lg">
       <slot />
     </div>
+  </div>
   </div>
 </template>
 

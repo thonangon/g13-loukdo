@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table class="table table-dark table-striped">
+    <table class="table table-white table-striped">
           <thead>
               <tr>
               <th scope="col">Id</th>
@@ -20,11 +20,11 @@
               <td>{{ data.products[0].buyer.name }}</td>
               <td>{{ data.products[0].owner.name  }}</td>
               <td>${{ data.products[0].price * data.quantity }}</td>
-              <td class="d-flex gap-2">
-                  <!-- <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" :data-bs-target="'#' + product.id" data-bs-whatever="@mdo">Edit</button> -->
-                  <button v-if="data.status == 0" class="btn btn-primary mb-2" @click="deleteProduct(product.id)">In order</button>
-                  <button v-else-if="data.status == 1" class="btn btn-secondary mb-2" @click="deleteProduct(product.id)">In delivery</button>
-                  <button v-else class="btn btn-success mb-2" @click="deleteProduct(product.id)">Finish</button>
+              <td class="gap-2 d-flex">
+                  <!-- <button type="button" class="mb-2 btn btn-primary" data-bs-toggle="modal" :data-bs-target="'#' + product.id" data-bs-whatever="@mdo">Edit</button> -->
+                  <button v-if="data.status == 0" class="mb-2 btn btn-primary" @click="deleteProduct(product.id)">In order</button>
+                  <button v-else-if="data.status == 1" class="mb-2 btn btn-secondary" @click="deleteProduct(product.id)">In delivery</button>
+                  <button v-else class="mb-2 btn btn-success" @click="deleteProduct(product.id)">Finish</button>
               </td>
               </tr>
           </tbody>
