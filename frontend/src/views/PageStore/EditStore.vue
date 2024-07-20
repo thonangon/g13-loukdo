@@ -26,12 +26,12 @@
             <input type="file" class="form-control" id="image" @change="onFileChange" />
           </div>
           <div class="mb-3 d-flex justify-content-between">
-            <router-link to="/Createstore">
-              <button type="button" class="btn btn-primary btn-lg" style="width: 120px;">
+            <router-link to="/userStore">
+              <button type="button" class="btn btn-primary" style="width: 120px;">
                 Back
               </button>
             </router-link>
-            <button type="submit" class="btn btn-dark btn-lg" style="width: 120px;">
+            <button type="submit" class="btn btn-dark" style="width: 120px;">
               Save
             </button>
           </div>
@@ -44,7 +44,6 @@
 <script>
 import api from '../../views/api';
 import { useUserStore } from '@/stores/user.js';
-
 export default {
   data() {
     return {
@@ -86,18 +85,9 @@ export default {
         });
 
         console.log('Store updated successfully:', response.data);
-        this.$router.push('/Createstore'); // Redirect to the create page
+        this.$router.push('/userStore'); // Redirect to the user's store page
       } catch (error) {
-        // if (error.response) {
-        //   console.error('Error response:', error.response.data);
-        //   console.error('Status code:', error.response.status);
-        //   console.error('Headers:', error.response.headers);
-        // } else if (error.request) {
-        //   console.error('No response received:', error.request);
-        // } else {
-        //   console.error('Error setting up the request:', error.message);
-        // }
-        console.error('Error updating store:');
+        console.error('Error updating store:', error);
       }
     },
     onFileChange(event) {

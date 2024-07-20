@@ -110,6 +110,8 @@ Route::prefix('store')->group(function () {
     Route::put('/update/{id}', [StoreController::class, 'update']);
     Route::get('/show/{id}', [StoreController::class, 'show']);
     Route::delete('/remove/{id}', [StoreController::class, 'destroy']);
+    
+    
 });
 
 // messages chat
@@ -138,6 +140,7 @@ Route::middleware('auth:sanctum')->prefix('payment')->group(function () {
 Route::get('/user/{id}', [UserProfileController::class, 'show']);
 Route::post('/user/update', [UserProfileController::class, 'update'])->middleware('auth:sanctum');
 Route::get('/userproduct', [UserProfileController::class, 'userproduct']);
+Route::get('/userStore', [UserProfileController::class, 'userStore']);
 
 // Crud on Add to Cart
 Route::middleware('auth:sanctum')->prefix('cart')->group(function () {
@@ -159,6 +162,7 @@ Route::middleware('auth:sanctum')->prefix('order')->group(function () {
 // Customer charge for product
 Route::get('/orders/list', [OrderProductController::class, 'orderAndSellerUser']);
 // charge the money
+Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
 
 // custmer charge for product
 Route::get('/plans', [PlansController::class, 'index']);

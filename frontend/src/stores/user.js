@@ -14,6 +14,7 @@ export const useUserStore = defineStore({
     post_count: 0, 
     has_paid: false, 
     notification: null,
+   
   }),
   actions: {
     setUser(data) {
@@ -21,17 +22,19 @@ export const useUserStore = defineStore({
       this.tokenUser = data.tokenUser;
       this.post_count = data.post_count || 0;
       this.has_paid = data.has_paid || false;
-      
+      this.user_id = data.user_id;
       localStorage.setItem('user_token', data.userToken);
       localStorage.setItem('userAccount', JSON.stringify(data.accountUser));
       localStorage.setItem('post_count', this.post_count);
       localStorage.setItem('has_paid', this.has_paid);
+
     },
     loadUser() {
       const token = localStorage.getItem('user_token');
       const accountUser = localStorage.getItem('userAccount');
       const postCount = localStorage.getItem('post_count');
       const hasPaid = localStorage.getItem('has_paid');
+       const userId = localStorage.getItem('user_id');
       if (token && accountUser) {
         this.tokenUser = token;
         this.accountUser = JSON.parse(accountUser);
