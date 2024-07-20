@@ -1,9 +1,9 @@
 <template>
-  <div class="container py-4  rounded">
-    <div class="card mb-4 shadow-sm">
-      <div class="card-body text-center">
-        <div class="d-flex justify-content-center mb-4">
-          <img :src="imageProduct(product.image)" class="img-fluid rounded" style="width: 200px; height: 200px; object-fit: cover;" />
+  <div class="container py-4 rounded">
+    <div class="mb-4 shadow-sm card">
+      <div class="text-center card-body">
+        <div class="mb-4 d-flex justify-content-center">
+          <img :src="imageProduct(product.image)" class="rounded img-fluid" style="width: 180px; height: 180px; object-fit: cover;" />
         </div>
         <h5 class="card-title">{{ product.name }}</h5>
         <p class="card-text text-muted">${{ product.price }}</p>

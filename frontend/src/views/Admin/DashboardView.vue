@@ -20,7 +20,7 @@
 
     <!-- Page Content -->
     <div class="mx-2">
-      <table v-if="currentSection === 'users'" class="table table-dark table-striped">
+      <table v-if="currentSection === 'users'" class="table table-white table-striped">
         <thead>
           <tr class="text-center">
             <th scope="col">Id</th>

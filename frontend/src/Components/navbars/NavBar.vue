@@ -1,5 +1,5 @@
 <template>
-  <div class="div bg-white sticky-xl-top">
+  <div class="bg-white div sticky-xl-top">
     <div class="navbar-shadow">
       <div class="container">
         <nav class="navbar navbar-expand-lg d-flex flex-column">
@@ -19,9 +19,9 @@
               <div class="d-flex w-100 justify-content-between align-items-center">
                 <!-- Left side of the navbar -->
                 <div class="d-flex flex-grow-1">
-                  <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)"><i class="fas fa-home"></i> Home</router-link>
-                  <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(1)"><i class="fas fa-box me-2"></i>Products</router-link>
-                  <!-- <router-link to="/Createstore" class="me-5 text-secondary mb-0 custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)">Store</router-link> -->
+                  <router-link to="/" class="mb-0 me-5 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)"><i class="fas fa-home"></i> Home</router-link>
+                  <router-link to="/product" class="mb-0 me-5 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(1)"><i class="fas fa-box me-2"></i>Products</router-link>
+                  <!-- <router-link to="/Createstore" class="mb-0 me-5 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)">Store</router-link> -->
                   <div v-if="store_user.accountUser" class="dropdown me-5 custom-font-size">
                     <a class="text-dark custom-font-size nav-link" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">More...</a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -32,7 +32,7 @@
                   </div>
                 </div>
                 <!-- Logo -->
-                <a class="navbar-brand mx-auto logo" href="#">
+                <a class="mx-auto navbar-brand logo" href="#">
                   <img class="ms-auto logo-img" src="../../assets/images/lOUKDO.png" alt="Logo" />
                 </a>
 
@@ -41,7 +41,7 @@
                   <div class="iconenav d-flex align-items-center">
                     <div v-if="store_user.accountUser" class="position-relative me-3" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">
                       <i class="bi bi-bell-fill me-2"></i>
-                      <span v-if="notiNum > 0" class="badge bg-danger position-absolute top-0 start-100 translate-middle">{{ notiNum }}</span>
+                      <span v-if="notiNum > 0" class="top-0 badge bg-danger position-absolute start-100 translate-middle">{{ notiNum }}</span>
                     </div>
                     <ul class="dropdown-menu dropdown-menu-end custom-dropdown">
                       <li v-if="currentSeller">
@@ -52,11 +52,11 @@
                     </ul>
                     <router-link v-if="store_user.accountUser" to="/card" class="position-relative">
                       <i class="bi bi-cart-dash me-2"></i>
-                      <span class="badge bg-success position-absolute top-0 start-100 translate-middle">{{ numcart }}</span>
+                      <span class="top-0 badge bg-success position-absolute start-100 translate-middle">{{ numcart }}</span>
                     </router-link>
                   </div>
-                  <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size"><button class="btn btn-secondary m-1">Login</button></router-link>
-                  <router-link v-if="!store_user.accountUser" to="/register" class="nav-link mr-0 custom-font-size"><button class="btn btn-primary m-1">Register</button></router-link>
+                  <router-link v-if="!store_user.accountUser" to="/login" class="mr-0 nav-link custom-font-size"><button class="m-1 btn btn-secondary">Login</button></router-link>
+                  <router-link v-if="!store_user.accountUser" to="/register" class="mr-0 nav-link custom-font-size"><button class="m-1 btn btn-primary">Register</button></router-link>
                   <div v-else class="dropdown d-flex align-items-center profile-container">
                     <span class="profile-name">{{ store_user.accountUser.name.toUpperCase() }}</span>
                     <img v-if="store_user.accountUser.profile" :src="profile_url(store_user.accountUser.profile)" class="text-dark custom-font-size nav-link profile-img" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">

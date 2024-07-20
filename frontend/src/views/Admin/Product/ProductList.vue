@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-      <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#createProduct" data-bs-whatever="@mdo">New product</button>
-      <table class="table table-dark table-striped">
+      <button type="button" class="mb-2 btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProduct" data-bs-whatever="@mdo">Add product</button>
+      <table class="table table-white table-striped">
           <thead>
               <tr>
               <th scope="col">Id</th>
@@ -15,13 +15,13 @@
           <tbody>
               <tr v-for="(product, list) in products" :key="product.id">
               <th scope="row">{{ list + 1 }}</th>
-              <td>{{ product.name }}</td>
+              <td >{{ product.name }}</td>
               <td>{{ product.quantity }}</td>
               <td>${{ product.price }}</td>
               <td>{{ product.creator }}</td>
-              <td class="d-flex gap-2">
-                  <!-- <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" :data-bs-target="'#' + product.id" data-bs-whatever="@mdo">Edit</button> -->
-                  <button class="btn btn-danger mb-2" @click="deleteProduct(product.id)">Delete</button>
+              <td class="gap-2 d-flex">
+                  <!-- <button type="button" class="mb-2 btn btn-primary" data-bs-toggle="modal" :data-bs-target="'#' + product.id" data-bs-whatever="@mdo">Edit</button> -->
+                  <button class="mb-2 btn btn-danger" @click="deleteProduct(product.id)">Delete</button>
               </td>
               </tr>
           </tbody>
@@ -37,7 +37,7 @@
                   </div>
                   <div class="modal-body">
                       <form @submit.prevent="createProduct">
-                          <div class="d-flex justify-content-between gap-2">
+                          <div class="gap-2 d-flex justify-content-between">
                               <div style="width: 50%;">
                                   <label for="namePro" class="col-form-label">Name:</label>
                                   <input type="text" class="form-control" id="namePro" v-model="name">
@@ -47,7 +47,7 @@
                                   <input type="number" class="form-control" id="price" v-model="price">
                               </div>
                           </div>
-                          <div class="d-flex justify-content-between gap-2">
+                          <div class="gap-2 d-flex justify-content-between">
                               <div style="width: 50%;">
                                   <label for="quantity" class="col-form-label">Quantity:</label>
                                   <input type="number" class="form-control" id="quantity" v-model="quantity">
@@ -89,7 +89,7 @@
                       </div>
                       <div class="modal-body">
                           <form>
-                              <div class="d-flex justify-content-between gap-2">
+                              <div class="gap-2 d-flex justify-content-between">
                                   <div style="width: 50%;">
                                       <label for="namePro" class="col-form-label">Name:</label>
                                       <input type="text" class="form-control" id="namePro" v-model="product.name">
@@ -99,7 +99,7 @@
                                       <input type="number" class="form-control" id="price" v-model="product.price">
                                   </div>
                               </div>
-                              <div class="d-flex justify-content-between gap-2">
+                              <div class="gap-2 d-flex justify-content-between">
                                   <div style="width: 50%;">
                                       <label for="quantity" class="col-form-label">Quantity:</label>
                                       <input type="number" class="form-control" id="quantity" v-model="product.quantity">

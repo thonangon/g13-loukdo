@@ -3,12 +3,12 @@
     <div v-if="productDetails" class="">
       <div class="leftSide" style="width: 48%;">
         <div class="d-flex align-items-center" style="height: 60px;">
-          <img v-if="productDetails.data.pro_owner.profile" :src="profile_url(productDetails.data.pro_owner.profile)" alt="User Image" class="text-dark m-3 nav-link profile-img">
-          <img v-else :src="ownerprofileName(productDetails.data.pro_owner.name)" alt="User Image" class="text-dark m-3 nav-link profile-img">
+          <img v-if="productDetails.data.pro_owner.profile" :src="profile_url(productDetails.data.pro_owner.profile)" alt="User Image" class="m-3 text-dark nav-link profile-img">
+          <img v-else :src="ownerprofileName(productDetails.data.pro_owner.name)" alt="User Image" class="m-3 text-dark nav-link profile-img">
           <p class="mb-0">{{ productDetails.data.pro_owner.name }} - Owner: {{ productDetails.data.name }}</p>
         </div>
       </div>
-      <div class="rightSide p-3 d-flex align-items-center gap-5 bg-light rounded shadow">
+      <div class="gap-5 p-3 rounded shadow rightSide d-flex align-items-center bg-light">
         <div class="proImageSlide">
           <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner" style="height: 600px;">
@@ -48,22 +48,22 @@
             <h2>QUANTITY</h2>
             <input type="number" v-model="form.quantity" class="p-4">
           </div>
-          <div class="action d-flex justify-content-between mt-5 gap-2">
-            <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size">
+          <div class="gap-2 mt-5 action d-flex justify-content-between">
+            <router-link v-if="!store_user.accountUser" to="/login" class="mr-0 nav-link custom-font-size">
               <button class="btn btn-success" style="width: 270px; height: 52px;">Add to cart!</button>
             </router-link>
             <button v-else @click="addToCart(productDetails.data)" class="btn btn-success" style="width: 270px; height: 52px;">Add to cart!</button>
-            <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size text-danger">
+            <router-link v-if="!store_user.accountUser" to="/login" class="mr-0 nav-link custom-font-size text-danger">
               <button class="btn btn-primary" style="width: 270px; height: 52px;">Buy now!</button>
             </router-link>
-            <router-link v-else to="" class="nav-link mr-0 custom-font-size text-danger">
+            <router-link v-else to="" class="mr-0 nav-link custom-font-size text-danger">
               <button class="btn btn-primary" style="width: 270px; height: 52px;" @click="buyNow()">Buy now!</button>
             </router-link>
           </div>
         </form>
       </div>
     </div>
-    <p class="p- mt-5 border-bottom" style="width: 100%;">Ratings and Feedback for this product!</p>
+    <p class="mt-5 p- border-bottom" style="width: 100%;">Ratings and Feedback for this product!</p>
     <div class="RateAndFeedback d-flex">
       <div class="feedback" style="width: 70%;">
         <rate_show :product_id="id" />
@@ -87,12 +87,12 @@
     <div v-if="productDetails">
       <div class="leftSide" style="width: 48%;">
         <div class="d-flex align-items-center" style="height: 60px;">
-          <img v-if="productDetails.data.pro_owner.profile" :src="profile_url(productDetails.data.pro_owner.profile)" alt="User Image" class="text-dark m-3 nav-link profile-img">
-          <img v-else :src="ownerprofileName(productDetails.data.pro_owner.name)" alt="User Image" class="text-dark m-3 nav-link profile-img">
+          <img v-if="productDetails.data.pro_owner.profile" :src="profile_url(productDetails.data.pro_owner.profile)" alt="User Image" class="m-3 text-dark nav-link profile-img">
+          <img v-else :src="ownerprofileName(productDetails.data.pro_owner.name)" alt="User Image" class="m-3 text-dark nav-link profile-img">
           <p class="mb-0">{{ productDetails.data.pro_owner.name }} - Owner: {{ productDetails.data.name }}</p>
         </div>
       </div>
-      <div class="rightSide p-3 d-flex align-items-center gap-5 bg-light rounded shadow">
+      <div class="gap-5 p-3 rounded shadow rightSide d-flex align-items-center bg-light">
         <div class="proImageSlide">
           <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner" style="height: 600px;">
@@ -133,15 +133,15 @@
             <h2>QUANTITY</h2>
             <input type="number" v-model="form.quantity" class="p-4">
           </div>
-          <div class="action d-flex justify-content-between mt-5 gap-2">
-            <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size">
+          <div class="gap-2 mt-5 action d-flex justify-content-between">
+            <router-link v-if="!store_user.accountUser" to="/login" class="mr-0 nav-link custom-font-size">
               <button class="btn btn-success" style="width: 270px; height: 52px;">Add to cart!</button>
             </router-link>
             <button v-else @click="addToCart(productDetails.data)" class="btn btn-success" style="width: 270px; height: 52px;">Add to cart!</button>
-            <router-link v-if="!store_user.accountUser" to="/login" class="nav-link mr-0 custom-font-size text-danger">
+            <router-link v-if="!store_user.accountUser" to="/login" class="mr-0 nav-link custom-font-size text-danger">
               <button class="btn btn-primary" style="width: 270px; height: 52px;">Buy now!</button>
             </router-link>
-            <router-link v-else to="" class="nav-link mr-0 custom-font-size text-danger">
+            <router-link v-else to="" class="mr-0 nav-link custom-font-size text-danger">
               <button class="btn btn-primary" style="width: 270px; height: 52px;" @click="buyNow()">Buy now!</button>
             </router-link>
           </div>
@@ -149,7 +149,7 @@
       </div>
     </div>
     <!-- {{ productDetails }} -->
-    <p class="p- mt-5 border-bottom" style="width: 100%;">Ratings and Feedback for this product!</p>
+    <p class="mt-5 p- border-bottom" style="width: 100%;">Ratings and Feedback for this product!</p>
     <div class="RateAndFeedback d-flex">
       <div class="feedback" style="width: 70%;">
         <div v-if="productDetails">
@@ -161,8 +161,8 @@
           </div>
         </div>
       </div>
-      <div class="cardPro border-start bg-dark" style="width: 30%">
-        <div class="product-container mt-3">
+      <div class="cardPro border-start" style="width: 30%">
+        <div class="mt-3 product-container">
           <div v-for="(product, index) in products" :key="index">
             <cards_product :product="product" style="width: 90%" />
           </div>
