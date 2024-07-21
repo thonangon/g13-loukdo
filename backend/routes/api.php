@@ -180,3 +180,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
 });
 
+
+Route::middleware('auth:sanctum')->group(function () {
+
+});
+
