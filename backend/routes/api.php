@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Order\PaymentController;
 use App\Http\Controllers\Plans\PlansController;
 use App\Http\Controllers\Plans\PlansController\PlanController;
+use App\Http\Controllers\Plans\PlansUserController;
 use App\Http\Controllers\Plans\SubscriptionController;
 use App\Http\Controllers\Stripe\StripeController
 ;
@@ -156,9 +157,9 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('/plans', [PlansController::class, 'index']);
-    Route::get('/plans/{id}', [PlansController::class, 'show']);
-    Route::post('/create/plans', [PlansController::class, 'store']);
-    Route::put('/plans/{id}', [PlansController::class, 'update']);
-    Route::delete('/plans/{id}', [PlansController::class, 'destroy']);
+    Route::get('/plans', [PlansUserController::class, 'index']);
+    Route::get('/plans/{id}', [PlansUserController::class, 'show']);
+    Route::put('/plans/{id}', [PlansUserController::class, 'update']);
+    Route::delete('/plans/{id}', [PlansUserController::class, 'destroy']);
+    Route::post('/plans/create', [PlansUserController::class, 'store']);
 });

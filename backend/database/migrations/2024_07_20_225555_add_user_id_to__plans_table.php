@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->boolean('has_paid')->default(false);
-            $table->timestamp('next_charge_date')->nullable();
-           
+        Schema::table('Plans', function (Blueprint $table) {
+            //
+            $table->unsignedBigInteger('user_id')->nullable()->after('id'); 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -23,9 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('has_paid');
-            $table->dropColumn('next_charge_date');
+        Schema::table('Plans', function (Blueprint $table) {
+            //
         });
     }
 };
