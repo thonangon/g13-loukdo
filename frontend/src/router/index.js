@@ -91,7 +91,10 @@ const routes = [
         path: '/charge',
         name: '/charge', 
         component: ChargeMoney,
-        props: true
+        props: route => ({ 
+            planTitle: route.query.planTitle,
+            planPrice: route.query.planPrice
+          })
     }
 ]
 
