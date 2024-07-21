@@ -180,3 +180,7 @@ Route::post('/stripe/success', [StripeController::class, 'paymentSuccess']);
 //user post product information
 Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
 
+
+Route::post('/send-message', [MessageController::class, 'sendMessage']);
+
+
