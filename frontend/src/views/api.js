@@ -68,11 +68,7 @@ export default {
   },
 
 
-  chatrooms(headers) {
-    return axios.get(`${API_URL}/message/chat/rooms`, {
-      headers: headers
-    });
-  },
+
   getAllCate(){
     return axios.get(`${API_URL}/categories/list`);},
   createStore(formData, config){
@@ -164,7 +160,27 @@ export default {
 
   orderAndseller(){
     return axios.get(`${API_URL}/orders/list`);
-  }
+  },
+
+  // ________________Messages___________________________
+
+  // http://127.0.0.1:8000/api/message/chat/room
+  chatrooms(headers) {
+    return axios.get(`${API_URL}/message/chat/rooms`, {
+      headers: headers
+    });
+  },
+
+  createChatRoom(userId, headers) {
+    return axios.post(`${API_URL}/message/chat/room`, { user_id: userId }, { headers: headers });
+  },
+
+
+  getMessage(roomId, headers) {
+    return axios.get(`${API_URL}/message/chat/messages/${roomId}`, {
+      headers: headers
+    });
+  },
 
 };
 

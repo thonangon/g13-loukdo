@@ -14,6 +14,7 @@ export const useUserStore = defineStore({
     post_count: 0, 
     has_paid: false, 
     notification: null,
+    user_id:null,
   }),
   actions: {
     setUser(data) {
@@ -69,6 +70,9 @@ export const useUserStore = defineStore({
     },
     setNotification(notification) {
       this.notification = notification;
+    },
+    setUser_id(id){
+      this.user_id = id;
     }
   },
 });
