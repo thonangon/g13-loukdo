@@ -19,7 +19,7 @@ class SubscriptionController extends Controller
         ]);
 
         $user = User::findOrFail($request->user_id);
-        $plan = Plans::findOrFail($request->plan_id);
+        // $plan = Plans::findOrFail($request->plan_id);
         if ($user->subscription) {
             return response()->json(['error' => 'User already has an active subscription'], 400);
         }
@@ -27,7 +27,7 @@ class SubscriptionController extends Controller
         // Create a new subscription for the user
         $subscription = new Subscription();
         $subscription->user_id = $user->id;
-        $subscription->plan_id = $plan->id;
+        // $subscription->plan_id = $plan->id;
         $subscription->expires_at = now()->addMonth(); 
         $subscription->save();
 

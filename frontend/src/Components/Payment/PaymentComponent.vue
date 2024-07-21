@@ -1,3 +1,4 @@
+
 <template>
   <div class="payment-form">
     <div class="card payment-details">
@@ -49,7 +50,7 @@
         </div>
         <div class="custom-modal-body">
           <p>Your payment was processed successfully.</p>
-          <p v-if="planTitle === 'Pro'">Your next payment will be due on {{ nextPaymentDate }}</p>
+          <p v-if="selectedPlan === 'Pro' && nextChargeDate">Your next charge date is: {{ nextChargeDate }}</p>
         </div>
         <div class="custom-modal-footer">
           <button type="button" @click="closeModal" class="btn btn-secondary">OK</button>
@@ -71,13 +72,13 @@ export default {
       elements: null,
       cardElement: null,
       email: '',
-      amount: this.$route.query.planPrice,
       paymentMethod: 'card',
+      amount: '',
       saveInfo: false,
       showModal: false,
       submitting: false,
-      nextPaymentDate: '',
-      planTitle: this.$route.query.planTitle
+      selectedPlan: null, // Add selectedPlan data
+      nextChargeDate: null, // Add nextChargeDate data
     };
   },
   computed: {
@@ -117,7 +118,8 @@ export default {
       this.submitting = true;
       try {
         const { data } = await axios.post('http://127.0.0.1:8000/api/stripe/payment', {
-          amount: this.amount
+          amount: this.amount,
+          plan: this.selectedPlan 
         });
         const clientSecret = data.client_secret;
         const { error, paymentIntent } = await this.stripe.confirmCardPayment(clientSecret, {
@@ -134,15 +136,15 @@ export default {
           displayError.textContent = error.message;
         } else {
           if (paymentIntent) {
-            await axios.post('http://127.0.0.1:8000/api/stripe/handlePaymentSuccess', {
+            const response = await axios.post('http://127.0.0.1:8000/api/stripe/handlePaymentSuccess', {
               payment_intent_id: paymentIntent.id,
               email: this.email,
-              plan_title: this.planTitle
+              plan: this.selectedPlan 
             });
-            if (this.planTitle === 'Pro') {
-              const currentDate = new Date();
-              const nextPaymentDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
-              this.nextPaymentDate = nextPaymentDate.toISOString().split('T')[0];
+            if (this.selectedPlan === 'Pro') {
+              this.nextChargeDate = response.data.next_charge_date;
+              console.log(this.nextChargeDate);
+              // Set next charge date if Pro plan
             }
             this.showModal = true;
           }
@@ -160,7 +162,88 @@ export default {
   }
 };
 </script>
-
 <style scoped>
-/* Your styles here */
+.payment-form {
+  max-width: 1000px;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.payment-details {
+  width: 48%;
+}
+.payment-form .card {
+  padding: 20px;
+}
+.payment-form .card .card-header {
+  background: none;
+  border: none;
+  padding: 0;
+}
+.payment-form .form-group label {
+  font-weight: bold;
+}
+.payment-form .form-control {
+  margin-bottom: 10px;
+}
+.payment-form .btn-primary {
+  width: 100%;
+}
+.payment-method {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.payment-method .custom-control {
+  margin-right: 10px;
+}
+.powered-by {
+  text-align: center;
+  margin-top: 20px;
+}
+.stripe-logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.stripe-logo img {
+  max-width: 100px;
+  margin: 0 5px;
+}
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.custom-modal {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  max-width: 500px;
+  width: 100%;
+}
+.custom-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.custom-modal-body {
+  margin-top: 10px;
+}
+.custom-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+.close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+}
 </style>

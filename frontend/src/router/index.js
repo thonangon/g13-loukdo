@@ -14,6 +14,7 @@ import userprodcuts from '../views/Users/ProductVue.vue'
 // import ProductShow from '../views/Products/ProductShow.vue';
 import addcard from '../views/CardAdd/addCard.vue';
 import userchats from '../views/Users/Chat/ChatView.vue'
+import Charge from '../Components/Payment/PaymentComponent.vue'
 import plans from '../views/Charge/ChargeMoney.vue'
 import ChargeMoney from '../views/Order/PaymentOrder.vue';
 
@@ -89,8 +90,17 @@ const routes = [
     },
     {
         path: '/charge',
-        name: '/charge', 
+        name: 'charge', 
         component: ChargeMoney,
+        // props: route => ({ 
+        //     planTitle: route.query.planTitle,
+        //     planPrice: route.query.planPrice
+        //   })
+    },
+    {
+        path: '/chargeMoney',
+        name: 'chargeMoney', 
+        component: Charge,
         props: route => ({ 
             planTitle: route.query.planTitle,
             planPrice: route.query.planPrice

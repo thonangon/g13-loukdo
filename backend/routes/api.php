@@ -15,6 +15,7 @@ use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 use App\Http\Controllers\addToCartController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Order\PaymentController;
+use App\Http\Controllers\Plans\PlanPayController;
 use App\Http\Controllers\Plans\PlansController;
 use App\Http\Controllers\Plans\PlansController\PlanController;
 use App\Http\Controllers\Plans\PlansUserController;
@@ -155,11 +156,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
     Route::post('/products', [ProductController::class, 'store']);
 });
-Route::middleware('auth:sanctum')->group(function () {
-
-    Route::get('/plans', [PlansUserController::class, 'index']);
-    Route::get('/plans/{id}', [PlansUserController::class, 'show']);
-    Route::put('/plans/{id}', [PlansUserController::class, 'update']);
-    Route::delete('/plans/{id}', [PlansUserController::class, 'destroy']);
-    Route::post('/plans/create', [PlansUserController::class, 'store']);
-});
+Route::get('/lists', [PlanPayController::class, 'index']);
+Route::get('/plans/{id}', [PlanPayController::class, 'show']);
+Route::put('update/plans/{id}', [PlanPayController::class, 'update']);
+Route::delete('delete/plans/{id}', [PlanPayController::class, 'destroy']);
+Route::post('/create/plans', [PlanPayController::class, 'store']);
+Route::post('/setDate', [StripePaymentController::class, 'setNextChargeDate']);

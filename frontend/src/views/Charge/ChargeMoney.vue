@@ -1,5 +1,5 @@
 <template>
-  <div class="container ">
+  <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="step-indicator">
@@ -20,11 +20,9 @@
                 </h2>
                 <h1 class="card-subtitle mb-2">{{ plan.price }}</h1>
                 <p class="card-text">{{ plan.description }}</p>
-                <router-link to="/charge">
-                  <button class="btn w-100" :class="plan.recommended ? 'btn-success' : 'btn-outline-primary'" >
+                <button @click="choosePlan(plan)" class="btn w-100" :class="plan.recommended ? 'btn-success' : 'btn-outline-primary'">
                     Get this plan
-                  </button>
-                </router-link>
+                </button>
               </div>
             </div>
           </div>
@@ -35,39 +33,44 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { useUserStore } from '@/stores/user.js';
+
 export default {
-  
   data() {
     return {
-      plans: [
-        {
-          title: 'Free',
-          price: '$0',
-          description: 'Freer for you to post the post of 10 produt first',
-          recommended: false
-        },
-        {
-          title: 'Standard',
-          price: '$10 per 10 posts',
-          description:
-            'Unlimited product posts, Charge if posts exceed 10, Easy and continuous posting still 20 posts',
-          recommended: true
-        },
-        {
-          title: 'Pro',
-          price: '$20 per month',
-          description:
-            'Unlimited product posts, No additional charges for unlimited posts, 2.5% discount every month, Additional premium features',
-          recommended: false
-        }
-      ],
-      selectedPlan: null
+      plans: [],
+      selectedPlan: null,
+      store_user: useUserStore(),
+    };
+  },
+  async created() {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/api/lists');
+      this.plans = response.data;
+      console.log(this.plans);
+    } catch (error) {
+      console.error('Error fetching plans:', error);
     }
   },
-  
-}
+  methods: {
+    choosePlan(plan) {
+      this.selectedPlan = plan;
+      this.store_user.plan = plan; // Save selected plan to the store
+      console.log(this.selectedPlan);
+      console.log(this.store_user.plan);
+      if (plan.title === 'Pro') {
+        // Add logic to handle 'Pro' plan selection
+        console.log(plan.title);
+        this.$router.push('/chargeMoney');
+      } else {
+        // Handle other plans
+        this.$router.push('/chargeMoney');
+      }
+    }
+  }
+};
 </script>
-
 <style scoped>
 body {
   font-family: 'Arial', sans-serif;
@@ -137,8 +140,6 @@ body {
   color: black;
 }
 
-
-
 .btn {
   border-radius: 25px;
   padding: 0.75rem 1rem;
@@ -146,7 +147,7 @@ body {
 
 .btn-outline-primary {
   border-color: #28a745;
-  color:  #28a745;
+  color: #28a745;
 }
 
 .btn-outline-primary:hover {

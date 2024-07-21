@@ -30,7 +30,9 @@ class User extends Authenticatable
         'password',
         'post_count',
         'has_paid',
-        'next_charge_date'
+        'next_charge_date',
+        'plan_id',
+
     ];
 
     /**
@@ -81,14 +83,14 @@ class User extends Authenticatable
         {
             return $this->hasMany(ReplyComment::class);
         }
-        public function plan()
-        {
-            return $this->belongsTo(Plans::class);
-        }
-    public function products()
+        public function planPay()
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsTo(PlanPay::class);
     }
+        public function products()
+        {
+            return $this->hasMany(Product::class);
+        }
     
         
 }
