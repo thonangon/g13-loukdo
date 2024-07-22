@@ -57,14 +57,15 @@
                     </div>
                     <ul class="dropdown-menu dropdown-menu-end custom-dropdown">
                       <li v-if="currentSeller">
+                        
                         <router-link v-for="(sell, list) in currentSeller" :key="list" class="custom-dropdown-item border-bottom" to="/selling">
                           <p v-if="sell.status==0" @click="isClick"><i class="fas fa-user me-2"></i>{{sell.buyer.name}} order {{ sell.products[0].name }}</p>
                         </router-link>
                       </li>
                     </ul>
                     <router-link v-if="store_user.accountUser" to="/card" class="position-relative">
-                      <i class="bi bi-cart-dash me-2"></i>
-                      <span class="top-0 badge bg-success position-absolute start-100 translate-middle">{{ numcart }}</span>
+                      <i class="fas fa-shopping-cart me-2"></i>
+                      <span v-if="numcart > 0" class="top-0 badge bg-success position-absolute start-100 translate-middle">{{ numcart }}</span>
                     </router-link>
                   </div>
                   <router-link v-if="!store_user.accountUser" to="/login" class="mr-0 nav-link custom-font-size"><button class="m-1 btn btn-secondary">Login</button></router-link>
@@ -120,6 +121,7 @@ export default {
     const listCategories = ref([]);
     const currentSeller = ref([]);
     const notiNum = ref(0);
+    const numNoti = localStorage.getItem('notinum');
 
     const loadCart = () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
