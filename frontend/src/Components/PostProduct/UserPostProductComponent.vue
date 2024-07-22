@@ -1,6 +1,6 @@
 <template>
   <form @submit.prevent="createProduct">
-    <div class="container bg-light p-4 rounded shadow w-50">
+    <div class="container p-4 rounded shadow bg-light w-50">
       <div class="mb-3 text-center">
         <h3>Create your products</h3>
         <span>Start posting your product to make money here!</span>
@@ -159,9 +159,12 @@ export default {
           console.error('Error posting product: ', response.data.message);
         }
       } catch (error) {
-        console.error('Error creating product:', error);
-        if (error.response && error.response.status === 401) {
-          console.log('Unauthorized access. Redirecting to login.');
+        if (error.response && error.response.status === 422 || error.response && error.response.status === 403) {
+          console.error('403 Forbidden:', error.response.data.message);
+          this.$router.push('/plans'); // Redirect to payment page on 403 error
+        } else {
+          console.error('Error creating product:', error);
+          // Handle general error
         }
       } finally {
         this.loading = false;

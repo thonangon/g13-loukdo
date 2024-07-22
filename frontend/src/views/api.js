@@ -18,9 +18,14 @@ export default {
   createProduct(formData, config) {
     return axios.post(`${API_URL}/products/create`, formData, config);
   },
+
   
   imageUrlProduct(filename) {
     return `${API_URL}/products/image/${filename}`;
+  },
+  
+  imageUrlCategory(filename) {
+    return `${API_URL}/categories/image/${filename}`;
   },
   imageUrlStore(filename) {
     return `${API_URL}/stores/image/${filename}`;
@@ -80,8 +85,8 @@ export default {
   getStore(storeId) {
     return axios.get(`${API_URL}/store/show/${storeId}`);
   },
-  updateStore(storeId, formData) {
-    return axios.put(`${API_URL}/store/update/${storeId}`, formData);
+  updateStore(storeId, formData,config) {
+    return axios.put(`${API_URL}/store/update/${storeId}`, formData,config);
   },
   deleteStore(storeId) {
     return axios.delete(`${API_URL}/store/remove/${storeId}`);
@@ -129,23 +134,30 @@ export default {
   },
 
   // ____________________CATEGORY________________
-  listCategories(){
+
+  listCategories() {
     return axios.get(`${API_URL}/categories/list`);
-  },
+},
 
-  productCategory(cateId) {
-    return axios.get(`${API_URL}/products/category/${cateId}`);
-  },
+createCategory(formData, config) {
+    return axios.post(`${API_URL}/create/category`, formData, config);
+},
+updateCategory(id, formData, config) {
+  return axios.post(`${API_URL}/update/category/${id}`, formData, config);
+},
 
-  createCategory(data) {
-    return axios.post(`${API_URL}/create/category`, data);
-  },
+deleteCategory(categoryId) {
+    return axios.delete(`${API_URL}/delete/category/${categoryId}`);
+},
 
-  deleteCategory(cateId) {
-    return axios.delete(`${API_URL}/delete/category/${cateId}`);
-  },
 
-  // ______________________Rattings__________________
+getAllCategories(){
+  return axios.get(`${API_URL}/categories/list`);},
+productCategory(cateId) {
+  return axios.get(`${API_URL}/products/category/${cateId}`);
+},
+
+  // ______________________Ratings__________________
   rattingProduct(productId, rating, headers) {
     console.log(rating);
     return axios.post(`${API_URL}/products/ratting/${productId}`, { rating: rating }, { headers: headers });

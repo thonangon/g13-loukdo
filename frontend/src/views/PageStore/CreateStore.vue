@@ -1,17 +1,9 @@
 <template>
-  <div class="container h-auto">
-    <!-- Search Bar -->
-    <div class="d-flex justify-content-center">
-      <div class="search">
-        <input class="search_input" type="text" v-model="searchQuery" placeholder="Search here..." @input="performSearch" />
-        <a href="#" class="search_icon"><i class="fa fa-search"></i></a>
-      </div>
-    </div>
-
+  <div class="container h-100">
     <!-- Create Button -->
     <div class="d-flex justify-content-start mb-3">
       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createFormModal">
-        Create
+        Create Own Store
       </button>
     </div>
 
@@ -41,30 +33,31 @@
                 <label for="image" class="form-label">Image</label>
                 <input type="file" class="form-control" id="image" @change="onFileChange" required />
               </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Create</button>
+              </div>
             </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" @click="createStore">Create</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Store Collection -->
-    <h3 class="text-center mt-4" style="color: teal">Shop Collections</h3>
-    <div v-if="stores.length > 0" class="stores-container">
-      <div v-for="store in filteredStores" :key="store.id" class="card mt-4 ">
+    <!-- Display Stores -->
+    <div>
+      <div v-for="store in stores" :key="store.id" class="card mb-4">
         <div class="card-body d-flex m-4">
           <div class="d-flex justify-content-center align-items-center">
-            <img :src="imageStore(store.image)" alt="Store Image" style="width: 200px; height: 200px" />
+            <router-link :to="{ name: 'CollectStore', params: { id: store.id } }">
+              <img :src="imageStore(store.image)" @click="captureUserId(store.created_by)" alt="Store Image" style="width: 200px; height: 200px" />
+            </router-link>
           </div>
           <div class="text1 m-4">
             <h2>Store name: {{ store.name }}</h2>
-            <h5>My address: {{ store.address }}</h5>
+            <h5>Address: {{ store.address }}</h5>
             <p>{{ store.description }}</p>
             <div class="mt-2">
-              <router-link :to="{ name: 'editStore', params: { id: store.id } }" class="btn btn-secondary">Edit</router-link>
+              <router-link :to="{ name: 'editStore', params: { id: store.id } }" class="btn btn-primary me-3">Edit</router-link>
               <button class="btn btn-danger" @click="deleteStore(store.id)">Delete</button>
             </div>
           </div>
@@ -77,6 +70,8 @@
 <script>
 import api from '../../views/api';
 import { useUserStore } from '@/stores/user.js';
+import axios from 'axios';
+
 
 export default {
   data() {
@@ -90,21 +85,11 @@ export default {
       userStore: useUserStore(),
       stores: [],
       loading: false,
-      searchQuery: ''
+      searchQuery: '',
+      userHasStore: false
     };
   },
-  computed: {
-    filteredStores() {
-      if (!this.searchQuery) {
-        return this.stores;
-      }
-      const query = this.searchQuery.toLowerCase();
-      return this.stores.filter(store =>
-        store.name.toLowerCase().includes(query) ||
-        store.description.toLowerCase().includes(query)
-      );
-    }
-  },
+  
   methods: {
     async createStore() {
       this.loading = true;
@@ -115,7 +100,6 @@ export default {
         formData.append('description', this.store.description);
         formData.append('image', this.store.image);
 
-        // window.location.href ='/userprodcuts'
         const response = await api.createStore(formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -123,13 +107,12 @@ export default {
           }
         });
 
+        // Add the new store to the stores array
+        this.stores.push(response.data.data);
+        
+        this.resetForm();
         console.log('Store created successfully:', response.data);
-        
-        $('#createFormModal').modal('hide'); // Close the modal
-        
-        this.fetchStores(); // Refresh store list
-        this.resetForm(); // Reset form fields
-
+        this.closeModal();  // Ensure this is called after the state updates
       } catch (error) {
         console.error('Error creating store:', error);
         if (error.response && error.response.status === 401) {
@@ -146,18 +129,11 @@ export default {
       this.store.description = '';
       this.store.image = null;
     },
-    async fetchStores() {
-      try {
-        const response = await api.getStores();
-        this.stores = response.data.data;
-      } catch (error) {
-        console.error('API error:', error);
-      }
-    },
     async deleteStore(storeId) {
       try {
         await api.deleteStore(storeId);
         this.stores = this.stores.filter(store => store.id !== storeId);
+        this.userHasStore = this.userStores.length > 0;
       } catch (error) {
         console.error('Delete error:', error);
       }
@@ -168,105 +144,36 @@ export default {
     imageStore(filename) {
       return api.imageUrlStore(filename);
     },
-    performSearch() {
-      // Delayed fetch after typing
-      if (this.timer) {
-        clearTimeout(this.timer);
+    captureUserId(userId) {
+      console.log('Store created by user ID:', userId);
+      this.userStore.user_id = userId; 
+    },
+    closeModal() {
+      const modalElement = this.$el.querySelector('#createFormModal');
+      if(modalElement){
+        modalElement.style.display = 'none';
+        this.userStore.user_id = null;  
+        this.userHasStore = this.userStores.length > 0;  
       }
-      this.timer = setTimeout(() => {
-        this.fetchStores();
-      }, 500);
+    },
+    async fetchStores() {
+      try {
+        const id = this.userStore.accountUser.id;  
+        const response = await axios.get(`http://127.0.0.1:8000/api/userStore?id=${id}`);
+        if (response.data.status === 200) {
+          this.stores = response.data.data.owner; 
+          console.log('store:', this.stores.length);
+        } else {
+          console.error('Error fetching store:', response.data.message);
+        }
+      } catch (error) {
+        console.error('API error:', error);
+      }
     }
   },
-  async created() {
-    await this.fetchStores();
-
-    // Auto refresh every 10 seconds
-    setInterval(async () => {
-      await this.fetchStores();
-    }, 10000); // Adjust the interval as needed
+  mounted() {
+    this.userStore.loadUser();
+    this.fetchStores();
   }
 };
 </script>
-
-<style>
-.search {
-  margin:10px;
-  height: 50px;
-  background-color: #fff;
-  border-radius: 40px;
-  padding: 10px;
-  border: 1px solid #000;
-}
-.search_input {
-  color: black;
-  border: 0;
-  outline: none;
-  background: none;
-  border: white;
-}
-.search .search_input {
-  width: 500px;
-  caret-color: black;
-}
-.search:hover > .search_icon {
-  color: #fff;
-}
-.search_icon {
-  margin-top: -4px;
-  height: 35px;
-  width: 40px;
-  float: right;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 50%;
-  color: white;
-  background-color: black;
-}
-a:link {
-  text-decoration: none;
-}
-/* Media queries for responsiveness */
-@media (max-width: 992px) {
- 
-  .search .search_input {
-    width: 300px;
-  }
-  .card-body{
-    flex-direction:row;
-  }
-  
-
-  .store-image {
-    width: 150px;
-    height: 150px;
-  }
-}@media (max-width: 768px) {
- 
-  .search .search_input {
-    width: 200px;
-  }
-  .button {
-    width: 100px;
-  }
-  .card-body {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    /* background-color: pink; */
-  }
-  .card {
-    width: 80%;
-    height: 470px;
-    margin: 0 auto;
-  }
-  .store-image {
-    width: 80px;
-    height: 80px;
-  }
-  .btn-primary {
-    width: 100px;
-  }}
-</style>
-

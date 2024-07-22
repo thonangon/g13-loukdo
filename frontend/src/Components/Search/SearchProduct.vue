@@ -1,12 +1,11 @@
 <template>
     <div class="container mt-4 mb-4">
         <h2 class="text-center mb-4">Welcome to Loukdo Store</h2>
-        <div class="row justify-content-center">
-            <div class="col-lg-6">
-                <form class="input-group">
-                    <input type="text" v-model="searchQuery" @input="onSearch" class="form-control " name="q" placeholder="Search ..." aria-label="Search Google">
-                    <button class="btn btn-primary rounded-pill-end" type="button">Search</button>
-                </form>
+
+        <div class="d-flex justify-content-center m-5">
+            <div class="search">
+                <input class="search_input" type="text" v-model="searchQuery" @input="onSearch" placeholder="Search here..."  />
+                <a href="#" class="search_icon"><i class="fa fa-search"></i></a>
             </div>
         </div>
         <p class="text-center mb-4">Enjoy finding a million products all over the world here!</p>

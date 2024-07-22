@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,6 +23,7 @@ class StoreResource extends JsonResource
             'description' => $this->description,
             'image' => $this->image,
             'user' => $this->user,
+            "owner"=> Store::where("user_id", $this->id)->get(),
             'image_url' => $this->image ? asset('/api/stores/image/' . $this->image) : null,
         ];
     }

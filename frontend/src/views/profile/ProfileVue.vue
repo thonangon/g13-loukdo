@@ -41,11 +41,11 @@
             <div class="d-flex justify-content-between align-items-center">
               <div class="d-flex justify-content-center">
                 <router-link to="/userprodcuts" class="mx-2 nav-item" active-class="text-dark active btn">Product</router-link>
-                <!-- <div class="mx-2 nav-item">Add to chart</div> -->
                 <router-link to="/booking" class="mx-2 nav-item" active-class="text-dark active btn">Inbox</router-link>
                 <router-link to="/selling" class="mx-2 nav-item" active-class="text-dark active btn">Selling</router-link>
                 <router-link to="/card" class="mx-2 nav-item" active-class="text-dark active btn">Favorites</router-link>
                 <router-link to="/chats" class="mx-2 nav-item" active-class="text-dark active btn">Messagers</router-link>
+                <router-link to="/userStore" class="mx-2 nav-item" active-class="text-dark active btn">Store</router-link>
                 <div class="d-flex flex-grow-1">
               </div>
 

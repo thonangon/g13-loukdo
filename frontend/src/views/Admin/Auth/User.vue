@@ -1,5 +1,5 @@
 <template>
-  <table class="table table-dark table-striped">
+  <table class="table table-white table-striped">
         <thead>
             <tr class="text-center">
                 <th scope="col">Id</th>
