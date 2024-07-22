@@ -15,7 +15,10 @@ use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 use App\Http\Controllers\addToCartController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Order\PaymentController;
+use App\Http\Controllers\Plans\PlanPayController;
 use App\Http\Controllers\Plans\PlansController;
+use App\Http\Controllers\Plans\PlansController\PlanController;
+use App\Http\Controllers\Plans\PlansUserController;
 use App\Http\Controllers\Plans\SubscriptionController;
 use App\Http\Controllers\Order\OrderProductController;
 use App\Http\Controllers\Store\StoreController;
@@ -164,13 +167,6 @@ Route::get('/orders/list', [OrderProductController::class, 'orderAndSellerUser']
 // charge the money
 Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
 
-// custmer charge for product
-Route::get('/plans', [PlansController::class, 'index']);
-Route::post('/plans/store', [PlansController::class, 'store']);
-Route::get('/plans/{id}', [PlansController::class, 'show']);
-Route::put('/plans/{id}', [PlansController::class, 'update']);
-Route::delete('/plans/{id}', [PlansController::class, 'destroy']);
-
 Route::post('/subscriptions', [SubscriptionController::class, 'subscribe']);
 Route::get('/users/{userId}/subscriptions', [SubscriptionController::class, 'userSubscriptions']);
 
@@ -182,5 +178,11 @@ Route::post('/stripe/handlePaymentSuccess', [StripePaymentController::class, 'ha
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
+    Route::post('/products', [ProductController::class, 'store']);
 });
-
+Route::get('/lists', [PlanPayController::class, 'index']);
+Route::get('/plans/{id}', [PlanPayController::class, 'show']);
+Route::put('update/plans/{id}', [PlanPayController::class, 'update']);
+Route::delete('delete/plans/{id}', [PlanPayController::class, 'destroy']);
+Route::post('/create/plans', [PlanPayController::class, 'store']);
+Route::post('/setDate', [StripePaymentController::class, 'setNextChargeDate']);

@@ -172,7 +172,7 @@ body {
 .navbar-custom .navbar-brand,
 .navbar-custom .nav-link,
 .navbar-custom .dropdown-item {
-  /* color: #ffffff; */
+  color: #ffffff;
 }
 
 .navbar-custom .nav-link:hover,

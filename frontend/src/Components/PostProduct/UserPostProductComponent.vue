@@ -159,9 +159,12 @@ export default {
           console.error('Error posting product: ', response.data.message);
         }
       } catch (error) {
-        console.error('Error creating product:', error);
-        if (error.response && error.response.status === 401) {
-          console.log('Unauthorized access. Redirecting to login.');
+        if (error.response && error.response.status === 422 || error.response && error.response.status === 403) {
+          console.error('403 Forbidden:', error.response.data.message);
+          this.$router.push('/plans'); // Redirect to payment page on 403 error
+        } else {
+          console.error('Error creating product:', error);
+          // Handle general error
         }
       } finally {
         this.loading = false;

@@ -84,22 +84,44 @@ class ProductController extends Controller
         // Get the authenticated user
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        $postLimit = 10;
 
-        // Check if the user has paid and reset post_count if necessary
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User not authenticated',
+            ], 401);
+        }
+        // Get the authenticated user
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User not authenticated',
+            ], 401);
+        }
+
+        $postLimit = 10;
         if ($user->post_count >= $postLimit) {
             if ($user->has_paid) {
+               
                 $user->post_count = 0;
-                $user->has_paid = 0; // Reset has_paid status after resetting post_count
+                $user->has_paid = false; 
                 $user->save();
-            } else {
+            } 
+            if ($user->has_paid) {
+
+                $user->next_charge_date = now()->addMonth(); 
+                $user->save();
+            }
                 return response()->json([
                     'status' => false,
                     'message' => 'You have reached the maximum number of posts allowed. Please make a payment to continue posting.',
-                ], 403);
-            }
+                    
+                ], 403); 
         }
-        
+
         // Debug: Log user information
         Log::info('Authenticated user:', $user->toArray());
 
