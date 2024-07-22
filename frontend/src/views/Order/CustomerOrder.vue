@@ -11,8 +11,7 @@
           </div>
           <div class="card-footer d-flex justify-content-between">
             <button class="btn btn-secondary" style="width: 48%">
-              <router-link to="/chats" class="text-white">Contact</router-link>
-              <!-- <router-link to="/chats" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom"><i class="fas fa-box home"></i> Home</router-link> -->
+              <router-link @click="store_user.setUser_id(store_user.productDetails.data.pro_owner.id)" to="/chats" class="text-white">Contact</router-link>
             </button>
             <router-link to="" class="text-white" style="width: 48%;" @click="OrderProduct">
               <button class="btn btn-primary" style="width: 100%;">Order</button>

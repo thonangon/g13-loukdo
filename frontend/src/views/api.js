@@ -182,5 +182,11 @@ export default {
     });
   },
 
+  sendMessage(roomId, message, headers) {
+    return axios.post(`${API_URL}/message/chat/messages/${roomId}`, { message }, {
+      headers: headers
+    });
+  }
+
 };
 

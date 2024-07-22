@@ -13,10 +13,12 @@
                     <div class="product d-flex gap-3">
                       <img :src="productImage(order.products[0].image)" alt="" style="width: 100px; height: 100px;">
                       <div class="product_title">
-                        <div class="d-flex align-items-center">
-                          <img v-if="order.products[0].owner.image" :src="profile_url(order.products[0].owner.image)" alt="User Image" class="text-dark profile-img">
-                          <img v-else :src="ownerprofileName(order.products[0].owner.name)" alt="User Image" class="text-dark profile-img">
-                          <p class="mb-0 p-1">{{ order.products[0].owner.name }}</p>
+                        <div >
+                          <router-link class="d-flex align-items-center text-dark" to="/chats" @click="store_user.setUser_id(order.products[0].owner.id)">
+                            <img v-if="order.products[0].owner.image" :src="profile_url(order.products[0].owner.image)" alt="User Image" class="text-dark profile-img">
+                            <img v-else :src="ownerprofileName(order.products[0].owner.name)" alt="User Image" class="text-dark profile-img">
+                            <p class="mb-0 p-1">{{ order.products[0].owner.name }}</p>
+                          </router-link>
                         </div>
                         <p class="mb-0 p-1">{{ order.products[0].name }}</p>
                         <p class="mb-0 p-1">Quantity: <strong>{{ order.quantity }}</strong></p>

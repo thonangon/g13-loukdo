@@ -42,7 +42,7 @@ const routes = [
                 component: register
             },
             { 
-                path: '/',
+                path: '/home',
                 name: 'Home', 
                 component: Home,
             },
