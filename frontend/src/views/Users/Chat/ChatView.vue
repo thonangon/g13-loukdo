@@ -6,9 +6,26 @@
         <div class="d-flex flex-column h-100 bg-dark text-light">
           <!-- Chat List -->
           <div class="chat-container flex-grow-1 overflow-auto p-3">
-            <div v-for="(room, index) in chatRoomsData" :key="index" class="mb-3">
-              <div v-if="room && room.user_id && room.sender" @click="getRoom(room.id)" :class="{'chat-item': true, 'd-flex': true, 'align-items-center': true, 'p-1': true, 'shadow-sm': true, 'rounded': true, 'bg-white': true}">
-                <img :src="profileimage(room.user_id == room.sender.id ? room.receiver.profile : room.sender.profile) || '../../../assets/images/Male User.png'" class="profile-img rounded-circle mr-3" alt="Avatar">
+            <div v-for="(room, index) in chatRoomsData" :key="index" class="mb-3 room">
+              <div
+                v-if="room && room.user_id && room.sender"
+                @click="getRoom(room.id)"
+                :class="{
+                  'chat-item': true,
+                  'd-flex': true,
+                  'align-items-center': true,
+                  'p-1': true,
+                  'shadow-sm': true,
+                  'rounded': true,
+                  'bg-white': true,
+                  'active-chat': room.id === activeChatRoomId
+                }"
+              >
+                <img
+                  :src="profileimage(room.user_id == room.sender.id ? room.receiver.profile : room.sender.profile) || '../../../assets/images/Male User.png'"
+                  class="profile-img rounded-circle mr-3"
+                  alt="Avatar"
+                >
                 <div class="chat-info">
                   <h6 class="mb-0 font-weight-bold text-primary">{{ room.user_id == room.sender.id ? room.receiver.name : room.sender.name }}</h6>
                   <p v-if="room.newmessage" class="text-dark">{{ truncateMessage(room.newmessage.message) }}</p>
@@ -23,7 +40,11 @@
       <!-- Chat Area -->
       <div class="col-lg-9 col-md-8 chat-area">
         <div class="chat-messages flex-grow-1 overflow-auto p-3">
-          <div v-for="(message, index) in eachRoom" :key="index" :class="{'message-item': true, 'message-right': message.user_id === store_user.accountUser.id, 'message-left': message.user_id !== store_user.accountUser.id}">
+          <div v-for="(message, index) in eachRoom" :key="index" :class="{
+            'message-item': true,
+            'message-right': message.user_id === store_user.accountUser.id,
+            'message-left': message.user_id !== store_user.accountUser.id
+          }">
             <div class="message-content" :class="{'myMessage': message.user_id === store_user.accountUser.id}">
               <p>{{ message.message }}</p>
             </div>
@@ -46,8 +67,6 @@
   </div>
 </template>
 
-
-
 <script>
 import { useUserStore } from '@/stores/user';
 import api from '@/views/api';
@@ -62,7 +81,7 @@ export default {
       selectedRoomId: null, // Variable to store the selected room ID
       selectedRoomName: '', // Variable to store the selected room name
       messageInterval: null, // Interval for polling new messages
-      active: ''
+      activeChatRoomId: null // Variable to store the active chat room ID
     };
   },
   async mounted() {
@@ -108,6 +127,7 @@ export default {
     },
     async getRoom(id) {
       this.selectedRoomId = id; // Set the selected room ID
+      this.activeChatRoomId = id; // Set the active chat room ID
       const user_token = this.store_user.tokenUser;
       const headers = {
         'Authorization': `Bearer ${user_token}`,
@@ -141,6 +161,7 @@ export default {
           this.newMessage = ''; // Clear the input field
           await this.getRoom(this.selectedRoomId); // Refresh messages
           await this.getChatRooms();
+          this.moveChatRoomToTop(this.selectedRoomId); // Move the chat room to the top
         } catch (error) {
           console.error('Error sending message:', error);
         }
@@ -163,11 +184,18 @@ export default {
           await this.getRoom(this.selectedRoomId);
         }
       }, 5000); // Poll every 5 seconds
+    },
+    moveChatRoomToTop(roomId) {
+      const index = this.chatRoomsData.findIndex(room => room.id === roomId);
+      if (index > -1) {
+        const [room] = this.chatRoomsData.splice(index, 1);
+        this.chatRoomsData.unshift(room);
+      }
     }
   },
 };
 </script>
- 
+
 <style scoped>
 .circular {
   width: 50px; /* Adjust as needed */
@@ -233,6 +261,7 @@ export default {
 .mr-3 {
     margin-right: 1rem !important;
 }
+
 .chat-area {
   display: flex;
   flex-direction: column;
@@ -293,10 +322,15 @@ export default {
   border-top: 1px solid #dee2e6;
   background-color: #ffffff;
 }
+
 .active-chat {
+  width: 290px;
   background-color: #e0f7fa; /* Change to your desired active background color */
-  border: 2px solid #007bff; /* Change to your desired active border color */
+  /* border: 2px solid #007bff; Change to your desired active border color */
 }
 
+.room:hover {
+  color: #333; /* Darker text color */
+  cursor: pointer; /* Change cursor to pointer */
+}
 </style>
-  
