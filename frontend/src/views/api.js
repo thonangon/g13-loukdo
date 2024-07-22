@@ -181,16 +181,37 @@ productCategory(cateId) {
     return axios.get(`${API_URL}/reply/list`, {headers:headers});
   },
 
+  // ________________Messages___________________________
+
+  // http://127.0.0.1:8000/api/message/chat/room
+  chatrooms(headers) {
+    return axios.get(`${API_URL}/message/chat/rooms`, {
+      headers: headers
+    });
+  },
+
+  createChatRoom(userId, headers) {
+    return axios.post(`${API_URL}/message/chat/room`, { user_id: userId }, { headers: headers });
+  },
+
+
+  getMessage(roomId, headers) {
+    return axios.get(`${API_URL}/message/chat/messages/${roomId}`, {
+      headers: headers
+    });
+  },
+
+  sendMessage(roomId, message, headers) {
+    return axios.post(`${API_URL}/message/chat/messages/${roomId}`, { message }, {
+      headers: headers
+    });
+  },
+
   // __________________Messages________________________
   // http://127.0.0.1:8000/api/message/chat/room
   postChatRooms(user_id, headers) {
     return axios.post(`${API_URL}/message/chat/room`, user_id, { headers: headers });
   },
 
-  chatrooms(headers) {
-    return axios.get(`${API_URL}/message/chat/rooms`, {
-      headers: headers
-    });
-  },
 };
 

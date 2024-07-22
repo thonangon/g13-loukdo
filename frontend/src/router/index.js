@@ -33,7 +33,7 @@ import Loukdo from '../LoukDo.vue'
 
 const routes = [
     {
-        path: '/',
+        path: '/home',
         name: 'Home', 
         component: Loukdo,
         children: [

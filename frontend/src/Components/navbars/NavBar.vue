@@ -19,17 +19,30 @@
               <div class="d-flex w-100 justify-content-between align-items-center">
                 <!-- Left side of the navbar -->
                 <div class="d-flex flex-grow-1">
-                  <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)"><i class="fas fa-home"></i> Home</router-link>
-                  <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(1)"><i class="fas fa-box me-2"></i>Products</router-link>
-                  <div v-if="store_user.accountUser" class="dropdown me-5 custom-font-size">
-                    <a class="text-dark custom-font-size nav-link" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">More...</a>
+                  <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)">
+                    <i class="fas fa-home"></i> Home
+                  </router-link>
+                  <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(1)">
+                    <i class="fas fa-box me-2"></i> Products
+                  </router-link>
+                  <div v-if="store_user.accountUser && store_user.accountUser.id !== 1" class="dropdown me-5 custom-font-size">
+                    <a class="me-5 mb-0 text-secondary custom-font-size nav-link d-flex align-items-center" active-class="text-dark active border-bottom" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fas fa-receipt me-2"></i> More...
+                    </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <router-link to="/userprodcuts" class="dropdown-item custom-font-size">My Product</router-link>
-                      <router-link to="/booking" class="dropdown-item custom-font-size">Inbox</router-link>
-                      <router-link to="/selling" class="dropdown-item custom-font-size">Selling</router-link>
+                      <router-link to="/userprodcuts" class="dropdown-item custom-font-size">
+                        <i class="fas fa-box-open me-2"></i> My Product
+                      </router-link>
+                      <router-link to="/booking" class="dropdown-item custom-font-size">
+                        <i class="fas fa-envelope me-2"></i> Inbox
+                      </router-link>
+                      <router-link to="/selling" class="dropdown-item custom-font-size">
+                        <i class="fas fa-dollar-sign me-2"></i> Selling
+                      </router-link>
                     </ul>
                   </div>
                 </div>
+
                 <!-- Logo -->
                 <a class="mx-auto navbar-brand logo" href="#">
                   <img class="ms-auto logo-img" src="../../assets/images/lOUKDO.png" alt="Logo" />
@@ -79,7 +92,7 @@
     </div>
 
     <div class="container">
-      <nav v-if="router-link" class="d-flex">
+      <nav v-if="router-link == '/product'" class="d-flex">
         <ul v-for="cate in listCategories" :key="cate.id" class="nav nav-tabs">
           <li class="nav-item">
             <router-link class="nav-link" active-class="navbar-shadow active" aria-current="page" :to="{ name: 'product/category', params: { id: cate.id} }">{{cate.category_name}}</router-link>

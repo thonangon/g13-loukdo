@@ -186,3 +186,7 @@ Route::put('update/plans/{id}', [PlanPayController::class, 'update']);
 Route::delete('delete/plans/{id}', [PlanPayController::class, 'destroy']);
 Route::post('/create/plans', [PlanPayController::class, 'store']);
 Route::post('/setDate', [StripePaymentController::class, 'setNextChargeDate']);
+
+Route::post('/send-message', [MessageController::class, 'sendMessage']);
+
+

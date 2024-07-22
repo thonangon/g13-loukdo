@@ -3,11 +3,13 @@
   <div class="container mt-5">
     <div v-if="productDetails">
       <div class="leftSide" style="width: 48%;">
-        <div class="d-flex align-items-center" style="height: 60px;">
-          <img v-if="productDetails.data.pro_owner.profile" :src="profile_url(productDetails.data.pro_owner.profile)" alt="User Image" class="m-3 text-dark nav-link profile-img">
-          <img v-else :src="ownerprofileName(productDetails.data.pro_owner.name)" alt="User Image" class="m-3 text-dark nav-link profile-img">
-          <p class="mb-0">{{ productDetails.data.pro_owner.name }} - Owner: {{ productDetails.data.name }}</p>
-        </div>
+        <router-link to="/chats">
+          <div class="d-flex align-items-center" @click="store_user.setUser_id(productDetails.data.pro_owner.id)" style="height: 60px;">
+            <img v-if="productDetails.data.pro_owner.profile" :src="profile_url(productDetails.data.pro_owner.profile)" alt="User Image" class="text-dark m-3 nav-link profile-img">
+            <img v-else :src="ownerprofileName(productDetails.data.pro_owner.name)" alt="User Image" class="text-dark m-3 nav-link profile-img">
+            <p class="mb-0">{{ productDetails.data.pro_owner.name }} - Owner: {{ productDetails.data.name }}</p>
+          </div>
+        </router-link>
       </div>
       <div class="gap-5 p-3 rounded shadow rightSide d-flex align-items-center bg-light">
         <div class="proImageSlide">
@@ -190,6 +192,24 @@ export default {
       localStorage.setItem('orderData', JSON.stringify(orderData));
       this.$router.push('/order');
     },
+
+    async createChatRoom(id) {
+        const user_id = id; // Ensure store_user is defined and accessible
+        const auth = this.store_user.tokenUser; // Ensure tokenUser contains the correct token
+        console.log(user_id, auth);
+        try {
+          const response = await api.createChatRoom(user_id, {
+            headers: {
+              'Authorization': `Bearer ${auth}`,
+              'Content-Type': 'application/json',
+            },
+          });
+          this.getChatRooms();
+        } catch (error) {
+          console.error(error);
+        }
+      },
+
     handleMouseMove(event) {
       const zoomContainer = event.currentTarget;
       const zoomImage = zoomContainer.querySelector('.zoom-image');
