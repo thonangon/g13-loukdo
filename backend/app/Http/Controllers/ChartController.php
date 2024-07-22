@@ -21,12 +21,10 @@ class ChartController extends Controller
 
     public function messages(Request $request, $roomId)
     {
-        $selectChatRoom = ChartRoom::find($roomId);
-        return $selectChatRoom;
-        // return ChartMessages::where('id', $roomId)
-        //                   ->with('user')
-        //                   ->orderBy('created_at', 'DESC')
-        //                   ->get();
+        return ChartMessages::where('chat_room_id', $roomId)
+                          ->with('user')
+                        //   ->orderBy('created_at', 'DESC')
+                          ->get();
     }
 
     public function newMessage(Request $request, $roomId)
