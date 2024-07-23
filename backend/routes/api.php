@@ -175,6 +175,9 @@ Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
 
 Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
 Route::post('/stripe/handlePaymentSuccess', [StripePaymentController::class, 'handlePaymentSuccess']);
+Route::get('/payment',[StripePaymentController::class, 'index']);
+Route::get('/show/payment/{id}', [StripePaymentController::class, 'show']);
+Route::delete('/delete/payment/{id}', [StripePaymentController::class, 'deletePayment']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);

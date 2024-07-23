@@ -191,6 +191,11 @@ const routes = [
                 name: 'admin_orders',
                 component: () => import('../views/Admin/Auth/OrderAndSeller.vue')
             },
+            {
+                path: '/userCharge',
+                name: 'userCharge',
+                component: () => import('../views/Admin/ChargeBoard/UserCharge.vue')
+            },
             // {
             //     path: '/admin/pages',
             //     name: 'admin_pages',
