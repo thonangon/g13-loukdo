@@ -19,25 +19,28 @@
               <div class="d-flex w-100 justify-content-between align-items-center">
                 <!-- Left side of the navbar -->
                 <div class="d-flex flex-grow-1">
-                  <router-link to="/" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)">
+                  <router-link to="/" class="me-5 mb-0 text-darl custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(0)">
                     <i class="fas fa-home"></i> Home
                   </router-link>
-                  <router-link to="/product" class="me-5 mb-0 text-secondary custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(1)">
+                  <router-link to="/product" class="me-5 mb-0 text-darl custom-font-size nav-link" active-class="text-dark active border-bottom" @click="isProduct(1)">
                     <i class="fas fa-box me-2"></i> Products
                   </router-link>
                   <div v-if="store_user.accountUser && store_user.accountUser.id !== 1" class="dropdown me-5 custom-font-size">
-                    <a class="me-5 mb-0 text-secondary custom-font-size nav-link d-flex align-items-center" active-class="text-dark active border-bottom" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="me-5 mb-0 text-darl custom-font-size nav-link d-flex align-items-center" active-class="text-dark active border-bottom" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                       <i class="fas fa-receipt me-2"></i> More...
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <router-link to="/userprodcuts" class="dropdown-item custom-font-size">
-                        <i class="fas fa-box-open me-2"></i> My Product
+                      <router-link to="/userprodcuts" @click="isProduct(0)" class="dropdown-item">
+                        <i class="fas fa-box-open me-1"></i><span>My Product</span>
                       </router-link>
-                      <router-link to="/booking" class="dropdown-item custom-font-size">
-                        <i class="fas fa-envelope me-2"></i> Inbox
+                      <router-link to="/chats" @click="isProduct(0)" class="dropdown-item">
+                        <i class="bi bi-chat-dots me-2"></i><span>Message</span>
                       </router-link>
-                      <router-link to="/selling" class="dropdown-item custom-font-size">
-                        <i class="fas fa-dollar-sign me-2"></i> Selling
+                      <router-link to="/selling" @click="isProduct(0)" class="dropdown-item">
+                        <i class="fas fa-dollar-sign me-3"></i><span>Selling</span>
+                      </router-link>
+                      <router-link to="/booking" @click="isProduct(0)" class="dropdown-item">
+                        <i class="fas fa-envelope me-2"></i><span>Inbox</span>
                       </router-link>
                     </ul>
                   </div>
@@ -77,7 +80,7 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
                       <li>
                         <router-link v-if="store_user.accountUser.id == 1" class="dropdown-item" to="/dashboard" active-class="active"><i class="fas fa-user me-2"></i>Profile</router-link>
-                        <router-link v-else class="dropdown-item" to="/profile" active-class="active"><i class="fas fa-user me-2"></i>Profile</router-link>
+                        <router-link v-else class="dropdown-item" to="/profile" @click="isProduct(0)" active-class=""><i class="fas fa-user me-2"></i>Profile</router-link>
                       </li>
                       <li>
                         <button class="dropdown-item" @click="logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</button>
@@ -93,10 +96,10 @@
     </div>
 
     <div class="container">
-      <nav v-if="router-link == '/product'" class="d-flex">
-        <ul v-for="cate in listCategories" :key="cate.id" class="nav nav-tabs">
-          <li class="nav-item">
-            <router-link class="nav-link" active-class="navbar-shadow active" aria-current="page" :to="{ name: 'product/category', params: { id: cate.id} }">{{cate.category_name}}</router-link>
+      <nav v-if="ifProduct" class="product-nav d-flex">
+        <ul class="nav nav-tabs product-nav-tabs">
+          <li v-for="cate in listCategories" :key="cate.id" class="nav-item">
+            <router-link class="nav-link product-nav-link" active-class="navbar-shadow active" aria-current="page" :to="{ name: 'product/category', params: { id: cate.id} }">{{cate.category_name}}</router-link>
           </li>
         </ul>
       </nav>
@@ -121,7 +124,6 @@ export default {
     const listCategories = ref([]);
     const currentSeller = ref([]);
     const notiNum = ref(0);
-    const numNoti = localStorage.getItem('notinum');
 
     const loadCart = () => {
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -271,10 +273,6 @@ export default {
   font-size: 18px;
   transition: color 0.3s, font-size 0.3s;
 }
-.custom-font-size:hover {
-  color: blue; /* Change text color to blue on hover */
-  /* font-size: 20px; */
-}
 .navbar-shadow {
   box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.1);
 }
@@ -284,8 +282,7 @@ export default {
   color: black; /* Default text color */
 }
 .dropdown-item:hover {
-  color: blue; /* Change text color to blue on hover */
-  font-size: 20px; /* Increase font size on hover */
+  background: rgb(218, 215, 215);
 }
 
 .logo-img {
@@ -342,6 +339,25 @@ export default {
   flex-grow: 1;
   font-size: 0.9rem;
   color: #495057;
+}
+
+.product-nav {
+  overflow-x: scroll; /* Allows horizontal scrolling */
+  -webkit-overflow-scrolling: touch; /* Enables smooth scrolling on iOS devices */
+  scrollbar-width: none; /* Hides scrollbar for Firefox */
+}
+
+.product-nav::-webkit-scrollbar {
+  display: none; /* Hides scrollbar for WebKit browsers */
+}
+
+.product-nav-tabs {
+  display: inline-flex; /* Allows the items to be displayed inline */
+  flex-wrap: nowrap; /* Prevents wrapping of the tabs */
+}
+
+.nav-item {
+  flex: 0 0 auto; /* Ensures the nav items don't shrink and keep their width */
 }
 @media (max-width: 992px) {
   .logo-img {

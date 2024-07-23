@@ -286,24 +286,18 @@ body {
 
 .scrollable-container {
   height: calc(1.8 * (250px + 0.5rem));
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);
+  overflow-y: scroll; /* Allows vertical scrolling */
+  overflow-x: hidden; /* Hides horizontal overflow */
+  
+  /* Hide scrollbar in Firefox */
+  scrollbar-width: none;
 
-  overflow-x: hidden;
+  /* Hide scrollbar in WebKit browsers */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
 }
 
+/* Hide scrollbar in WebKit browsers */
 .scrollable-container::-webkit-scrollbar {
-  width: 2px;
-} 
-
-.scrollable-container::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
+  display: none;
 }
-
-.scrollable-container::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-} 
 </style>
