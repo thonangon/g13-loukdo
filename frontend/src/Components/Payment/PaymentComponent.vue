@@ -117,46 +117,51 @@ export default {
   },
   methods: {
     async submitPayment() {
-      this.submitting = true;
-      try {
-        const { data } = await axios.post('http://127.0.0.1:8000/api/stripe/payment', {
-          amount: this.amount,
+  this.submitting = true;
+  try {
+    // Ensure that email is included in the request
+    const { data } = await axios.post('http://127.0.0.1:8000/api/stripe/payment', {
+      email: this.email,
+      amount: this.amount,
+      plan: this.selectedPlan 
+    });
+
+    const clientSecret = data.client_secret;
+    const { error, paymentIntent } = await this.stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: this.cardElement,
+        billing_details: {
+          email: this.email
+        }
+      }
+    });
+
+    if (error) {
+      console.error(error.message);
+      const displayError = document.getElementById('card-errors');
+      displayError.textContent = error.message;
+    } else {
+      if (paymentIntent) {
+        const response = await axios.post('http://127.0.0.1:8000/api/stripe/handlePaymentSuccess', {
+          payment_intent_id: paymentIntent.id,
+          email: this.email,
           plan: this.selectedPlan 
         });
-        const clientSecret = data.client_secret;
-        const { error, paymentIntent } = await this.stripe.confirmCardPayment(clientSecret, {
-          payment_method: {
-            card: this.cardElement,
-            billing_details: {
-              email: this.email
-            }
-          }
-        });
-        if (error) {
-          console.error(error.message);
-          const displayError = document.getElementById('card-errors');
-          displayError.textContent = error.message;
-        } else {
-          if (paymentIntent) {
-            const response = await axios.post('http://127.0.0.1:8000/api/stripe/handlePaymentSuccess', {
-              payment_intent_id: paymentIntent.id,
-              email: this.email,
-              plan: this.selectedPlan 
-            });
-            if (this.selectedPlan === 'Pro') {
-              this.nextChargeDate = response.data.next_charge_date;
-              console.log(this.nextChargeDate);
-              // Set next charge date if Pro plan
-            }
-            this.showModal = true;
-          }
+
+        if (this.selectedPlan === 'Pro') {
+          this.nextChargeDate = response.data.next_charge_date;
+          console.log(this.nextChargeDate);
         }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        this.submitting = false;
+        this.showModal = true;
       }
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    this.submitting = false;
+  }
     },
+
     closeModal() {
       this.showModal = false;
       this.$router.push('/product-post');
