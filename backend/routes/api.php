@@ -75,7 +75,7 @@ Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     
     Route::get('/image/{id}', [ProductController::class, 'getImage']);
 });
-Route::delete('/product/remove/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+// Route::delete('/product/remove/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     Route::post('/ratting/{productId}', [RateProductController::class, 'rate']);
@@ -106,12 +106,13 @@ Route::prefix('reply')->group(function () {
 Route::prefix('store')->group(function () {
     Route::get('/list', [StoreController::class, 'index']);
     Route::post('/create', [StoreController::class, 'store'])->middleware('auth:sanctum');
-    Route::put('/update/{id}', [StoreController::class, 'update']);
+    Route::put('/update/{id}', [StoreController::class, 'update'])->middleware('auth:sanctum');
+   
     Route::get('/show/{id}', [StoreController::class, 'show']);
     Route::delete('/remove/{id}', [StoreController::class, 'destroy']);
-    
-    
+
 });
+
 
 // messages chat
 Route::middleware('auth:sanctum')->prefix('message')->group(function () {

@@ -25,7 +25,6 @@
               id="Address"
               v-model="store.address"
               placeholder="Enter address"
-              required
             />
           </div>
           <div class="mb-3">
@@ -66,6 +65,7 @@
 <script>
 import api from '../../views/api';
 import { useUserStore } from '@/stores/user.js';
+
 export default {
   data() {
     return {
@@ -94,6 +94,7 @@ export default {
         formData.append('name', this.store.name);
         formData.append('address', this.store.address);
         formData.append('description', this.store.description);
+
         if (this.store.image) {
           formData.append('image', this.store.image);
         }
@@ -107,9 +108,9 @@ export default {
         });
 
         console.log('Store updated successfully:', response.data);
-        this.$router.push('/userStore'); // Redirect to the user's store page
+        this.$router.push('/userStore');
       } catch (error) {
-        console.error('Error updating store:', error);
+        console.error('Error updating store:', error.response?.data || error.message);
       }
     },
     onFileChange(event) {
@@ -121,3 +122,7 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+/* Add your styles here */
+</style>
