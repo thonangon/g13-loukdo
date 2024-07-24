@@ -10,7 +10,7 @@
   
       <!-- Display Stores -->
  
-        <div v-for="store in stores" :key="store.id" class="card mb-4">
+        <div v-for="store in filteredStores" :key="store.id" class="card mb-4">
           <div class="card-body d-flex m-4">
             <div class="d-flex justify-content-center align-items-center">
               <router-link :to="{ name: 'CollectUserStore', params: { id: store.id } }">
@@ -27,10 +27,10 @@
       </div>
   </template>
   
-  <script>
+<script>
   import api from '../../views/api';
   import { useUserStore } from '@/stores/user.js';
-  
+
   export default {
     data() {
       return {
@@ -51,14 +51,23 @@
       userStores() {
         return this.stores.filter(store => store.created_by === this.userStore.user_id);
       },
-      
+      filteredStores() {
+        return this.stores.filter(store => {
+          const query = this.searchQuery.toLowerCase();
+          return (
+            store.name.toLowerCase().includes(query) ||
+            store.address.toLowerCase().includes(query) ||
+            store.description.toLowerCase().includes(query)
+          );
+        });
+      }
     },
     methods: {
       async fetchStores() {
         try {
           const response = await api.getStores();
           this.stores = response.data.data;
-          console.log(this.stores)
+          console.log(this.stores);
           this.userHasStore = this.userStores.length > 0;
         } catch (error) {
           console.error('Error fetching stores:', error);
@@ -86,7 +95,8 @@
       await this.fetchStores();
     }
   };
-  </script>
+
+</script>
   
   <style>
   .search {
