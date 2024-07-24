@@ -17,7 +17,7 @@ import addcard from '../views/CardAdd/addCard.vue';
 import booking from '../views/Order/InOrder.vue'
 import sellProduct from '../views/Order/InSell.vue'
 import payment from '../views/Order/PaymentOrder.vue'
-import CollectStore from '../views/PageStore/CollectStore.vue'
+import CollectUserStore from '../views/PageStore/CollectUserStore.vue'
 import Createstore from '../views/PageStore/CreateStore.vue'
 import editStore from '../views/PageStore/EditStore.vue'
 import userStore from '../views/Users/UserStore.vue'
@@ -127,9 +127,9 @@ const routes = [
                 props: true
             },
             {
-                path: '/CollectStore/:id',
-                name: 'CollectStore', 
-                component: CollectStore,
+                path: '/CollectUserStore/:id',
+                name: 'CollectUserStore', 
+                component: CollectUserStore,
                 props:true
 
             },
