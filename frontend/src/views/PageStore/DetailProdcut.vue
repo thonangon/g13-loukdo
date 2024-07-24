@@ -67,51 +67,11 @@
       }
     },
     methods: {
-      async createStore() {
-        if (this.userHasStore) {
-          alert("You can only create one store.");
-          return;
-        }
-  
-        this.loading = true;
-        try {
-          const formData = new FormData();
-          formData.append('name', this.store.name);
-          formData.append('address', this.store.address);
-          formData.append('description', this.store.description);
-          formData.append('image', this.store.image);
-  
-          const response = await api.createStore(formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              Authorization: `Bearer ${this.userStore.tokenUser}`
-            }
-          });
-  
-          this.closeModal();
-          console.log('Store created successfully:', response.data);
-          await this.fetchStores();
-          this.resetForm();
-        } catch (error) {
-          console.error('Error creating store:', error);
-          if (error.response && error.response.status === 401) {
-            console.log('Unauthorized access. Redirecting to login.');
-            this.$router.push('/');
-          }
-        } finally {
-          this.loading = false;
-        }
-      },
-      resetForm() {
-        this.store.name = '';
-        this.store.address = '';
-        this.store.description = '';
-        this.store.image = null;
-      },
       async fetchStores() {
         try {
           const response = await api.getStores();
           this.stores = response.data.data;
+          console.log(this.stores)
           this.userHasStore = this.userStores.length > 0;
         } catch (error) {
           console.error('Error fetching stores:', error);

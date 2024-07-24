@@ -169,7 +169,7 @@ export default {
       return api.profile(filename);
     },
     toggleDetails(order) {
-      this.$set(order, 'showDetails', !order.showDetails);
+      order.showDetails = !order.showDetails;
     }
   }
 };
