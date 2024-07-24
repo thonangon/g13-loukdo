@@ -9,11 +9,11 @@
       </div>
   
       <!-- Display Stores -->
-      <div v-if="filteredStores.length > 0">
+ 
         <div v-for="store in filteredStores" :key="store.id" class="card mb-4">
           <div class="card-body d-flex m-4">
             <div class="d-flex justify-content-center align-items-center">
-              <router-link :to="{ name: 'CollectStore', params: { id: store.id } }">
+              <router-link :to="{ name: 'CollectUserStore', params: { id: store.id } }">
                 <img :src="imageStore(store.image)" @click="captureUserId(store.created_by)" alt="Store Image" style="width: 200px; height: 200px" />
               </router-link>
             </div>
@@ -25,16 +25,12 @@
           </div>
         </div>
       </div>
-      <div v-else class="text-center">
-        <p>No stores found.</p>
-      </div>
-    </div>
   </template>
   
-  <script>
+<script>
   import api from '../../views/api';
   import { useUserStore } from '@/stores/user.js';
-  
+
   export default {
     data() {
       return {
@@ -56,14 +52,14 @@
         return this.stores.filter(store => store.created_by === this.userStore.user_id);
       },
       filteredStores() {
-        if (!this.searchQuery) {
-          return this.userStores;
-        }
-        const query = this.searchQuery.toLowerCase();
-        return this.userStores.filter(store =>
-          store.name.toLowerCase().includes(query) ||
-          store.description.toLowerCase().includes(query)
-        );
+        return this.stores.filter(store => {
+          const query = this.searchQuery.toLowerCase();
+          return (
+            store.name.toLowerCase().includes(query) ||
+            store.address.toLowerCase().includes(query) ||
+            store.description.toLowerCase().includes(query)
+          );
+        });
       }
     },
     methods: {
@@ -71,7 +67,7 @@
         try {
           const response = await api.getStores();
           this.stores = response.data.data;
-          console.log(this.stores)
+          console.log(this.stores);
           this.userHasStore = this.userStores.length > 0;
         } catch (error) {
           console.error('Error fetching stores:', error);
@@ -99,7 +95,8 @@
       await this.fetchStores();
     }
   };
-  </script>
+
+</script>
   
   <style>
   .search {

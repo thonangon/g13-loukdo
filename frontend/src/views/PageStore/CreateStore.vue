@@ -48,7 +48,7 @@
       <div v-for="store in stores" :key="store.id" class="card mb-4">
         <div class="card-body d-flex m-4">
           <div class="d-flex justify-content-center align-items-center">
-            <router-link :to="{ name: 'CollectStore', params: { id: store.id } }">
+            <router-link :to="{ name: 'CollectUserStore', params: { id: store.id } }">
               <img :src="imageStore(store.image)" @click="captureUserId(store.created_by)" alt="Store Image" style="width: 200px; height: 200px" />
             </router-link>
           </div>
@@ -133,7 +133,6 @@ export default {
       try {
         await api.deleteStore(storeId);
         this.stores = this.stores.filter(store => store.id !== storeId);
-        this.userHasStore = this.userStores.length > 0;
       } catch (error) {
         console.error('Delete error:', error);
       }
@@ -153,7 +152,7 @@ export default {
       if(modalElement){
         modalElement.style.display = 'none';
         this.userStore.user_id = null;  
-        this.userHasStore = this.userStores.length > 0;  
+        
       }
     },
     async fetchStores() {

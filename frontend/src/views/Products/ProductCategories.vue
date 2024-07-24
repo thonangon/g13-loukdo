@@ -1,10 +1,10 @@
 <template>
   <div class="">
-    <search_product/>
+    <search_product @search="updateSearchQuery" />
     <div class="scrollable-container">
         <div class="row">
-          <div class="col-md-3 mt-3" v-for="(product, index) in products" :key="index">
-            <cards_product :searchQuery="searchQuery" :product="product" />
+          <div class="col-md-3 mt-3" v-for="(product, index) in filteredCategories" :key="index">
+            <cards_product  :product="product" />
           </div>
         </div>
       </div>
@@ -26,6 +26,7 @@ export default {
         return{
             cateId: useUserStore(),
             products: null,
+            searchQuery: ''
         }
     },
     mounted(){
@@ -53,8 +54,18 @@ export default {
             } catch (error) {
                 console.error(error);
             }
+        },
+        updateSearchQuery(query) {
+            this.searchQuery = query;
+            console.log("Updated search query:", this.searchQuery);
         }
     },
+    computed: {
+        filteredCategories() {
+            if (!this.products) return [];
+            return this.products.filter(product => product.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+        },
+    }
 }
 </script>
 
