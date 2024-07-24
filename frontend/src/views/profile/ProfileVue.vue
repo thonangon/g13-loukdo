@@ -51,9 +51,8 @@
 
               </div>
               <div class="d-flex align-items-center gap-1">
-                <button class="btn bg-light-gray btn">...</button>
                 <a href="/product-post">
-                  <button class="btn btn-dark btn">Post</button>
+                  <button class="btn btn-dark pulse-animation">Post</button>
                 </a>
                 {{ num_products }}
               </div>
@@ -235,7 +234,34 @@ body,
   margin: 0;
   color: #666;
 }
-.nav-item{
+
+.nav-item {
   text-decoration: none;
+}
+
+.btn {
+  border-radius: 30px;
+  font-size: 0.9em;
+  padding: 10px 20px;
+  cursor: pointer; /* Added cursor pointer */
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.pulse-animation {
+  animation: pulse 1.5s infinite;
 }
 </style>

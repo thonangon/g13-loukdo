@@ -1,5 +1,10 @@
 <template>
   <div class="">
+    <button class="btn btn-primary sticky-xl-center pulse-animation">
+      <router-link to="/product-post">
+        <strong class="text-white">Post your product to make money here!</strong>
+      </router-link>
+    </button>
     <div id="slid-show" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
@@ -299,5 +304,31 @@ body {
 /* Hide scrollbar in WebKit browsers */
 .scrollable-container::-webkit-scrollbar {
   display: none;
+}
+.sticky-xl-center {
+  position: fixed; /* Fixed position to keep it in view */
+  bottom: 20px; /* Distance from the bottom of the viewport */
+  left: 40%; /* Center horizontally */
+  transform: translatex(-50%); /* Offset by half of its width */
+  z-index: 1000; /* Ensure it stays on top of other content */
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.pulse-animation {
+  animation: pulse 1.5s infinite;
 }
 </style>

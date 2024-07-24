@@ -57,9 +57,11 @@
                     </div>
                     <ul class="dropdown-menu dropdown-menu-end custom-dropdown">
                       <li v-if="currentSeller">
-                        <router-link v-for="(sell, list) in currentSeller" :key="list" class="custom-dropdown-item border-bottom" to="/selling">
-                          <p v-if="sell.status==0" @click="isClick"><i class="fas fa-user me-2"></i>{{sell.buyer.name}} order {{ sell.products[0].name }}</p>
-                        </router-link>
+                        <span v-for="(sell, list) in currentSeller" :key="list">
+                          <router-link v-if="sell.status==0" class="custom-dropdown-item border-bottom" to="/selling">
+                             <span class="p-2" @click="isClick"><i class="fas fa-user me-2"></i>{{sell.buyer.name}} <strong>order</strong> {{ sell.products[0].name }}</span>
+                          </router-link>
+                        </span>
                       </li>
                     </ul>
                     <router-link v-if="store_user.accountUser" to="/card" class="position-relative">
@@ -109,7 +111,7 @@
 <script>
 import { useUserStore } from '@/stores/user.js';
 import axios from 'axios';
-import { computed, ref, onMounted } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
 import api from '@/views/api.js';
 import router from '@/router';
 
@@ -203,10 +205,17 @@ export default {
       return '../../assets/images/Male User.png';
     });
 
+    let intervalId;
+
     onMounted(() => {
       loadCart();
       getListCate();
-      fetchCurrentOrder();
+      fetchCurrentOrder(); // Initial fetch
+      intervalId = setInterval(fetchCurrentOrder, 5000); // Fetch every 5 seconds
+    });
+
+    onUnmounted(() => {
+      clearInterval(intervalId); // Clean up interval on component unmount
     });
 
     return {
@@ -321,12 +330,12 @@ export default {
 .custom-dropdown-item {
   display: flex;
   align-items: center;
-  padding: 10px 15px;
+  padding: 5px;
   transition: background-color 0.3s ease;
 }
 
 .custom-dropdown-item:hover {
-  background-color: #f8f9fa;
+  background-color: #dddfe2;
 }
 
 .custom-dropdown-item i {

@@ -4,9 +4,8 @@
       <div class="col-lg-8 mb-4" style="width: 75%;">
         <template v-if="groupedOrders">
           <h3>Current orders</h3>
-          <!-- {{groupedOrders}} -->
           <div v-for="(group, ownerName) in groupedOrders" :key="ownerName">
-            <div class="rounde mb-4" style="width: 100%;">
+            <div class="rounded mb-4" style="width: 100%;">
               <strong class="">Delivery: $2</strong>
               <div v-for="(order) in group" :key="order.id" class="">
                 <div v-if="order.status !== 2" class="bg-light rounded shadow mb-2 shadow-sm">
@@ -14,7 +13,7 @@
                     <div class="product d-flex gap-3">
                       <img :src="productImage(order.products[0].image)" alt="" style="width: 100px; height: 100px;">
                       <div class="product_title">
-                        <div >
+                        <div>
                           <router-link class="d-flex align-items-center text-dark" to="/chats" @click="store_user.setUser_id(order.products[0].owner.id)">
                             <img v-if="order.products[0].owner.image" :src="profile_url(order.products[0].owner.image)" alt="User Image" class="text-dark profile-img">
                             <img v-else :src="ownerprofileName(order.products[0].owner.name)" alt="User Image" class="text-dark profile-img">
@@ -143,14 +142,18 @@ export default {
     }
   },
   mounted() {
-    this.fetchCurrentOrder();
+    this.fetchCurrentOrderWithDelay();
+    this.interval = setInterval(this.fetchCurrentOrderWithDelay, 1000); // Fetch orders every 10 seconds
+  },
+  beforeUnmount() {
+    clearInterval(this.interval);
   },
   computed: {
     groupedOrders() {
       return this.currentOrder.reduce((acc, order) => {
         const ownerName = order.products[0].owner.name;
         if (!acc[ownerName]) {
-          acc[ownerName] = []
+          acc[ownerName] = [];
         }
         acc[ownerName].push(order);
         return acc;
@@ -158,6 +161,11 @@ export default {
     }
   },
   methods: {
+    fetchCurrentOrderWithDelay() {
+      setTimeout(() => {
+        this.fetchCurrentOrder();
+      }, 1000);
+    },
     async fetchCurrentOrder() {
       try {
         const headers = { Authorization: `Bearer ${this.store_user.tokenUser}` };
@@ -174,7 +182,7 @@ export default {
         const confirmed = confirm('Are you sure you want to cancel this order?');
         if (confirmed) {
           await api.deleteOrderProduct(orderId, headers);
-          this.fetchCurrentOrder();
+          this.fetchCurrentOrderWithDelay();
         }
       } catch (error) {
         console.error('Error deleting order product:', error);
@@ -199,7 +207,6 @@ export default {
     toggleDetails(order) {
       order.showDetails = !order.showDetails;
     }
-
   }
 };
 </script>

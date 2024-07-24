@@ -46,6 +46,7 @@ export default {
         this.cart.splice(index, 1);
         localStorage.setItem('cart', JSON.stringify(this.cart));
         this.$emit('cart-updated'); // Emit event to parent component (like Navbar)
+        window.location.reload();
       }
     }
   }
