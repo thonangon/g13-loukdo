@@ -41,7 +41,7 @@
         </template>
         
         <h3>Past orders</h3>
-        <div v-for="order in pastOrder" :key="order.id" class="card mb-4 shadow-sm">
+        <div v-for="order in currentOrder" :key="order.id" class="card mb-4 shadow-sm">
           <div v-if="order.status == 2">
             <div class="card-header d-flex justify-content-between">
               <div class="product d-flex gap-3">
@@ -169,7 +169,7 @@ export default {
       return api.profile(filename);
     },
     toggleDetails(order) {
-      this.$set(order, 'showDetails', !order.showDetails);
+      (order, 'showDetails', !order.showDetails);
     }
   }
 };
