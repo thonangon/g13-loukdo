@@ -36,11 +36,13 @@ export default {
   },
 
   profile(filename) {
-    console.log(`${URL_PORT}/storage/${filename}`)
-    return `${URL_PORT}/storage/${filename}`;
-
+    return `${API_URL}/profiles/${filename}`;
   },
 
+  qrimages(filename) {
+    return `${API_URL}/userqrimage/${filename}`;
+  },
+  
   register(userData) {
     return axios.post(`${API_URL}/register`, userData);
   },

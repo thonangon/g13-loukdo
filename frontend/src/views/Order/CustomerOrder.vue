@@ -94,7 +94,7 @@ export default {
       }
     },
     qrimage_url(filename){
-      return api.profile(filename)
+      return api.qrimages(filename)
     },
 
     addToSummary(product) {
