@@ -3,9 +3,9 @@
       <div v-if="storeData ">
         <div class="leftSide" style="width: 48%;">
           <div class="d-flex align-items-center" style="height: 60px;">
-            <img v-if="storeData.user.profile" :src="profileUrl(storeData.user.profile)" alt="User Image" class="text-dark m-3 nav-link profile-img">
-            <img v-else :src="ownerProfileName(storeData.user.name)" alt="User Image" class="text-dark m-3 nav-link profile-img">
-            <h6 class="mb-0">Owner: {{ storeData.user.name }} - {{ storeData.name }}</h6>
+            <img v-if="storeData.image_url" :src="profileUrl(storeData.image_url)" alt="User Image" class="text-dark m-3 nav-link profile-img">
+            <img v-else :src="ownerProfileName(storeData.store.user.name)" alt="User Image" class="text-dark m-3 nav-link profile-img">
+            <h6 class="mb-0">Owner: {{ storeData.store.user.name }} - {{ storeData.store.name }}</h6>
           </div>
         </div>
       </div>
@@ -70,6 +70,7 @@
         }
       },
       profileUrl(filename) {
+        console.log('Profile URL:', this.profileUrl)
         return api.profile(filename);
       },
       ownerProfileName(username) {

@@ -9,8 +9,8 @@
       </div>
   
       <!-- Display Stores -->
-      <div v-if="filteredStores.length > 0">
-        <div v-for="store in filteredStores" :key="store.id" class="card mb-4">
+ 
+        <div v-for="store in stores" :key="store.id" class="card mb-4">
           <div class="card-body d-flex m-4">
             <div class="d-flex justify-content-center align-items-center">
               <router-link :to="{ name: 'CollectUserStore', params: { id: store.id } }">
@@ -25,10 +25,6 @@
           </div>
         </div>
       </div>
-      <div v-else class="text-center">
-        <p>No stores found.</p>
-      </div>
-    </div>
   </template>
   
   <script>
@@ -55,16 +51,7 @@
       userStores() {
         return this.stores.filter(store => store.created_by === this.userStore.user_id);
       },
-      filteredStores() {
-        if (!this.searchQuery) {
-          return this.userStores;
-        }
-        const query = this.searchQuery.toLowerCase();
-        return this.userStores.filter(store =>
-          store.name.toLowerCase().includes(query) ||
-          store.description.toLowerCase().includes(query)
-        );
-      }
+      
     },
     methods: {
       async fetchStores() {

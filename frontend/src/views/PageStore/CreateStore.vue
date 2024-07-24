@@ -133,7 +133,6 @@ export default {
       try {
         await api.deleteStore(storeId);
         this.stores = this.stores.filter(store => store.id !== storeId);
-        this.userHasStore = this.userStores.length > 0;
       } catch (error) {
         console.error('Delete error:', error);
       }
@@ -153,7 +152,7 @@ export default {
       if(modalElement){
         modalElement.style.display = 'none';
         this.userStore.user_id = null;  
-        this.userHasStore = this.userStores.length > 0;  
+        
       }
     },
     async fetchStores() {
