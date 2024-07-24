@@ -7,7 +7,6 @@
         <div class="card text-center shadow-sm" style="width: 100%;">
           <div class="card-body">
             <img :src="qrimage_url(store_user.productDetails.data.pro_owner.qrimage)" alt="Bank Logo" class="img-fluid mb-3" style="width: 150px; height: 150px;">
-            <!-- <h5 class="card-title">BANK NAME</h5> -->
           </div>
           <div class="card-footer d-flex justify-content-between">
             <button class="btn btn-secondary" style="width: 48%">
