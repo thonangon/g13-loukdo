@@ -1,19 +1,22 @@
 <template>
     <div class="container h-100">
       <!-- Search Bar -->
-      <div class="d-flex justify-content-center m-5">
+      <div class="d-flex justify-content-center m-3">
         <div class="search">
           <input class="search_input" type="text" v-model="searchQuery" placeholder="Search here..." @input="performSearch" />
           <a href="#" class="search_icon"><i class="fa fa-search"></i></a>
         </div>
       </div>
-  
+      <div class="text-center">
+        <p><strong>Welcome to all everyone🙌🤑</strong> to finde all of each store</p>
+        <p>It has more of specific product that you to <strong>view and Order</strong> </p>
+      </div>
       <!-- Display Stores -->
-      <div v-if="filteredStores.length > 0">
+ 
         <div v-for="store in filteredStores" :key="store.id" class="card mb-4">
           <div class="card-body d-flex m-4">
             <div class="d-flex justify-content-center align-items-center">
-              <router-link :to="{ name: 'CollectStore', params: { id: store.id } }">
+              <router-link :to="{ name: 'CollectUserStore', params: { id: store.id } }">
                 <img :src="imageStore(store.image)" @click="captureUserId(store.created_by)" alt="Store Image" style="width: 200px; height: 200px" />
               </router-link>
             </div>
@@ -25,16 +28,12 @@
           </div>
         </div>
       </div>
-      <div v-else class="text-center">
-        <p>No stores found.</p>
-      </div>
-    </div>
   </template>
   
-  <script>
+<script>
   import api from '../../views/api';
   import { useUserStore } from '@/stores/user.js';
-  
+
   export default {
     data() {
       return {
@@ -56,62 +55,22 @@
         return this.stores.filter(store => store.created_by === this.userStore.user_id);
       },
       filteredStores() {
-        if (!this.searchQuery) {
-          return this.userStores;
-        }
-        const query = this.searchQuery.toLowerCase();
-        return this.userStores.filter(store =>
-          store.name.toLowerCase().includes(query) ||
-          store.description.toLowerCase().includes(query)
-        );
+        return this.stores.filter(store => {
+          const query = this.searchQuery.toLowerCase();
+          return (
+            store.name.toLowerCase().includes(query) ||
+            store.address.toLowerCase().includes(query) ||
+            store.description.toLowerCase().includes(query)
+          );
+        });
       }
     },
     methods: {
-      async createStore() {
-        if (this.userHasStore) {
-          alert("You can only create one store.");
-          return;
-        }
-  
-        this.loading = true;
-        try {
-          const formData = new FormData();
-          formData.append('name', this.store.name);
-          formData.append('address', this.store.address);
-          formData.append('description', this.store.description);
-          formData.append('image', this.store.image);
-  
-          const response = await api.createStore(formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              Authorization: `Bearer ${this.userStore.tokenUser}`
-            }
-          });
-  
-          this.closeModal();
-          console.log('Store created successfully:', response.data);
-          await this.fetchStores();
-          this.resetForm();
-        } catch (error) {
-          console.error('Error creating store:', error);
-          if (error.response && error.response.status === 401) {
-            console.log('Unauthorized access. Redirecting to login.');
-            this.$router.push('/');
-          }
-        } finally {
-          this.loading = false;
-        }
-      },
-      resetForm() {
-        this.store.name = '';
-        this.store.address = '';
-        this.store.description = '';
-        this.store.image = null;
-      },
       async fetchStores() {
         try {
           const response = await api.getStores();
           this.stores = response.data.data;
+          console.log(this.stores);
           this.userHasStore = this.userStores.length > 0;
         } catch (error) {
           console.error('Error fetching stores:', error);
@@ -139,7 +98,8 @@
       await this.fetchStores();
     }
   };
-  </script>
+
+</script>
   
   <style>
   .search {

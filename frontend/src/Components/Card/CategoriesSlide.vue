@@ -1,33 +1,22 @@
 <template>
   <section class="container">
-    <b-carousel class="gap-3 d-flex" id="categoryCarousel" controls indicators background="#ababab">
+    <b-carousel class="gap-3 d-flex flex-wrap" id="categoryCarousel" controls indicators background="#ababab">
       <b-carousel-slide v-for="category in categoriesWithProductCounts" :key="category.id">
-        <router-link :to="{ name: 'product/category', params: { id: category.id } }" class="card-link">
-          <div class="card h-100">
-            <div class="cate-container">
-            <img :src="category.image" class="p-2 card-img-top " :alt="category.title" style="background-color: #FFFBF9;">
-          </div>
-            <div class="card-body">
-              <h5 class="card-title">{{ category.category_name }}</h5>
-              <p class="card-text">{{ category.productCount }} products</p>
+        <div v-if="category.productCount > 1">
+          <router-link :to="{ name: 'product/category', params: { id: category.id } }" class="card-link">
+            <div class="card h-100">
+              <div class="cate-container">
+              <img :src="category.image" class="p-2 card-img-top " :alt="category.title" style="background-color: #FFFBF9;">
             </div>
-          </div>
-        </router-link>
+              <div class="card-body">
+                <h5 class="card-title">{{ category.category_name }}</h5>
+                <p class="card-text">{{ category.productCount }} products</p>
+              </div>
+            </div>
+          </router-link>
+        </div>
       </b-carousel-slide>
     </b-carousel>
-
-    <div class="dropdown">
-      <button class="text-black bg-white border-0 opacity-50 btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-        aria-expanded="false">
-        Categories
-      </button>
-      <ul class="border-0 dropdown-menu dropdown-menu-scroll" aria-labelledby="dropdownMenuButton" style="  max-height: 45px; overflow-y: auto;">
-        <li v-for="category in categories" :key="category.id">
-          <a class="dropdown-item" href="#">{{ category.category_name }}</a>
-        </li>
-      </ul>
-    </div>
-    
   </section>
 </template>
 

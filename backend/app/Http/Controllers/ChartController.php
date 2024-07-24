@@ -17,21 +17,13 @@ class ChartController extends Controller
         $rooms = ChartRoom::all();
         return ChatRoomResource::collection($rooms);
     }
-    // public function ownerrooms(Request $request)
-    // {
-    //     $user = Auth::user();
-    //     $rooms = ChartRoom::all();
-    //     try{
-            
-    //     }
-    //     return ChatRoomResource::collection($rooms);
-    // }
+
 
     public function messages(Request $request, $roomId)
     {
         return ChartMessages::where('chat_room_id', $roomId)
                           ->with('user')
-                          ->orderBy('created_at', 'DESC')
+                        //   ->orderBy('created_at', 'DESC')
                           ->get();
     }
 

@@ -28,14 +28,6 @@
               class="dropdown-item list-group-item list-group-item-action text-light" active-class="active" style="background-color: #222E3C;">
               <i class="bi bi-box me-2"></i> Categories
             </router-link>
-            <router-link to="/" class="dropdown-item list-group-item list-group-item-action text-light"
-              active-class="active" style="background-color: #222E3C;">
-              <i class="bi bi-box me-2"></i> Categories
-            </router-link>
-            <router-link to="/" class="dropdown-item list-group-item list-group-item-action text-light"
-              active-class="active" style="background-color: #222E3C;">
-              <i class="bi bi-box me-2"></i> Categories
-            </router-link>
 
           </ul>
         </div>
@@ -48,9 +40,9 @@
           <i class="bi bi-shop me-2"></i> Store
         </router-link>
 
-        <router-link to="/admin/reports" class="list-group-item list-group-item-action text-light"
+        <router-link to="/userCharge" class="list-group-item list-group-item-action text-light"
           active-class="active" style="background-color: #222E3C;">
-          <i class="bi bi-bar-chart me-2"></i> Reports
+          <i class="bi bi-bar-chart me-2"></i> Reports Payment
         </router-link>
         <router-link to="/admin/settings" class="list-group-item list-group-item-action text-light"
           active-class="active" style="background-color: #222E3C;">
@@ -71,7 +63,6 @@
           aria-controls="nav-collapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#">Admin Dashboard</a>
         <div class="collapse navbar-collapse" id="nav-collapse">
           <ul class="ml-auto navbar-nav">
             <li class="mx-3 nav-item">
@@ -81,7 +72,7 @@
               </a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+              <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <em>Admin</em>
               </a>
@@ -96,7 +87,7 @@
         </div>
       </nav>
 
-      <div class="container-fluid">
+      <div class="container-fluid scrollable-container">
         <router-view></router-view>
       </div>
     </div>
@@ -167,17 +158,20 @@ body {
 .navbar-custom {
   background-color: #ffffff !important;
   /* color: #ffffff; */
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
 }
 
 .navbar-custom .navbar-brand,
 .navbar-custom .nav-link,
 .navbar-custom .dropdown-item {
-  /* color: #ffffff; */
+  color: #0f0e0e;
 }
 
 .navbar-custom .nav-link:hover,
 .navbar-custom .dropdown-item:hover {
-  color: #ffc107;
+  color: #131310;
 }
 
 .notification-icon {

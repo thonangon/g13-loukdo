@@ -17,13 +17,14 @@ import addcard from '../views/CardAdd/addCard.vue';
 import booking from '../views/Order/InOrder.vue'
 import sellProduct from '../views/Order/InSell.vue'
 import payment from '../views/Order/PaymentOrder.vue'
-import CollectStore from '../views/PageStore/CollectStore.vue'
+import CollectUserStore from '../views/PageStore/CollectUserStore.vue'
 import Createstore from '../views/PageStore/CreateStore.vue'
 import editStore from '../views/PageStore/EditStore.vue'
 import userStore from '../views/Users/UserStore.vue'
 import DetailStore from '../views/PageStore/DetailProdcut.vue'
 import productCategory from '../views/Products/ProductCategories.vue'
 import userchats from '../views/Users/Chat/ChatView.vue'
+import Charge from '../Components/Payment/PaymentComponent.vue'
 import plans from '../views/Charge/ChargeMoney.vue'
 import ChargeMoney from '../views/Order/PaymentOrder.vue';
 // __________________ADMIN________________
@@ -32,7 +33,7 @@ import Loukdo from '../LoukDo.vue'
 
 const routes = [
     {
-        path: '/',
+        path: '/home',
         name: 'Home', 
         component: Loukdo,
         children: [
@@ -126,9 +127,9 @@ const routes = [
                 props: true
             },
             {
-                path: '/CollectStore/:id',
-                name: 'CollectStore', 
-                component: CollectStore,
+                path: '/CollectUserStore/:id',
+                name: 'CollectUserStore', 
+                component: CollectUserStore,
                 props:true
 
             },
@@ -190,6 +191,11 @@ const routes = [
                 name: 'admin_orders',
                 component: () => import('../views/Admin/Auth/OrderAndSeller.vue')
             },
+            {
+                path: '/userCharge',
+                name: 'userCharge',
+                component: () => import('../views/Admin/ChargeBoard/UserCharge.vue')
+            },
             // {
             //     path: '/admin/pages',
             //     name: 'admin_pages',
@@ -203,10 +209,22 @@ const routes = [
         component: plans
     },
     {
-        path: '/charge/:selectedPlan',
-        name: '/charge', 
+        path: '/charge',
+        name: 'charge', 
         component: ChargeMoney,
-        props: true
+        // props: route => ({ 
+        //     planTitle: route.query.planTitle,
+        //     planPrice: route.query.planPrice
+        //   })
+    },
+    {
+        path: '/chargeMoney',
+        name: 'chargeMoney', 
+        component: Charge,
+        props: route => ({ 
+            planTitle: route.query.planTitle,
+            planPrice: route.query.planPrice
+          })
     }
 ]
 

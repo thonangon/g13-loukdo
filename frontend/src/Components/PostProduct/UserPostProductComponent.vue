@@ -43,10 +43,10 @@
         <label for="product-image" class="form-label fw-bold">Photo</label>
         <div class="d-flex align-items-center">
           <input type="file" class="form-control flex-grow-1" id="product-image" @change="handleFileUpload" ref="imageInput" required />
-          <button v-if="num_products >= 1 || userInfo.user_qrimage !== null" type="submit" class="btn btn-dark ms-3" :disabled="loading">
+          <button v-if="num_products >= 1 || userInfo.user_qrimage !== null" type="submit" class="btn btn-dark ms-3 pulse-animation " :disabled="loading">
             <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Post
           </button>
-          <button v-else type="button" class="btn btn-dark ms-3" data-bs-toggle="modal" data-bs-target="#isProduct">
+          <button v-else type="button" class="btn btn-dark ms-3 pulse-animation " data-bs-toggle="modal" data-bs-target="#isProduct">
             <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Post
           </button>
         </div>
@@ -159,9 +159,12 @@ export default {
           console.error('Error posting product: ', response.data.message);
         }
       } catch (error) {
-        console.error('Error creating product:', error);
-        if (error.response && error.response.status === 401) {
-          console.log('Unauthorized access. Redirecting to login.');
+        if (error.response && error.response.status === 422 || error.response && error.response.status === 403) {
+          console.error('403 Forbidden:', error.response.data.message);
+          this.$router.push('/plans'); // Redirect to payment page on 403 error
+        } else {
+          console.error('Error creating product:', error);
+          // Handle general error
         }
       } finally {
         this.loading = false;
@@ -255,3 +258,30 @@ export default {
   }
 };
 </script>
+<style>
+
+@media (max-width: 768px) {
+  .container {
+    width: 100% !important;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.pulse-animation {
+  animation: pulse 1.5s infinite;
+}
+</style>

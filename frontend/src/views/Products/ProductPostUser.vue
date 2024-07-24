@@ -13,5 +13,11 @@ export default {
 </script>
 
 <style>
+.btn {
+  border-radius: 30px;
+  font-size: 0.9em;
+  padding: 10px 20px;
+  cursor: pointer; /* Added cursor pointer */
+}
 
 </style>

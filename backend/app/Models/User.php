@@ -13,13 +13,12 @@ use App\Models\CommentProduct;
 use App\Models\ReplyComment;
 use App\Models\Store;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Model;
+use Stripe\Plan;
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory;
-    use Notifiable;
-    use HasRoles; // Include HasRoles trait for roles and permissions
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -31,7 +30,9 @@ class User extends Authenticatable
         'email',
         'password',
         'post_count',
-        'has_paid'
+        'has_paid',
+        'next_charge_date',
+        'plan_id',
     ];
 
     /**
@@ -112,17 +113,17 @@ class User extends Authenticatable
      */
     public function stores()
     {
-        return $this->hasMany(Store::class); // User has many stores
+        return $this->hasMany(Store::class);
     }
 
     /**
-     * Define relationship with Plans.
+     * Define relationship with PlanPay.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function plan()
+    public function planPay()
     {
-        return $this->hasOne(Plans::class);
+        return $this->belongsTo(PlanPay::class);
     }
 
     /**
@@ -133,5 +134,9 @@ class User extends Authenticatable
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+    public function UserPayment()
+    {
+        return $this->hasMany(UserPayment::class);
     }
 }

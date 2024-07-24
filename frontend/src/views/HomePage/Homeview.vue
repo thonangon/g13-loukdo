@@ -1,5 +1,10 @@
 <template>
   <div class="">
+    <button v-if="isAuthenticated" class="btn btn-primary sticky-xl-center pulse-animation">
+      <router-link to="/product-post">
+        <strong class="text-white">Post your product to make money here!</strong>
+      </router-link>
+    </button>
     <div id="slid-show" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
@@ -156,7 +161,7 @@ import Categories from '@/Components/Card/CategoriesSlide.vue'
 import api from '@/views/api';
 import NavBar from '@/Components/navbars/NavBar.vue';
 import Footer from '@/Components/footer/FooTer.vue';
-
+import { useUserStore } from '@/stores/user.js';
 export default {
   name: 'HomeView',
   components: {
@@ -166,10 +171,14 @@ export default {
   data() {
     return {
       products: [],
-      searchQuery: ''
+      searchQuery: '',
+      store_user:useUserStore(),
     }
   },
   computed: {
+    isAuthenticated() {
+      return this.store_user.accountUser; 
+    },
     filteredProducts() {
       if (!this.searchQuery) {
         return this.products;
@@ -286,24 +295,44 @@ body {
 
 .scrollable-container {
   height: calc(1.8 * (250px + 0.5rem));
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);
+  overflow-y: scroll; /* Allows vertical scrolling */
+  overflow-x: hidden; /* Hides horizontal overflow */
+  
+  /* Hide scrollbar in Firefox */
+  scrollbar-width: none;
 
-  overflow-x: hidden;
+  /* Hide scrollbar in WebKit browsers */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
 }
 
+/* Hide scrollbar in WebKit browsers */
 .scrollable-container::-webkit-scrollbar {
-  width: 2px;
-} 
-
-.scrollable-container::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
+  display: none;
+}
+.sticky-xl-center {
+  position: fixed; /* Fixed position to keep it in view */
+  bottom: 20px; /* Distance from the bottom of the viewport */
+  left: 40%; /* Center horizontally */
+  transform: translatex(-50%); /* Offset by half of its width */
+  z-index: 1000; /* Ensure it stays on top of other content */
 }
 
-.scrollable-container::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-} 
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.pulse-animation {
+  animation: pulse 1.5s infinite;
+}
 </style>

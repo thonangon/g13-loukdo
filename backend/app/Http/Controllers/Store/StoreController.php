@@ -14,143 +14,153 @@ use Illuminate\Support\Facades\Response;
 
 class StoreController extends Controller
 {
-    public function index()
-    {
+    public function index(){
         $stores = Store::all();
-
-        return response()->json([
-            'status' => true,
-            'data' => StoreResource::collection($stores),
-        ]);
+        return StoreResource::collection($stores);
+    }
+    public function getUserStore(Request $request)
+    {
+        $user = $request->user();
+        $stores = Store::where('created_by', $user->id)->get();
+        if (!$stores) {
+            return response()->json(['message' => 'No store found for this user.'], 404);
+        }
+        return response()->json($stores);
     }
 
     public function store(Request $request)
-{
-    try {
-        // Validate incoming request
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'address' => 'nullable|string',
-            'description' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:204800',
-        ]);
+    {
+        try {
+            // Check if the user already has a store
+            $user = Auth::user();
+            // Validate incoming request
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|string|max:255',
+                'address' => 'nullable|string',
+                'description' => 'required|string',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:204800',
+            ]);
 
-        // Handle validation errors
-        if ($validator->fails()) {
+            // Handle validation errors
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validation error',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            // Handle image upload if provided
+            $imageName = null;
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('/api/stores/image/'), $imageName);
+            }
+
+            // Get the validated data
+            $validatedData = $validator->validated();
+
+            // Create new store instance
+            $store = new Store([
+                'name' => $validatedData['name'],
+                'address' => $validatedData['address'],
+                'description' => $validatedData['description'],
+                'image' => $imageName,
+                'user_id' => $user->id,
+            ]);
+            $store->save();
+            $store->image_url = $imageName ? asset('/api/stores/image/' . $imageName) : null;
+
+            return response()->json([
+                'status' => true,
+                'data' => $store,
+                'message' => 'Store created successfully'
+            ], 201);
+        } catch (\Exception $error) {
+            // Return error response if an exception occurs
             return response()->json([
                 'status' => false,
-                'message' => 'Validation error',
-                'errors' => $validator->errors()
-            ], 422);
+                'message' => 'Store creation failed',
+                'error' => $error->getMessage()
+            ], 400);
         }
-
-        // Handle image upload if provided
-        $imageName = null;
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('/api/stores/image/'), $imageName);
-        }
-
-        // Get the validated data
-        $validatedData = $validator->validated();
-        $user = Auth::user();
-        // Create new store instance
-        $store = new Store([
-            'name' => $validatedData['name'],
-            'address' => $validatedData['address'],
-            'description' => $validatedData['description'],
-            'image' => $imageName,
-            'user_id' => $user->id,
-        ]);
-        $store->save();
-        $store->image_url = $imageName ? asset('/api/stores/image/' . $imageName) : null;
-        return response()->json([
-            'status' => true,
-            'data' => $store,
-            'message' => 'Store created successfully'
-        ], 201);
-    } catch (\Exception $error) {
-        // Return error response if an exception occurs
-        return response()->json([
-            'status' => false,
-            'message' => 'Store creation failed',
-            'error' => $error->getMessage()
-        ], 400);
     }
-}
 
+    public function show(Request $request, $id)
+    {
+        try {
+            $store = Store::findOrFail($id); // Ensure store with ID exists
+            return response()->json([
+                'status' => true,
+                'data' => [
+                    'store' => new StoreResource($store),
+                    'created_by' => [
+                        'id' => $store->user->id,
+                        'name' => $store->user->name,
+                    ]
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Store not found or an error occurred.',
+            ], 404); // Return appropriate HTTP status code
+        }
+    }
 
-   public function show(Request $request, $id)
-   {
-       try {
-           $store = Store::findOrFail($id); // Ensure store with ID exists
-           return response()->json([
-               'status' => true,
-               'data' => new StoreResource($store),
-           ]);
-       } catch (\Exception $e) {
-           return response()->json([
-               'status' => false,
-               'message' => 'store not found or an error occurred.',
-           ], 404); // Return appropriate HTTP status code
-       }
-   }
-   
-   
-   public function update(Request $request, $id)
+    public function update(Request $request, $id)
 {
     try {
         // Find the store by ID
+        Log::info('Update request data:', $request->all());
         $store = Store::findOrFail($id);
 
         // Validate incoming request
         $validatedData = $request->validate([
-            'name' => 'required|string|max:30',
+            'name' => 'required|string|max:255',
             'address' => 'nullable|string',
             'description' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:204800',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Update store properties
         $store->name = $validatedData['name'];
-        $store->address = $validatedData['address'];
+        $store->address = $validatedData['address'] ?? $store->address;
         $store->description = $validatedData['description'];
 
-        // Handle image update if provided
+        // Find the store by ID
+        $store = Store::findOrFail($id);
+
+        // Handle image upload if provided
         if ($request->hasFile('image')) {
-            // Delete old image if it exists
+            // Delete the old image if it exists
             if ($store->image) {
-                $imagePath = public_path('/api/stores/image/' . $store->image);
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
+                $oldImagePath = public_path('/api/stores/image/' . $store->image);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
                 }
             }
 
-            // Upload new image
+            // Upload the new image
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move(public_path('/api/stores/image/'), $imageName);
-
-            // Update image field in database
             $store->image = $imageName;
         }
 
-        // Save updated store
+        // Update store details
+        $store->name = $request->input('name');
+        $store->address = $request->input('address');
+        $store->description = $request->input('description');
         $store->save();
-
-        // Optionally, update image_url if needed
-        $store->image_url = $store->image ? asset('/api/stores/image/' . $store->image) : null;
 
         return response()->json([
             'status' => true,
-            'data' => $store,
+            'data' => new StoreResource($store),
             'message' => 'Store updated successfully'
-        ]);
+        ], 200);
     } catch (\Exception $error) {
-        // Log the error message
-        Log::error('Store update failed: ' . $error->getMessage());
-
         // Return error response if an exception occurs
         return response()->json([
             'status' => false,
@@ -159,6 +169,8 @@ class StoreController extends Controller
         ], 400);
     }
 }
+
+
 
 
     public function destroy($id)
@@ -178,38 +190,39 @@ class StoreController extends Controller
                 }
             }
 
-            // Delete the st$store
+            // Delete the store
             $store->delete();
 
             // Return success response
             return response()->json([
                 'status' => true,
-                'message' => 'Product and associated image deleted successfully'
+                'message' => 'Store and associated image deleted successfully'
             ]);
         } catch (\Exception $error) {
             // Log the error message
-            Log::error('Product deletion failed: ' . $error->getMessage());
+            Log::error('Store deletion failed: ' . $error->getMessage());
 
             // Return error response if an exception occurs
             return response()->json([
                 'status' => false,
-                'message' => 'Product deletion failed',
+                'message' => 'Store deletion failed',
                 'error' => $error->getMessage()
             ], 400);
         }
     }
+
     public function getImage($id)
     {
         try {
-            $product = Store::findOrFail($id);
+            $store = Store::findOrFail($id);
 
-            if ($product->image) {
-                $path = public_path('/api/products/image/' . $product->image);
+            if ($store->image) {
+                $path = public_path('/api/stores/image/' . $store->image);
                 return Response::file($path);
             } else {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Image not found for product with ID ' . $id,
+                    'message' => 'Image not found for store with ID ' . $id,
                 ], 404);
             }
         } catch (\Exception $e) {
@@ -219,11 +232,5 @@ class StoreController extends Controller
             ], 500);
         }
     }
-    /**
-     * Retrieve ratings for a specific product.
-     *
-     * @param  int  $productId
-     * @return \Illuminate\Http\JsonResponse
-     */
-    
+   
 }

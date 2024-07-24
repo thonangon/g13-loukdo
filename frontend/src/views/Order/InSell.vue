@@ -98,8 +98,11 @@
       }
     },
     
-    mounted(){
-      this.fetchCurrentOrder();
+    mounted() {
+      setTimeout(() => {
+        this.fetchCurrentOrder();
+        setInterval(this.fetchCurrentOrder, 5000);
+      }, 1000);
       // this.fetchPastOrder();
     },
     methods: {

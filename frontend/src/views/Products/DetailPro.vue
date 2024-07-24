@@ -1,96 +1,15 @@
-<!-- <template>
-  <div class="container mt-5">
-    <div v-if="productDetails" class="">
-      <div class="leftSide" style="width: 48%;">
-        <div class="d-flex align-items-center" style="height: 60px;">
-          <img v-if="productDetails.data.pro_owner.profile" :src="profile_url(productDetails.data.pro_owner.profile)" alt="User Image" class="m-3 text-dark nav-link profile-img">
-          <img v-else :src="ownerprofileName(productDetails.data.pro_owner.name)" alt="User Image" class="m-3 text-dark nav-link profile-img">
-          <p class="mb-0">{{ productDetails.data.pro_owner.name }} - Owner: {{ productDetails.data.name }}</p>
-        </div>
-      </div>
-      <div class="gap-5 p-3 rounded shadow rightSide d-flex align-items-center bg-light">
-        <div class="proImageSlide">
-          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner" style="height: 600px;">
-              <div class="carousel-item active">
-                <img :src="product_img_url(productDetails.data.image)" class="d-block w-100" style="height: 100%;" alt="Product Image">
-              </div>
-            </div>
-          </div>
-        </div>
-        <form class="p-5" style="width: 60%;">
-          <div class="title">
-            <h1>{{ productDetails.data.name }}</h1>
-            <h3>${{ productDetails.data.price }}</h3>
-          </div>
-          <div class="description">
-            <h2>DESCRIPTION</h2>
-            <p>{{ productDetails.data.description }}</p>
-          </div>
-          <div class="detail">
-            <h2>DETAIL</h2>
-            <ul>
-              <li class="d-flex">
-                <p>Color:</p>
-                <p>Black</p>
-              </li>
-              <li class="d-flex">
-                <p>Size:</p>
-                <p>S</p>
-              </li>
-              <li class="d-flex">
-                <p>Material:</p>
-                <p>Cotton</p>
-              </li>
-            </ul>
-          </div>
-          <div class="quantity">
-            <h2>QUANTITY</h2>
-            <input type="number" v-model="form.quantity" class="p-4">
-          </div>
-          <div class="gap-2 mt-5 action d-flex justify-content-between">
-            <router-link v-if="!store_user.accountUser" to="/login" class="mr-0 nav-link custom-font-size">
-              <button class="btn btn-success" style="width: 270px; height: 52px;">Add to cart!</button>
-            </router-link>
-            <button v-else @click="addToCart(productDetails.data)" class="btn btn-success" style="width: 270px; height: 52px;">Add to cart!</button>
-            <router-link v-if="!store_user.accountUser" to="/login" class="mr-0 nav-link custom-font-size text-danger">
-              <button class="btn btn-primary" style="width: 270px; height: 52px;">Buy now!</button>
-            </router-link>
-            <router-link v-else to="" class="mr-0 nav-link custom-font-size text-danger">
-              <button class="btn btn-primary" style="width: 270px; height: 52px;" @click="buyNow()">Buy now!</button>
-            </router-link>
-          </div>
-        </form>
-      </div>
-    </div>
-    <p class="mt-5 p- border-bottom" style="width: 100%;">Ratings and Feedback for this product!</p>
-    <div class="RateAndFeedback d-flex">
-      <div class="feedback" style="width: 70%;">
-        <rate_show :product_id="id" />
-        <div v-if="productDetails" class="feedback">
-          <div v-for="comment in productDetails.data.comments" :key="comment.id" class="">
-            <comment :comment="comment" />
-          </div>
-        </div>
-      </div>
-      <div class="cardPro border-start" style="width: 30%">
-        <div v-for="(product, index) in products" :key="index">
-          <cards_product :product="product" style="width: 90%" />
-        </div>
-      </div>
-    </div>
-  </div>
-</template> -->
 
 <template>
   <div class="container mt-5">
     <div v-if="productDetails">
       <div class="leftSide" style="width: 48%;">
-        <div class="d-flex align-items-center" style="height: 60px;">
-          <img v-if="productDetails.data.pro_owner.profile" :src="profile_url(productDetails.data.pro_owner.profile)" alt="User Image" class="m-3 text-dark nav-link profile-img">
-          <img v-else :src="ownerprofileName(productDetails.data.pro_owner.name)" alt="User Image" class="m-3 text-dark nav-link profile-img">
-          <p class="mb-0">{{ productDetails.data.pro_owner.name }} - Owner: {{ productDetails.data.name }}</p>
-        </div>
+        <router-link to="/chats">
+          <div class="d-flex align-items-center" @click="store_user.setUser_id(productDetails.data.pro_owner.id)" style="height: 60px;">
+            <img v-if="productDetails.data.pro_owner.profile" :src="profile_url(productDetails.data.pro_owner.profile)" alt="User Image" class="text-dark m-3 nav-link profile-img">
+            <img v-else :src="ownerprofileName(productDetails.data.pro_owner.name)" alt="User Image" class="text-dark m-3 nav-link profile-img">
+            <p class="mb-0">{{ productDetails.data.pro_owner.name }} - Owner: {{ productDetails.data.name }}</p>
+          </div>
+        </router-link>
       </div>
       <div class="gap-5 p-3 rounded shadow rightSide d-flex align-items-center bg-light">
         <div class="proImageSlide">
@@ -273,6 +192,24 @@ export default {
       localStorage.setItem('orderData', JSON.stringify(orderData));
       this.$router.push('/order');
     },
+
+    async createChatRoom(id) {
+        const user_id = id; // Ensure store_user is defined and accessible
+        const auth = this.store_user.tokenUser; // Ensure tokenUser contains the correct token
+        console.log(user_id, auth);
+        try {
+          const response = await api.createChatRoom(user_id, {
+            headers: {
+              'Authorization': `Bearer ${auth}`,
+              'Content-Type': 'application/json',
+            },
+          });
+          this.getChatRooms();
+        } catch (error) {
+          console.error(error);
+        }
+      },
+
     handleMouseMove(event) {
       const zoomContainer = event.currentTarget;
       const zoomImage = zoomContainer.querySelector('.zoom-image');
@@ -281,7 +218,7 @@ export default {
       const y = ((event.pageY - top) / height) * 100;
       zoomImage.style.transformOrigin = `${x}% ${y}%`;
     },
-  }
+  },
 };
 </script>
 <style>

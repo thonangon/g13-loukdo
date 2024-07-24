@@ -1,6 +1,6 @@
 <template>
   <div>
-    <product_slide/>
+    <!-- <product_slide/> -->
     <search_product @search="handleSearch"/>
     <div class="scrollable-container">
       <div class="row">

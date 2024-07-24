@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->boolean('has_paid')->default(false);
+            $table->timestamp('next_charge_date')->nullable();
+           
         });
     }
 
@@ -23,6 +25,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('has_paid');
+            $table->dropColumn('next_charge_date');
         });
     }
 };
