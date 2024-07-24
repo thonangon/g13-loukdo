@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <button class="btn btn-primary sticky-xl-center pulse-animation">
+    <button v-if="isAuthenticated" class="btn btn-primary sticky-xl-center pulse-animation">
       <router-link to="/product-post">
         <strong class="text-white">Post your product to make money here!</strong>
       </router-link>
@@ -161,7 +161,7 @@ import Categories from '@/Components/Card/CategoriesSlide.vue'
 import api from '@/views/api';
 import NavBar from '@/Components/navbars/NavBar.vue';
 import Footer from '@/Components/footer/FooTer.vue';
-
+import { useUserStore } from '@/stores/user.js';
 export default {
   name: 'HomeView',
   components: {
@@ -171,10 +171,14 @@ export default {
   data() {
     return {
       products: [],
-      searchQuery: ''
+      searchQuery: '',
+      store_user:useUserStore(),
     }
   },
   computed: {
+    isAuthenticated() {
+      return this.store_user.accountUser; 
+    },
     filteredProducts() {
       if (!this.searchQuery) {
         return this.products;

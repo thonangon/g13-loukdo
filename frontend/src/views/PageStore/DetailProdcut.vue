@@ -1,13 +1,16 @@
 <template>
     <div class="container h-100">
       <!-- Search Bar -->
-      <div class="d-flex justify-content-center m-5">
+      <div class="d-flex justify-content-center m-3">
         <div class="search">
           <input class="search_input" type="text" v-model="searchQuery" placeholder="Search here..." @input="performSearch" />
           <a href="#" class="search_icon"><i class="fa fa-search"></i></a>
         </div>
       </div>
-  
+      <div class="text-center">
+        <p><strong>Welcome to all everyone🙌🤑</strong> to finde all of each store</p>
+        <p>It has more of specific product that you to <strong>view and Order</strong> </p>
+      </div>
       <!-- Display Stores -->
  
         <div v-for="store in filteredStores" :key="store.id" class="card mb-4">
