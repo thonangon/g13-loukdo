@@ -33,13 +33,6 @@ class StoreController extends Controller
         try {
             // Check if the user already has a store
             $user = Auth::user();
-            if (Store::where('user_id', $user->id)->exists()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'User already has a store.',
-                ], 400);
-            }
-
             // Validate incoming request
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:255',
