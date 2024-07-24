@@ -18,7 +18,7 @@
         "laravel/tinker": "^2.8",
         "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-permission": "^6.9",
-        "stripe/stripe-php": "^15.0",
+        "stripe/stripe-php": "^15.3",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {

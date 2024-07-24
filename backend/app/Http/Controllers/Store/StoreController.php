@@ -136,37 +136,38 @@ class StoreController extends Controller
         $store->address = $validatedData['address'] ?? $store->address;
         $store->description = $validatedData['description'];
 
-        // Handle image update if provided
+        // Find the store by ID
+        $store = Store::findOrFail($id);
+
+        // Handle image upload if provided
         if ($request->hasFile('image')) {
-            // Delete old image if it exists
+            // Delete the old image if it exists
             if ($store->image) {
-                $imagePath = public_path('/api/stores/image/' . $store->image);
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
+                $oldImagePath = public_path('/api/stores/image/' . $store->image);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
                 }
             }
 
-            // Upload new image
+            // Upload the new image
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move(public_path('/api/stores/image/'), $imageName);
-
-            // Update image field in database
             $store->image = $imageName;
         }
 
-        // Save updated store
+        // Update store details
+        $store->name = $request->input('name');
+        $store->address = $request->input('address');
+        $store->description = $request->input('description');
         $store->save();
 
         return response()->json([
             'status' => true,
-            'data' => $store,
+            'data' => new StoreResource($store),
             'message' => 'Store updated successfully'
-        ]);
+        ], 200);
     } catch (\Exception $error) {
-        // Log the error message
-        Log::error('Store update failed: ' . $error->getMessage());
-
         // Return error response if an exception occurs
         return response()->json([
             'status' => false,
@@ -175,6 +176,8 @@ class StoreController extends Controller
         ], 400);
     }
 }
+
+
 
 
     public function destroy($id)

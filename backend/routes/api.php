@@ -14,16 +14,14 @@ use App\Http\Controllers\Products\CommentProductController;
 use App\Http\Controllers\ReplyProduct\ReplyCommentController;
 use App\Http\Controllers\addToCartController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Order\PaymentController;
-use App\Http\Controllers\Plans\PlanPayController;
-use App\Http\Controllers\Plans\PlansController;
-use App\Http\Controllers\Plans\PlansController\PlanController;
-use App\Http\Controllers\Plans\PlansUserController;
 use App\Http\Controllers\Plans\SubscriptionController;
 use App\Http\Controllers\Order\OrderProductController;
+use App\Http\Controllers\Plans\PlanPayController;
 use App\Http\Controllers\Store\StoreController;
 use App\Http\Controllers\Stripe\StripePaymentController;
-
+use App\Http\Controllers\Plans\PlansController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -79,7 +77,7 @@ Route::middleware('auth:sanctum')->prefix('products')->group(function () {
 
     Route::get('/image/{id}', [ProductController::class, 'getImage']);
 });
-Route::delete('/product/remove/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+// Route::delete('/product/remove/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
 
 Route::middleware('auth:sanctum')->prefix('products')->group(function () {
     Route::post('/ratting/{productId}', [RateProductController::class, 'rate']);
@@ -110,12 +108,13 @@ Route::prefix('reply')->group(function () {
 Route::prefix('store')->group(function () {
     Route::get('/list', [StoreController::class, 'index']);
     Route::post('/create', [StoreController::class, 'store'])->middleware('auth:sanctum');
-    Route::put('/update/{id}', [StoreController::class, 'update']);
+    Route::put('/update/{id}', [StoreController::class, 'update'])->middleware('auth:sanctum');
+   
     Route::get('/show/{id}', [StoreController::class, 'show']);
     Route::delete('/remove/{id}', [StoreController::class, 'destroy']);
-    
-    
+
 });
+
 
 // messages chat
 Route::middleware('auth:sanctum')->prefix('message')->group(function () {
@@ -175,6 +174,9 @@ Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);
 
 Route::post('/stripe/payment', [StripePaymentController::class, 'makePayment']);
 Route::post('/stripe/handlePaymentSuccess', [StripePaymentController::class, 'handlePaymentSuccess']);
+Route::get('/payment',[StripePaymentController::class, 'index']);
+Route::get('/show/payment/{id}', [StripePaymentController::class, 'show']);
+Route::delete('/delete/payment/{id}', [StripePaymentController::class, 'deletePayment']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/post-count', [ProductController::class, 'getUserPostCount']);

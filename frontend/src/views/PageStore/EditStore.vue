@@ -44,6 +44,7 @@
 <script>
 import api from '../../views/api';
 import { useUserStore } from '@/stores/user.js';
+
 export default {
   data() {
     return {
@@ -83,11 +84,10 @@ export default {
             Authorization: `Bearer ${this.userStore.tokenUser}`
           }
         });
-
         console.log('Store updated successfully:', response.data);
-        this.$router.push('/userStore'); // Redirect to the user's store page
+        this.$router.push('/userStore');
       } catch (error) {
-        console.error('Error updating store:', error);
+        console.error('Error updating store:', error.response?.data || error.message);
       }
     },
     onFileChange(event) {
@@ -99,3 +99,7 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+/* Add your styles here */
+</style>
