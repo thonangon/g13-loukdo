@@ -36,7 +36,7 @@ export default {
   },
 
   profile(filename) {
-    console.log(`${URL_PORT}/storage/${filename}`);
+    console.log(`${URL_PORT}/storage/${filename}`)
     return `${URL_PORT}/storage/${filename}`;
 
   },

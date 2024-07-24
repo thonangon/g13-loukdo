@@ -96,6 +96,7 @@ class UserProfileController extends Controller
         if ($request->hasFile('user_qrimage')) {
             // Store the new profile image
             $userqr_image = $request->file('user_qrimage')->store('userqrimage', 'public');
+            // add something
             $user->user_qrimage = $userqr_image;
         }
 

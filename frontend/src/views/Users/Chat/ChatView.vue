@@ -121,6 +121,7 @@ export default {
         };
         const response = await api.chatrooms(headers);
         this.chatRoomsData = response.data.data;
+        console.log(this.chatRoomsData)
       } catch (error) {
         console.error('Error fetching chat rooms:', error);
       }
@@ -293,6 +294,7 @@ export default {
   justify-content: flex-start;
 }
 
+/* --------------------- */
 .message-content {
   max-width: 60%;
   padding: 0.75rem 1rem;
@@ -311,6 +313,7 @@ export default {
   border-top-left-radius: 0;
 }
 
+/* ------------------- */
 .myMessage {
   background-color: #007bff !important;
   color: white !important;
