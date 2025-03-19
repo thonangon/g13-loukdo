@@ -129,6 +129,7 @@ export default {
           }
         });
         this.myAccount = response.data.user
+        console.log(this.myAccount)
       } catch (error) {
         if (error.response && error.response.data) {
           console.error('Error:', error.response.data); // Log detailed error from server
