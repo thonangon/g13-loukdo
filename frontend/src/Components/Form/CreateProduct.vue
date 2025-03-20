@@ -30,10 +30,9 @@
                     <div class="mb-3 d-flex" style="gap: 10px">
                         <input class="form-control" type="file" id="image" name="image" accept="image/*" required>
                         <div class="col">
-                            <button type="submit" class="btn btn-dark btn-lg" style="width: 120px;">Post</button>
+                            <button type="submit" class="btn btn-info btn-lg" style="width: 120px;">Post</button>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>

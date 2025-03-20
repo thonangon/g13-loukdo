@@ -6,7 +6,12 @@
             <div class="logo">
               <img src="../../assets/images/lOUKDO.png" alt="logo" class="img-fluid mb-2">
             </div>
-            <p class="text-muted">Your one-stop shop for everything!</p>
+            <p class="text-muted">Your one-stop shop for everything!
+              Post your product to make money here!
+            </p>
+            <button class="btn btn-primary">
+              <a href="/register" class="text-white" >Register Now</a>
+            </button>
           </div>
           <div class="col-md-2 mb-3">
             <h5>Products</h5>
@@ -26,8 +31,8 @@
           </div>
           <div class="col-md-3 mb-3">
             <h5>Contact Us</h5>
-            <p class="text-muted">123 Main St, Anytown, USA</p>
-            <p class="text-muted">Email: info@example.com</p>
+            <p class="text-muted">BP 511, Phum Tropeang Chhuk (Borey Sorla) Sangtak, Street 371, Phnom Penh</p>
+            <p class="text-muted">Email: thona@gmail.com</p>
             <p class="text-muted">Phone: (123) 456-7890</p>
             <div>
               <a href="#"><i class="bi bi-facebook text-muted me-2"></i></a>

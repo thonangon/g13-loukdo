@@ -5,9 +5,9 @@
         <div class="card h-100">
           <!-- Cover Photo and Profile Section -->
           <div class="cover rounded-top text-white d-flex flex-column align-items-center">
-            <p class="cover-photo"></p>
-            <div class="profile mt-5 d-flex flex-column align-items-center">
-              <div class="position-relative">
+            
+            <div class="profile mt-4 d-flex flex-column align-items-center">
+              <div class="position-relative mt-4">
                 <img :src="profile_url(myAccount.profile)" class="img-fluid img-thumbnail mt-5" />
                 <label for="inputGroupFile04" class="camera-icon position-absolute">
                   <i class="fas fa-camera fa-lg text-dark" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>

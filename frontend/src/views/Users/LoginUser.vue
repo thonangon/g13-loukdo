@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="login">
+  <form @submit.prevent="login" class="p-5">
     <div class="container bg-light p-4 rounded shadow w-50">
       <div class="mb-3 text-center">
         <h3>Login account</h3>
@@ -10,34 +10,41 @@
         <input type="email" class="form-control" v-model="email" required />
         <span v-if="emailError" class="text-danger">{{ emailError }}</span>
       </div>
-      <div class="mb-3"> 
+      <div class="mb-3">
         <label for="exampleInputPassword1" class="form-label fw-bold">Password</label>
         <div class="d-flex align-items-center">
           <input type="password" class="form-control flex-grow-1" v-model="password" required />
-          <button type="submit" class="btn btn-dark ms-3" :disabled="loading">
-            <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Submit
-          </button>
         </div>
         <span v-if="passwordError" class="text-danger">{{ passwordError }}</span>
       </div>
-      <div>
-        <a href="#" style="text-decoration: none">Forgot your password?</a>
-        <a href="/register" style="text-decoration: none">| Register</a>
+      <div class="d-flex justify-content-center">
+        <button type="submit" class="btn  ms-3 btn-primary form-control shadow-3" :disabled="loading">
+          <span 
+            v-if="loading"
+            class="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+          ></span>
+          Login
+        </button>
+      </div>
+      <div class="mt-3 text-center">
+        <a href="#" class="text-black">Forgot your password?</a>
+        <a href="/register" style="text-decoration: none"> | Register Now</a>
       </div>
     </div>
   </form>
 </template>
 
 <script>
-import api from "../../views/api";
-import { useUserStore } from '@/stores/user.js';
+import api from '../../views/api'
+import { useUserStore } from '@/stores/user.js'
 
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
     return {
-      admin:1,
+      admin: 1,
       email: '',
       password: '',
       store_user: useUserStore(),
@@ -48,85 +55,85 @@ export default {
   },
   watch: {
     email(newEmail) {
-      this.validateEmail(newEmail);
+      this.validateEmail(newEmail)
     },
     password(newPassword) {
-      this.validatePassword(newPassword);
+      this.validatePassword(newPassword)
     }
   },
   methods: {
     validateEmail(email) {
       if (!email) {
-        this.emailError = 'Email is required.';
+        this.emailError = 'Email is required.'
       } else if (!this.isValidEmail(email)) {
-        this.emailError = 'Please enter a valid email address.';
+        this.emailError = 'Please enter a valid email address.'
       } else {
-        this.emailError = null;
+        this.emailError = null
       }
     },
     validatePassword(password) {
       if (!password) {
-        this.passwordError = 'Password is required.';
+        this.passwordError = 'Password is required.'
       } else if (password.length < 8) {
-        this.passwordError = 'Password must be at least 8 characters long.';
+        this.passwordError = 'Password must be at least 8 characters long.'
       } else {
-        this.passwordError = null;
+        this.passwordError = null
       }
     },
     isValidEmail(email) {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      return emailRegex.test(email)
     },
     async login() {
       // Validate email and password
-      this.validateEmail(this.email);
-      this.validatePassword(this.password);
+      this.validateEmail(this.email)
+      this.validatePassword(this.password)
 
       // Check if there are any validation errors before proceeding
       if (this.emailError || this.passwordError) {
-        return;
+        return
       }
 
-      this.loading = true;
+      this.loading = true
       try {
-        const response = await api.login({ email: this.email, password: this.password });
+        const response = await api.login({ email: this.email, password: this.password })
         if (response.data.success) {
-          this.store_user.accountUser = response.data.data;
-          this.store_user.tokenUser = response.data.token;
+          this.store_user.accountUser = response.data.data
+          this.store_user.tokenUser = response.data.token
 
           // Save to localStorage
-          localStorage.setItem('user_token', response.data.token);
-          localStorage.setItem('userAccount', JSON.stringify(response.data.data));
+          localStorage.setItem('user_token', response.data.token)
+          localStorage.setItem('userAccount', JSON.stringify(response.data.data))
 
-          console.log(response.data.data.id);
-          if(response.data.data.id == this.admin){
-            this.$router.push('/dashboard');
-            return;
-          }else{
-            this.$router.push('/');
-            return;
+          console.log(response.data.data.id)
+          if (response.data.data.id == this.admin) {
+            this.$router.push('/dashboard')
+            return
+          } else {
+            this.$router.push('/')
+            return
           }
         } else {
-          this.emailError = response.data.message;
+          this.emailError = response.data.message
         }
       } catch (error) {
-        console.error('Login error:', error);
+        console.error('Login error:', error)
       } finally {
-        this.loading = false;
+        this.loading = false
       }
     }
   },
   mounted() {
     // Check if token exists in localStorage on component mount
-    const token = localStorage.getItem('user_token');
-    const accountUser = localStorage.getItem('userAccount');
+    const token = localStorage.getItem('user_token')
+    const accountUser = localStorage.getItem('userAccount')
     if (token && accountUser) {
-      this.store_user.tokenUser = token;
-      this.store_user.accountUser = JSON.parse(accountUser);
-      this.$router.push('/');
+      this.store_user.tokenUser = token
+      this.store_user.accountUser = JSON.parse(accountUser)
+      this.$router.push('/')
     }
   }
-};
+}
 </script>
 
 <style>

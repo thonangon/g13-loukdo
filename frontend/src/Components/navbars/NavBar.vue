@@ -73,7 +73,7 @@
                     </router-link>
                   </div>
                   <router-link v-if="!store_user.accountUser" to="/login" class="mr-0 nav-link custom-font-size"><button class="m-1 btn btn-secondary">Login</button></router-link>
-                  <router-link v-if="!store_user.accountUser" to="/register" class="mr-0 nav-link custom-font-size"><button class="m-1 btn btn-primary">Register</button></router-link>
+                  <router-link v-if="!store_user.accountUser" to="/register" class="mr-0 nav-link custom-font-size"><button class="m-1 btn btn-primary">Sign Up</button></router-link>
                   <div v-else class="dropdown d-flex align-items-center profile-container">
                     <span class="profile-name">{{ store_user.accountUser.name.toUpperCase() }}</span>
                     <img v-if="store_user.accountUser.profile" :src="profile_url(store_user.accountUser.profile)" class="text-dark custom-font-size nav-link profile-img" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" alt="">

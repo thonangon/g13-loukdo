@@ -1,7 +1,7 @@
 <template>
   <section class="container">
-    <b-carousel class="gap-3 d-flex flex-wrap" id="categoryCarousel" controls indicators background="#ababab">
-      <b-carousel-slide v-for="category in categoriesWithProductCounts" :key="category.id">
+    <div class="bg-light gap-5 d-flex flex-wrap" id="categoryCarousel" controls indicators background="#ababab">
+      <div v-for="category in categoriesWithProductCounts" :key="category.id">
         <div v-if="category.productCount > 1">
           <router-link :to="{ name: 'product/category', params: { id: category.id } }" class="card-link">
             <div class="card h-100">
@@ -15,8 +15,8 @@
             </div>
           </router-link>
         </div>
-      </b-carousel-slide>
-    </b-carousel>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -126,7 +126,7 @@ export default {
 .card {
   overflow: hidden;
   border-radius: 10px;
-  transition: transform 0.3s;
+  
 }
 
 .card:hover {
@@ -134,7 +134,9 @@ export default {
 }
 
 .card img {
-  height: 200px;
+
+  width: 270px;
+  height: 300px;
   object-fit: cover;
   border-radius: 10px 10px 0 0;
 }
