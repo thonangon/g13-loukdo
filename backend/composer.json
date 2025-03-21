@@ -55,7 +55,8 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ]
+        ],
+        "build": "vue-cli-service build && cp -r dist ../public/"
         
     },
     "extra": {

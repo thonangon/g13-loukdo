@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
@@ -13,7 +12,8 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
     "serve": "vue-cli-service serve",
-    "test": "vue-cli-service test"
+    "test": "vue-cli-service test",
+    "build": "vue-cli-service build"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
