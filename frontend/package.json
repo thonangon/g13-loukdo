@@ -13,8 +13,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
     "serve": "vue-cli-service serve",
-    "test": "vue-cli-service test",
-    "heroku-postbuild": "npm run production"
+    "test": "vue-cli-service test"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
