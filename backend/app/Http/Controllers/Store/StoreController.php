@@ -110,68 +110,61 @@ class StoreController extends Controller
     }
 
     public function update(Request $request, $id)
-{
-    try {
-        // Find the store by ID
-        Log::info('Update request data:', $request->all());
-        $store = Store::findOrFail($id);
+    {
+        try {
+            $store = Store::findOrFail($id);
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'address' => 'nullable|string',
+                'description' => 'required|string',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
 
-        // Validate incoming request
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'address' => 'nullable|string',
-            'description' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+            // Update store properties
+            $store->name = $validatedData['name'];
+            $store->address = $validatedData['address'] ?? $store->address;
+            $store->description = $validatedData['description'];
 
-        // Update store properties
-        $store->name = $validatedData['name'];
-        $store->address = $validatedData['address'] ?? $store->address;
-        $store->description = $validatedData['description'];
+            // Find the store by ID
+            $store = Store::findOrFail($id);
 
-        // Find the store by ID
-        $store = Store::findOrFail($id);
-
-        // Handle image upload if provided
-        if ($request->hasFile('image')) {
-            // Delete the old image if it exists
-            if ($store->image) {
-                $oldImagePath = public_path('/api/stores/image/' . $store->image);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
+            // Handle image upload if provided
+            if ($request->hasFile('image')) {
+                // Delete the old image if it exists
+                if ($store->image) {
+                    $oldImagePath = public_path('/api/stores/image/' . $store->image);
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
                 }
+
+                // Upload the new image
+                $image = $request->file('image');
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('/api/stores/image/'), $imageName);
+                $store->image = $imageName;
             }
 
-            // Upload the new image
-            $image = $request->file('image');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('/api/stores/image/'), $imageName);
-            $store->image = $imageName;
+            // Update store details
+            $store->name = $request->input('name');
+            $store->address = $request->input('address');
+            $store->description = $request->input('description');
+            $store->save();
+
+            return response()->json([
+                'status' => true,
+                'data' => new StoreResource($store),
+                'message' => 'Store updated successfully'
+            ], 200);
+        } catch (\Exception $error) {
+            // Return error response if an exception occurs
+            return response()->json([
+                'status' => false,
+                'message' => 'Store update failed',
+                'error' => $error->getMessage()
+            ], 400);
         }
-
-        // Update store details
-        $store->name = $request->input('name');
-        $store->address = $request->input('address');
-        $store->description = $request->input('description');
-        $store->save();
-
-        return response()->json([
-            'status' => true,
-            'data' => new StoreResource($store),
-            'message' => 'Store updated successfully'
-        ], 200);
-    } catch (\Exception $error) {
-        // Return error response if an exception occurs
-        return response()->json([
-            'status' => false,
-            'message' => 'Store update failed',
-            'error' => $error->getMessage()
-        ], 400);
     }
-}
-
-
-
 
     public function destroy($id)
     {

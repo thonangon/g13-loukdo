@@ -48,48 +48,65 @@ import { useUserStore } from '@/stores/user.js';
 export default {
   data() {
     return {
+      userStore: useUserStore(),
       store: {
         name: '',
         address: '',
         description: '',
         image: null
       },
-      userStore: useUserStore(),
     };
+  },
+  mounted() {
+    this.userStore.loadUser(); 
+    console.log("User Token:", this.userStore.tokenUser); 
+    this.fetchStore();
   },
   methods: {
     async fetchStore() {
       const storeId = this.$route.params.id;
+      console.log("storeId",storeId);
       try {
         const response = await api.getStore(storeId);
         this.store = response.data.data;
+        console.log('Store fetched successfully:', this.store);
       } catch (error) {
         console.error('API error:', error);
       }
     },
     async updateStore() {
-      try {
-        const formData = {
-          name: this.store.name,
-          address: this.store.address,
-          description: this.store.description
-        }
-        console.log(formData);
-        console.log(this.userStore.tokenUser);
+    try {
+      const id = this.store.id; 
+      const formData = new FormData();
 
-        const storeId = this.$route.params.id;
-        const response = await api.updateStore(storeId, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${this.userStore.tokenUser}`
-          }
-        });
-        console.log('Store updated successfully:', response.data);
-        this.$router.push('/userStore');
-      } catch (error) {
-        console.error('Error updating store:', error.response?.data || error.message);
+      formData.append('name', this.store.name);
+      formData.append('address', this.store.address);
+      formData.append('description', this.store.description);
+
+      if (this.store.image instanceof File) {
+        formData.append('image', this.store.image);
       }
-    },
+
+      console.log(...formData); 
+
+      const response = await api.updateStore(id, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${this.userStore.tokenUser}`,
+        }
+      });
+
+      if (response.status === 200) {
+        console.log('Store updated successfully:', response.data);
+        this.$router.push('/userStore'); 
+      } else {
+        alert('Failed to update the store');
+      }
+    } catch (error) {
+      console.error('Error updating store:', error);
+    }
+  },
+
     onFileChange(event) {
       this.store.image = event.target.files[0];
     },

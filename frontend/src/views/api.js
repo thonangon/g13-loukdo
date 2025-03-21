@@ -89,8 +89,11 @@ export default {
   getStore(storeId) {
     return axios.get(`${API_URL}/store/show/${storeId}`);
   },
-  updateStore(storeId, formData,config) {
-    return axios.put(`${API_URL}/store/update/${storeId}`, formData,config);
+  updateStore(storeId, data, token) {
+    const headers = {
+      'Authorization': `Bearer ${token}`
+    };
+    return axios.post(`${API_URL}/store/update/${storeId}`, data, { headers: headers });
   },
   deleteStore(storeId) {
     return axios.delete(`${API_URL}/store/remove/${storeId}`);
