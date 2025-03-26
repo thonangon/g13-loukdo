@@ -17,8 +17,8 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
-  // esbuild: {
-  //   target: 'esnext',
-  //   platform: 'linux',
-  // }
+  server: {
+    historyApiFallback: true,
+    allowedHosts: ['eba6-202-56-2-118.ngrok-free.app']
+  }
 })
